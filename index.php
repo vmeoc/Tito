@@ -9,7 +9,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
- 
+
     <div class="jumbotron text-center">
   <h1>Tito</h1>
   <img src="bouchons-home7-banner.png"  class="img-rounded" style="display:inline" alt="Bird">
@@ -18,7 +18,7 @@
 </div>
  
     
-<form class="form-horizontal" role="form" method="post" action="index.php">
+    <form class="form-horizontal" role="form" action="form_result.php" method="get">
 	<div class="form-group">
 		<label for="name" class="col-sm-2 control-label">Name</label>
 		<div class="col-sm-10">
@@ -27,14 +27,20 @@
 	</div>
 	<div class="form-group">
 		<label for="home" class="col-sm-2 control-label">Home</label>
-		<div class="col-sm-10">
+		<div class="col-sm-5">
 			<input type="text" class="form-control" id="home" name="home" placeholder="Home Address" value="">
+		</div>
+                <div class="col-sm-5">
+			<input type="time" class="form-control" id="hour_home_departure" name="hour_home_departure" placeholder="hour_home_departure" value="">
 		</div>
 	</div>
     	<div class="form-group">
 		<label for="work" class="col-sm-2 control-label">Work</label>
-		<div class="col-sm-10">
+		<div class="col-sm-5">
 			<input type="text" class="form-control" id="work" name="work" placeholder="Work Address" value="">
+		</div>
+                <div class="col-sm-5">
+			<input type="time" class="form-control" id="hour_work_departure" name="hour_work_departure" placeholder="hour_work_departure" value="">
 		</div>
 	</div>
 	<div class="form-group">
@@ -50,9 +56,7 @@
     
      
 </form>
-<div class="jumbotron text-center">
-    <iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/directions?origin=verri%C3%A8res%20le%20buisson&destination=La%20d%C3%A9fense&key=AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk" allowfullscreen></iframe>
-     </div>
+
    <script>
       // This example displays an address form, using the autocomplete feature
       // of the Google Places API to help users fill in the information.
@@ -96,6 +100,8 @@
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk&libraries=places&callback=initAutocomplete"
         async defer></script>
+
+
   </body>  
 </body>
 </html>
