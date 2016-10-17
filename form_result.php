@@ -118,17 +118,17 @@ function CreateStats(){
     $stats["year"] = $stats["mobth"] * 12;
     $stats["life"] = $stats["year"] * 40;
     
-    echo <br>;
+    echo "<br>";
     echo "time spent in transport:";
-    echo <br>;
+    echo "<br>";
     echo "per week: " . $stats["week"];
-    echo <br>;
+    echo "<br>";
     echo "per month: " . $stats["month"];
-    echo <br>;
+    echo "<br>";
     echo "per year: " . $stats["year"];
-    echo <br>;
+    echo "<br>";
     echo "per life: " . $stats["life"];
-    echo <br>;
+    echo "<br>";
 }
 // Réception des variables
 $hour_home_departure = $_GET['hour_home_departure'];
