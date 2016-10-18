@@ -131,10 +131,10 @@ function CreateStats(){
     echo "<br>";
 }
 // Réception des variables
-$hour_home_departure = $_GET['hour_home_departure'];
-$hour_work_departure = $_GET['hour_work_departure'];
-$home = $_GET['home'];
-$work = $_GET['work'];
+$hour_home_departure = $_POST['hour_home_departure'];
+$hour_work_departure = $_POST['hour_work_departure'];
+$home = $_POST['home'];
+$work = $_POST['work'];
 
 //nettoyage des variables
 $home = str_replace(' ', '%20', $home);
