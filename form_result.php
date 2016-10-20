@@ -1,6 +1,14 @@
 <html>
     <html lang="en">
-        <head></head>     
+        <head>
+             <!-- Bootstrap Core CSS -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="css/stylish-portfolio.css" rel="stylesheet">
+            
+            
+        </head>     
         <body>
   <?php
          
@@ -107,18 +115,6 @@ function CreateStats(){
     $stats["month"] = $stats["week"] * 4;
     $stats["year"] = $stats["month"] * 12;
     $stats["life"] = $stats["year"] * 40;
-    
-    echo "<br>";
-    echo "time spent in transport:";
-    echo "<br>";
-    echo "per week: " . secondsToTime($stats["week"]);
-    echo "<br>";
-    echo "per month: " . secondsToTime($stats["month"]);
-    echo "<br>";
-    echo "per year: " . secondsToTime($stats["year"]);
-    echo "<br>";
-    echo "per life: " . secondsToTime($stats["life"]);
-    echo "<br>";
 }
 
 //conversion d'une durée en secondes en format humain
@@ -128,9 +124,79 @@ function secondsToTime($seconds) {
     return $dtF->diff($dtT)->format('%a days, %h hours, %i minutes and %s seconds');
 }
 
+//Affichage du tableau
+function DisplayTable() {
+    global $stats;
+    global $weekdays_home_duration;
+    global $weekdays_work_duration; 
+    
+    ?>
+            
+<div class="container">
+    <div class="row">    
+                    <div class="span12">
+  <h2>Average commuting time</h2>
+                    </div>
+    </div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+          <th>#</th>
+          <?php
+          
+          foreach ($weekdays_home_duration as $day) {
+       echo "<th>" . $day . "</th>";
+          }
+          ?>
+      </tr>
+    </thead>
+    <tbody>
+        
+      <tr>
+          <th scope="row">Home -> Work</th>
+          <?php
+          foreach ($weekdays_home_duration as $day) {
+       echo "<td>" . secondsToTime($weekdays_home_duration["$day"]) . "</td>";
+       //workaround car le tableau a un offset de trop!
+        if ($day =="Friday") { break;}
+          }
+        ?>
+      </tr>
+      <tr>
+          <th scope="row">Work -> Home</th>
+        <?php
+          foreach ($weekdays_work_duration as $day) {
+       echo "<td>" . secondsToTime($weekdays_work_duration["$day"]) . "</td>";
+       //workaround car le tableau a un offset de trop!
+        if ($day =="Friday") { break;}
+          }
+        ?>
+      </tr>
+      <tr>
+     <th scope="row">Total</th>
+    <?php
+          foreach ($weekdays_work_duration as $day) {
+       echo "<td>" . secondsToTime($weekdays_home_duration["$day"]+$weekdays_work_duration["$day"]) . "</td>";
+       //workaround car le tableau a un offset de trop!
+        if ($day =="Friday") { break;}
+          }
+        ?>
+      </tr>
+        
+      </tr>
+    </tbody>
+  </table>
+        </div>
+            <?php
+
+}
+
 // Réception des variables
-$hour_home_departure = $_POST['hour_home_departure'];
-$hour_work_departure = $_POST['hour_work_departure'];
+//$hour_home_departure = $_POST['hour_home_departure'];
+//$hour_work_departure = $_POST['hour_work_departure'];
+$hour_home_departure="08:00";
+$hour_work_departure="17:00";
+
 $home = $_POST['home'];
 $work = $_POST['work'];
 
@@ -143,6 +209,7 @@ $work = str_replace(' ', '%20', $work);
 dataconversion($hour_home_departure,$hour_work_departure);
 GetDataFromGoogle();
 CreateStats();
+DisplayTable();
 showmap();
 
 
