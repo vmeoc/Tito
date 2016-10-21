@@ -29,7 +29,6 @@
         <![endif]-->
         
         <!-- css for tables -->
-        link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -37,7 +36,7 @@
 
     <body>
 
-        <!-- Navigation -->
+        <!-- Navigation
         <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
         <nav id="sidebar-wrapper">
             <ul class="sidebar-nav">
@@ -62,7 +61,7 @@
                 </li>
             </ul>
         </nav>
-
+-->
         <!-- Header -->
         <header id="top" class="header">
             <div class="text-vertical-center">
@@ -137,95 +136,18 @@
             include "form_result.php";
         }
         ?>
-        <!-- Callout -->
-        <aside class="callout">
-            <div class="text-vertical-center">
-                <h1>Vertically Centered Text</h1>
-            </div>
-        </aside>
-
-        <!-- Portfolio -->
-        <section id="portfolio" class="portfolio">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-10 col-lg-offset-1 text-center">
-                        <h2>Our Work</h2>
-                        <hr class="small">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="portfolio-item">
-                                    <a href="#">
-                                        <img class="img-portfolio img-responsive" src="img/portfolio-1.jpg">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="portfolio-item">
-                                    <a href="#">
-                                        <img class="img-portfolio img-responsive" src="img/portfolio-2.jpg">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="portfolio-item">
-                                    <a href="#">
-                                        <img class="img-portfolio img-responsive" src="img/portfolio-3.jpg">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="portfolio-item">
-                                    <a href="#">
-                                        <img class="img-portfolio img-responsive" src="img/portfolio-4.jpg">
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.row (nested) -->
-                        <a href="#" class="btn btn-dark">View More Items</a>
-                    </div>
-                    <!-- /.col-lg-10 -->
-                </div>
-                <!-- /.row -->
-            </div>
-            <!-- /.container -->
-        </section>
-
-        <!-- Call to Action -->
-        <aside class="call-to-action bg-primary">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 text-center">
-                        <h3>The buttons below are impossible to resist.</h3>
-                        <a href="#" class="btn btn-lg btn-light">Click Me!</a>
-                        <a href="#" class="btn btn-lg btn-dark">Look at Me!</a>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Map -->
-        <section id="contact" class="map">
-            <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe>
-            <br />
-            <small>
-                <a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a>
-            </small>
-            </iframe>
-        </section>
-
+      
         <!-- Footer -->
         <footer>
             <div class="container">
                 <div class="row">
                     <div class="col-lg-10 col-lg-offset-1 text-center">
-                        <h4><strong>Start Bootstrap</strong>
+                        <h4><strong>Powered by PHP/Bootstrap/Javascript/SDDC</strong>
                         </h4>
-                        <p>3481 Melrose Place
-                            <br>Beverly Hills, CA 90210</p>
+                        <p>VMware France
+                            <br>La Défense, Paris</p>
                         <ul class="list-unstyled">
-                            <li><i class="fa fa-phone fa-fw"></i> (123) 456-7890</li>
-                            <li><i class="fa fa-envelope-o fa-fw"></i> <a href="mailto:name@example.com">name@example.com</a>
+                            <li><i class="fa fa-envelope-o fa-fw"></i> <a href="mailto:name@example.com">vmeoc@vmware.com</a>
                             </li>
                         </ul>
                         <br>
