@@ -238,6 +238,38 @@ function DisplayStats()
     
 }
 
+function writeintodb() {
+    //variables SQL
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname="TitoDB";
+    $tablename ="TitoTable";
+        
+    //Autres
+    global $home;
+    global $work;
+    global $hour_home_departure;
+    global $hour_work_departure;
+    
+    
+// Create connection 
+$conn = new mysqli($servername, $username, $password,$dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+
+$sql = "INSERT INTO $tablename (home, work, hour_home_departure, hour_work_departure) VALUES ('$home', '$work', '$hour_home_departure', '$hour_work_departure')";
+
+if ($conn->query($sql) === TRUE) {} else {
+    echo "Error writing values: " . $conn->error;
+}
+
+$conn->close();
+}
+
 // Réception des variables
 //$hour_home_departure = $_POST['hour_home_departure'];
 //$hour_work_departure = $_POST['hour_work_departure'];
@@ -259,24 +291,8 @@ CreateStats();
 DisplayTable();
 DisplayStats();
 showmap();
+writeintodb ();
 
-//gestion SQL
-// Create connection
-$conn = new mysqli($servername, $username, $password);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} 
-// Create database
-$sql = "CREATE DATABASE TitoDB";
-if ($conn->query($sql) === TRUE) {
-    echo "Database created successfully";
-} else {
-    echo "Error creating database: " . $conn->error;
-}
-
-$conn->close();
 
 ?>
 
