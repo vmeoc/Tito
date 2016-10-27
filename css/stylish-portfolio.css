@@ -249,3 +249,9 @@ footer {
   bottom: 5px;
   right: 5px;
 }
+
+.select-date {
+    width:auto;
+    margin:auto;
+    margin-top: 5px;
+}

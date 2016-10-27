@@ -1,17 +1,6 @@
-<html>
-    <html lang="en">
-        <head>
-             <!-- Bootstrap Core CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
 
-        <!-- Custom CSS -->
-        <link href="css/stylish-portfolio.css" rel="stylesheet">
-            
-            
-        </head>     
-        <body>
   <?php
-         
+//array mgmt very nasty. To improve        
 $weekdays_home_departure = array("Monday","Tuesday","Wednesday","Thursday","Friday");
 $weekdays_work_departure = array("Monday","Tuesday","Wednesday","Thursday","Friday");
 $weekdays_home_duration = array("Monday","Tuesday","Wednesday","Thursday","Friday");
@@ -32,7 +21,7 @@ function GetDataFromGoogle (){
     global $weekdays_home_departure;
     global $weekdays_work_departure;
     
-      foreach ($weekdays_home_duration as $day) {
+      foreach ($weekdays_home_duration as $key=>$day) {
         
         $url = "https://maps.googleapis.com/maps/api/directions/json?origin=". $home . "&destination=" . $work . "&departure_time=" . $weekdays_home_departure[$day] . "&traffic_model=best_guess&key=AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk";
          
@@ -48,12 +37,13 @@ function GetDataFromGoogle (){
         $response = json_decode($response);
 
         $weekdays_home_duration[$day] = $response->routes[0]->legs[0]->duration_in_traffic->value;
+        unset($weekdays_home_duration[$key]);
         
       
     }
 
     
-    foreach ($weekdays_work_duration as $day) {
+    foreach ($weekdays_work_duration as $key=>$day) {
         
         $url = "https://maps.googleapis.com/maps/api/directions/json?origin=". $work . "&destination=" . $home . "&departure_time=" . $weekdays_work_departure[$day] . "&traffic_model=best_guess&key=AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk";
          
@@ -71,9 +61,9 @@ function GetDataFromGoogle (){
 
         
         $weekdays_work_duration[$day] = $response->routes[0]->legs[0]->duration_in_traffic->value;
-      
+        unset($weekdays_work_duration[$key]);
     }
-
+  
 }
 
 
@@ -110,11 +100,10 @@ function CreateStats(){
     global $weekdays_home_duration;
     global $weekdays_work_duration;
     
-    foreach ($weekdays_work_duration as $day) {
+    foreach ($weekdays_work_duration as $key=>$day) {
       
-        $stats["week"] = $stats["week"] + $weekdays_home_duration[$day] + $weekdays_work_duration[$day];
-       //workaround car le tableau a un offset de trop!
-        if ($day =="Friday") { break;}
+        $stats["week"] = $stats["week"] + $weekdays_home_duration[$key] + $weekdays_work_duration[$key];
+
     }
     
     $stats["month"] = $stats["week"] * 4;
@@ -126,7 +115,13 @@ function CreateStats(){
 function secondsToTime($seconds) {
     $dtF = new \DateTime('@0');
     $dtT = new \DateTime("@$seconds");
-    return $dtF->diff($dtT)->format('%a days, %h hours, %i minutes and %s seconds');
+    $result = $dtF->diff($dtT);
+    $stringResult="";
+    if ($result->format("%a") != 0 ) {$stringResult .= $result->format("%a") . " day" . ($result->format("%a") > 1 ? "s" : "") . " ";}
+    if ($result->format("%h") != 0 ) {$stringResult .= $result->format("%h") . " hour" . ($result->format("%h") > 1 ? "s" : "") . " "; }
+    $stringResult .= $result->format("%i") . " minute" . ($result->format("%i") > 1 ? "s" : "") . " "; 
+    return $stringResult;
+        
 }
 
 //Affichage du tableau
@@ -139,15 +134,15 @@ function DisplayTable() {
     
     ?>
             
-<div class="container">
+<div >
     <div class="row">    
                     <div class="span12">
-  <h2>Average commuting time</h2>
+  <h2 id="titleResult">Average commuting time</h2>
   
   <?php
     $home = str_replace(',%20France', '', $home);
     $work = str_replace(',%20France', '', $work);
-    echo "<h2>" . str_replace('%20', ' ', $home) . " <-> " . str_replace('%20', ' ', $work) . "</h2>";
+    echo "<h2>" . str_replace('%20', ' ', $home) . " <i class='fa fa-arrows-h'></i> " . str_replace('%20', ' ', $work) . "</h2>";
     ?>
                     </div>
     </div>
@@ -157,8 +152,8 @@ function DisplayTable() {
           <th>#</th>
           <?php
           
-          foreach ($weekdays_home_duration as $day) {
-       echo "<th>" . $day . "</th>";
+          foreach ($weekdays_home_duration as $key=>$day) {
+       echo "<th>" . $key . "</th>";
           }
           ?>
       </tr>
@@ -168,30 +163,26 @@ function DisplayTable() {
       <tr>
           <th scope="row">Home -> Work</th>
           <?php
-          foreach ($weekdays_home_duration as $day) {
-       echo "<td>" . secondsToTime($weekdays_home_duration["$day"]) . "</td>";
-       //workaround car le tableau a un offset de trop!
-        if ($day =="Friday") { break;}
+          foreach ($weekdays_home_duration as $key=>$day) {
+       echo "<td>" . secondsToTime($weekdays_home_duration["$key"]) . "</td>";
+
           }
         ?>
       </tr>
       <tr>
           <th scope="row">Work -> Home</th>
         <?php
-          foreach ($weekdays_work_duration as $day) {
-       echo "<td>" . secondsToTime($weekdays_work_duration["$day"]) . "</td>";
-       //workaround car le tableau a un offset de trop!
-        if ($day =="Friday") { break;}
+          foreach ($weekdays_work_duration as $key=>$day) {
+       echo "<td>" . secondsToTime($weekdays_work_duration["$key"]) . "</td>";
           }
         ?>
       </tr>
       <tr>
      <th scope="row">Total</th>
     <?php
-          foreach ($weekdays_work_duration as $day) {
-       echo "<td>" . secondsToTime($weekdays_home_duration["$day"]+$weekdays_work_duration["$day"]) . "</td>";
+          foreach ($weekdays_work_duration as $key=>$day) {
+       echo "<td>" . secondsToTime($weekdays_home_duration["$key"]+$weekdays_work_duration["$key"]) . "</td>";
        //workaround car le tableau a un offset de trop!
-        if ($day =="Friday") { break;}
           }
         ?>
       </tr>
@@ -240,7 +231,7 @@ function DisplayStats()
 
 function writeintodb() {
     //variables SQL
-    $servername = "localhost";
+    $servername = $_SERVER['SERVER_NAME'];
     $username = "root";
     $password = "";
     $dbname="TitoDB";
@@ -273,8 +264,8 @@ $conn->close();
 // Réception des variables
 //$hour_home_departure = $_POST['hour_home_departure'];
 //$hour_work_departure = $_POST['hour_work_departure'];
-$hour_home_departure="08:00";
-$hour_work_departure="17:00";
+$hour_home_departure= $_POST['hour_home_departure'];
+$hour_work_departure= $_POST['hour_work_departure'];
 
 $home = $_POST['home'];
 $work = $_POST['work'];
@@ -296,6 +287,3 @@ writeintodb ();
 
 ?>
 
-
-                </body>
-    </html>

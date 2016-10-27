@@ -27,7 +27,7 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
-        
+
         <!-- css for tables -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -61,7 +61,7 @@
                 </li>
             </ul>
         </nav>
--->
+        -->
         <!-- Header -->
         <header id="top" class="header">
             <div class="text-vertical-center">
@@ -90,7 +90,7 @@
         <!-- Services -->
         <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
         <section id="services" class="services bg-primary">
-            <form class="form-horizontal" role="form" action="index.php" method="post">
+            <form class="form-horizontal" role="form" action="index.php#titleResult" method="post">
                 <div class="container">
                     <div class="form-group">
                         <div class="row text-center">
@@ -104,7 +104,16 @@
                                                 <strong>Home address</strong>
                                             </h4>
                                             <input type="text" class="form-control" id="home" name="home" placeholder="Home Address" value="">
-                                            <script type="text/javascript" src="js/BuildTimepicker.js"></script>
+                                            <select name="hour_home_departure" class="select-date form-control">
+                                                <?PHP
+                                                $dateStart = new \DateTime();
+                                                $dateStart->setTime(6, 0, 0);
+                                                while ($dateStart->format("H") < 21) {
+                                                    echo "<option value='".$dateStart->format("H:i")."'>" . $dateStart->format("H:i") . "</option>";
+                                                    $dateStart->modify("+30 min");
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-sm-6">
@@ -114,7 +123,16 @@
                                                 <strong>Work address</strong>
                                             </h4>
                                             <input type="text" class="form-control" id="work" name="work" placeholder="Work Address" value="">
-                                            <script type="text/javascript" src="js/BuildTimepicker.js"></script>
+                                            <select name="hour_work_departure" class="select-date form-control">
+                                                <?PHP
+                                                $dateStart = new \DateTime();
+                                                $dateStart->setTime(6, 0, 0);
+                                                while ($dateStart->format("H") < 21) {
+                                                    echo "<option value='".$dateStart->format("H:i")."'>" . $dateStart->format("H:i") . "</option>";
+                                                    $dateStart->modify("+30 min");
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -136,7 +154,7 @@
             include "form_result.php";
         }
         ?>
-      
+
         <!-- Footer -->
         <footer>
             <div class="container">
@@ -178,76 +196,76 @@
 
         <!-- Custom Theme JavaScript -->
         <script>
-                        // Closes the sidebar menu
-                        $("#menu-close").click(function (e) {
-                            e.preventDefault();
-                            $("#sidebar-wrapper").toggleClass("active");
-                        });
-                        // Opens the sidebar menu
-                        $("#menu-toggle").click(function (e) {
-                            e.preventDefault();
-                            $("#sidebar-wrapper").toggleClass("active");
-                        });
-                        // Scrolls to the selected menu item on the page
-                        $(function () {
-                            $('a[href*=#]:not([href=#],[data-toggle],[data-target],[data-slide])').click(function () {
-                                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
-                                    var target = $(this.hash);
-                                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-                                    if (target.length) {
-                                        $('html,body').animate({
-                                            scrollTop: target.offset().top
-                                        }, 1000);
-                                        return false;
-                                    }
-                                }
+            // Closes the sidebar menu
+            $("#menu-close").click(function (e) {
+                e.preventDefault();
+                $("#sidebar-wrapper").toggleClass("active");
+            });
+            // Opens the sidebar menu
+            $("#menu-toggle").click(function (e) {
+                e.preventDefault();
+                $("#sidebar-wrapper").toggleClass("active");
+            });
+            // Scrolls to the selected menu item on the page
+            $(function () {
+                $('a[href*=#]:not([href=#],[data-toggle],[data-target],[data-slide])').click(function () {
+                    if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
+                        var target = $(this.hash);
+                        target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                        if (target.length) {
+                            $('html,body').animate({
+                                scrollTop: target.offset().top
+                            }, 1000);
+                            return false;
+                        }
+                    }
+                });
+            });
+            //#to-top button appears after scrolling
+            var fixed = false;
+            $(document).scroll(function () {
+                if ($(this).scrollTop() > 250) {
+                    if (!fixed) {
+                        fixed = true;
+                        // $('#to-top').css({position:'fixed', display:'block'});
+                        $('#to-top').show("slow", function () {
+                            $('#to-top').css({
+                                position: 'fixed',
+                                display: 'block'
                             });
                         });
-                        //#to-top button appears after scrolling
-                        var fixed = false;
-                        $(document).scroll(function () {
-                            if ($(this).scrollTop() > 250) {
-                                if (!fixed) {
-                                    fixed = true;
-                                    // $('#to-top').css({position:'fixed', display:'block'});
-                                    $('#to-top').show("slow", function () {
-                                        $('#to-top').css({
-                                            position: 'fixed',
-                                            display: 'block'
-                                        });
-                                    });
-                                }
-                            } else {
-                                if (fixed) {
-                                    fixed = false;
-                                    $('#to-top').hide("slow", function () {
-                                        $('#to-top').css({
-                                            display: 'none'
-                                        });
-                                    });
-                                }
-                            }
+                    }
+                } else {
+                    if (fixed) {
+                        fixed = false;
+                        $('#to-top').hide("slow", function () {
+                            $('#to-top').css({
+                                display: 'none'
+                            });
                         });
-                        // Disable Google Maps scrolling
-                        // See http://stackoverflow.com/a/25904582/1607849
-                        // Disable scroll zooming and bind back the click event
-                        var onMapMouseleaveHandler = function (event) {
-                            var that = $(this);
-                            that.on('click', onMapClickHandler);
-                            that.off('mouseleave', onMapMouseleaveHandler);
-                            that.find('iframe').css("pointer-events", "none");
-                        }
-                        var onMapClickHandler = function (event) {
-                            var that = $(this);
-                            // Disable the click handler until the user leaves the map area
-                            that.off('click', onMapClickHandler);
-                            // Enable scrolling zoom
-                            that.find('iframe').css("pointer-events", "auto");
-                            // Handle the mouse leave event
-                            that.on('mouseleave', onMapMouseleaveHandler);
-                        }
-                        // Enable map zooming with mouse scroll when the user clicks the map
-                        $('.map').on('click', onMapClickHandler);
+                    }
+                }
+            });
+            // Disable Google Maps scrolling
+            // See http://stackoverflow.com/a/25904582/1607849
+            // Disable scroll zooming and bind back the click event
+            var onMapMouseleaveHandler = function (event) {
+                var that = $(this);
+                that.on('click', onMapClickHandler);
+                that.off('mouseleave', onMapMouseleaveHandler);
+                that.find('iframe').css("pointer-events", "none");
+            }
+            var onMapClickHandler = function (event) {
+                var that = $(this);
+                // Disable the click handler until the user leaves the map area
+                that.off('click', onMapClickHandler);
+                // Enable scrolling zoom
+                that.find('iframe').css("pointer-events", "auto");
+                // Handle the mouse leave event
+                that.on('mouseleave', onMapMouseleaveHandler);
+            }
+            // Enable map zooming with mouse scroll when the user clicks the map
+            $('.map').on('click', onMapClickHandler);
         </script>
 
         <!-- autocompletion des champs addresse avec Google -->
