@@ -8,7 +8,7 @@ $weekdays_work_duration = array("Monday","Tuesday","Wednesday","Thursday","Frida
 $stats = array("week"=>"0","month"=>"0","year"=>"0","life"=>"0");
 
 //SQL variables
-$servername = "localhost";
+$servername = "tito-sql";
 $username = "root";
 $password = "";
 
