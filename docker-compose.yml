@@ -20,5 +20,5 @@ services:
      links:
        - Tito-SQL
      ports:
-       - "8000:80"
+       - "80:80"
      restart: always     
