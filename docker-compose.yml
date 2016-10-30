@@ -15,7 +15,7 @@ services:
    Tito-FE:
      depends_on:
        - Tito-SQL
-     image: vmeoc/tito-fe:V0.81
+     image: vmeoc/tito-fe:V0.84
      links:
        - Tito-SQL
      ports:
