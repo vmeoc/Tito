@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+   Tito-SQL:
+     image: mysql:5.7
+     volumes:
+       - "./data/db:/var/lib/mysql"
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: Tito2016
+       MYSQL_DATABASE: TitoDB
+       MYSQL_USER: root
+       MYSQL_PASSWORD: Tito2016
+
+   Tito-FE:
+     depends_on:
+       - Tito-SQL
+     image: vmeoc/tito-fe:V0.6
+     links:
+       - db
+     ports:
+       - "8000:80"
+     restart: always     

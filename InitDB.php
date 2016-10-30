@@ -3,9 +3,9 @@
 
 <?php
 
-$servername = "localhost";
+$servername = "tito-sql";
 $username = "root";
-$password = "";
+$password = "Tito2016";
 $dbname="TitoDB";
 $tablename ="TitoTable";
 

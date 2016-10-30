@@ -10,7 +10,9 @@ $stats = array("week"=>"0","month"=>"0","year"=>"0","life"=>"0");
 //SQL variables
 $servername = "tito-sql";
 $username = "root";
-$password = "";
+$password = "Tito2016";
+$dbname="TitoDB";
+$tablename ="TitoTable";
 
 //Obtention des infos de Google
 function GetDataFromGoogle (){
@@ -231,11 +233,11 @@ function DisplayStats()
 
 function writeintodb() {
     //variables SQL
-    $servername = $_SERVER['SERVER_NAME'];
-    $username = "root";
-    $password = "";
-    $dbname="TitoDB";
-    $tablename ="TitoTable";
+    global $servername;
+    global $username;
+    global $password;
+    global $dbname;
+    global $tablename;
         
     //Autres
     global $home;
