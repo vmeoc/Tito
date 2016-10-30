@@ -2,6 +2,7 @@ version: '2'
 
 services:
    Tito-SQL:
+     container_name: tito-sql
      image: mysql:5.7
      volumes:
        - "./data/db:/var/lib/mysql"
