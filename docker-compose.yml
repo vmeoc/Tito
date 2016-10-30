@@ -17,7 +17,7 @@ services:
        - Tito-SQL
      image: vmeoc/tito-fe:V0.81
      links:
-       - db
+       - Tito-SQL
      ports:
        - "8000:80"
      restart: always     
