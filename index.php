@@ -12,13 +12,13 @@
         <title>Time Traffic overview by Vince</title>
 
         <!-- Bootstrap Core CSS -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="./asset/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Custom CSS -->
-        <link href="css/stylish-portfolio.css" rel="stylesheet">
+        <link href="./asset/css/stylish-portfolio.css" rel="stylesheet">
 
         <!-- Custom Fonts -->
-        <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="./asset/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -29,9 +29,9 @@
         <![endif]-->
 
         <!-- css for tables -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   <!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+-->
     </head>
 
     <body>
@@ -62,6 +62,7 @@
             </ul>
         </nav>
         -->
+
         <!-- Header -->
         <header id="top" class="header">
             <div class="text-vertical-center">
@@ -90,65 +91,61 @@
         <!-- Services -->
         <!-- The circle icons use Font Awesome's stacked icon classes. For more information, visit http://fontawesome.io/examples/ -->
         <section id="services" class="services bg-primary">
-            <form class="form-horizontal" role="form" action="index.php#titleResult" method="post">
-                <div class="container">
-                    <div class="form-group">
-                        <div class="row text-center">
-                            <div class="col-lg-10 col-lg-offset-1">
-                                <hr class="small">
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6">
-                                        <div class="service-item">
-                                            <img src="img/home-icon.png" width="128" height="128">
-                                            <h4>
-                                                <strong>Home address</strong>
-                                            </h4>
-                                            <input type="text" class="form-control" id="home" name="home" placeholder="Home Address" value="">
-                                            <select name="hour_home_departure" class="select-date form-control">
-                                                <?PHP
-                                                $dateStart = new \DateTime();
-                                                $dateStart->setTime(6, 0, 0);
-                                                while ($dateStart->format("H") < 21) {
-                                                    echo "<option value='".$dateStart->format("H:i")."'>" . $dateStart->format("H:i") . "</option>";
-                                                    $dateStart->modify("+30 min");
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-sm-6">
-                                        <div class="service-item">
-                                            <img src="img/building-icon.png" width="128" height="128">
-                                            <h4>
-                                                <strong>Work address</strong>
-                                            </h4>
-                                            <input type="text" class="form-control" id="work" name="work" placeholder="Work Address" value="">
-                                            <select name="hour_work_departure" class="select-date form-control">
-                                                <?PHP
-                                                $dateStart = new \DateTime();
-                                                $dateStart->setTime(6, 0, 0);
-                                                while ($dateStart->format("H") < 21) {
-                                                    echo "<option value='".$dateStart->format("H:i")."'>" . $dateStart->format("H:i") . "</option>";
-                                                    $dateStart->modify("+30 min");
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
+            <div class="container">
+                <hr class="small">
+                <form class="form-horizontal" role="form" action="index.php#titleResult" method="POST">
+                    <div class="row text-center">
+                        <div class="col-lg-4 col-md-4 col-lg-offset-1 col-md-offset-1">
+                            <div class="form-group">
+                                <div class="service-item">
+                                    <img src="./asset/img/home-icon.png" width="128" height="128">
+                                    <h4>
+                                        <strong>Home address</strong>
+                                    </h4>
+                                    <input type="text" class="form-control" id="home" name="home" placeholder="Home Address" value="">
+                                    <select name="hour_home_departure" class="select-date form-control">
+                                        <?PHP
+                                        $dateStart = new \DateTime();
+                                        $dateStart->setTime(6, 0, 0);
+                                        while ($dateStart->format("H") < 21) {
+                                            echo "<option value='" . $dateStart->format("H:i") . "'>" . $dateStart->format("H:i") . "</option>";
+                                            $dateStart->modify("+30 min");
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>
+                        <div class="col-lg-4 col-md-4 col-lg-offset-2 col-md-offset-2">
+                            <div class="form-group">
+                                <div class="service-item">
+                                    <img src="./asset/img/building-icon.png" width="128" height="128">
+                                    <h4>
+                                        <strong>Work address</strong>
+                                    </h4>
+                                    <input type="text" class="form-control" id="work" name="work" placeholder="Work Address" value="">
+                                    <select name="hour_work_departure" class="select-date form-control">
+                                        <?PHP
+                                        $dateStart = new \DateTime();
+                                        $dateStart->setTime(6, 0, 0);
+                                        while ($dateStart->format("H") < 21) {
+                                            echo "<option value='" . $dateStart->format("H:i") . "'>" . $dateStart->format("H:i") . "</option>";
+                                            $dateStart->modify("+30 min");
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12">
+                            <input id="submit" name="submit" type="submit" value="Send" class="btn btn-default">
+                        </div>
                     </div>
-                    <!-- /.row -->
-                </div>
-                <div class="row">    
-                    <div class="span12">
-                        <input id="submit" name="submit" type="submit" value="Send" class="btn btn-primary">
-                    </div>
-                </div>
-                <!-- /.container -->
-            </form>
+                    <!-- /.container -->
+                </form>
+            </div>
         </section>
+
         <?php
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             include "form_result.php";
@@ -189,10 +186,13 @@
         </footer>
 
         <!-- jQuery -->
-        <script src="js/jquery.js"></script>
+        <script src="./asset/js/jquery.js"></script>
 
         <!-- Bootstrap Core JavaScript -->
-        <script src="js/bootstrap.min.js"></script>
+        <script src="./asset/js/bootstrap.min.js"></script>
+        
+        <!-- Parallax Core JavaScript -->
+        <script src="./asset/js/parallax.min.js"></script>
 
         <!-- Custom Theme JavaScript -->
         <script>
@@ -220,9 +220,23 @@
                         }
                     }
                 });
+                
+                $('.stat-block').fadeIn(1000);
+
+                //window.setTimeout("displayStatBlock()", 200);
             });
+
+            /*
+            var displayStatBlock = function () {
+                var item = $('.stat-block:hidden:first');
+                item.fadeIn('slow');
+                window.setTimeout("displayStatBlock()", 200);
+            };
+            */
+
             //#to-top button appears after scrolling
             var fixed = false;
+            /*
             $(document).scroll(function () {
                 if ($(this).scrollTop() > 250) {
                     if (!fixed) {
@@ -246,6 +260,7 @@
                     }
                 }
             });
+            */
             // Disable Google Maps scrolling
             // See http://stackoverflow.com/a/25904582/1607849
             // Disable scroll zooming and bind back the click event
@@ -312,8 +327,7 @@
             }
         </script>
 
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk&libraries=places&callback=initAutocomplete"
-        async defer></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk&libraries=places&callback=initAutocomplete" async defer></script>
 
     </body>
 

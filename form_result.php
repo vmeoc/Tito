@@ -24,7 +24,7 @@ function GetDataFromGoogle() {
     $weekdays_home_duration_result = array();
     foreach ($weekdays_home_duration as $key => $day) {
 
-        $url = "https://maps.googleapis.com/maps/api/directions/json?origin=" . $home . "&destination=" . $work . "&departure_time=" . $weekdays_home_departure[$day] . "&traffic_model=best_guess&key=AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk";
+        $url = "https://maps.googleapis.com/maps/api/directions/json?origin=" . $home . "&destination=" . $work . "&departure_time=" . $weekdays_home_departure[$day] . "&traffic_model=pessimistic&key=AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk";
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -45,7 +45,7 @@ function GetDataFromGoogle() {
     $weekdays_work_duration_result = array();
     foreach ($weekdays_work_duration as $key => $day) {
 
-        $url = "https://maps.googleapis.com/maps/api/directions/json?origin=" . $work . "&destination=" . $home . "&departure_time=" . $weekdays_work_departure[$day] . "&traffic_model=best_guess&key=AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk";
+        $url = "https://maps.googleapis.com/maps/api/directions/json?origin=" . $work . "&destination=" . $home . "&departure_time=" . $weekdays_work_departure[$day] . "&traffic_model=pessimistic&key=AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk";
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -325,7 +325,7 @@ $work = str_replace(' ', '%20', $work);
 dataconversion($hour_home_departure, $hour_work_departure);
 GetDataFromGoogle();
 CreateStats();
-echo "<div class='parallax-container' data-parallax='scroll' data-speed='0.1' data-bleed='50' data-natural-height='223' data-image-src='../asset/img/bg.jpg'>";
+echo "<div class='parallax-container' data-parallax='scroll' data-speed='0.1' data-bleed='50' data-natural-height='223' data-image-src='./asset/img/bg.jpg'>";
 echo "<section>";
 DisplayTable();
 DisplayStats();
