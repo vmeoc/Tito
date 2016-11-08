@@ -325,7 +325,7 @@ $work = str_replace(' ', '%20', $work);
 dataconversion($hour_home_departure, $hour_work_departure);
 GetDataFromGoogle();
 CreateStats();
-echo "<div class='parallax-container' data-parallax='scroll' data-speed='0.1' data-bleed='50' data-natural-height='223' data-image-src='../asset/img/bouchons-home7-banner.png'>";
+echo "<div class='parallax-container' data-parallax='scroll' data-speed='0.1' data-bleed='50' data-natural-height='223' data-image-src='../asset/img/bg.jpg'>";
 echo "<section>";
 DisplayTable();
 DisplayStats();
