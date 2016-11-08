@@ -334,4 +334,3 @@ echo "</div>";
 showmap();
 writeintodb();
 ?>
-
