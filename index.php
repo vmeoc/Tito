@@ -183,7 +183,6 @@
                         echo "Server Name: " . gethostname()
                                 ?>
                         </p>
-                        ?>
                     </div>
                 </div>
             </div>
