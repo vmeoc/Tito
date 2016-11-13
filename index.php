@@ -105,7 +105,7 @@
                                     <input type="text" class="form-control" id="home" name="home" placeholder="Home Address" value="">
                                     <select name="hour_home_departure" class="select-date form-control">
                                         <?PHP
-                                        $dateStart = new DateTime();
+                                        $dateStart = new \DateTime();
                                         $dateStart->setTime(6, 0, 0);
                                         while ($dateStart->format("H") < 21) {
                                             echo "<option value='" . $dateStart->format("H:i") . "'>" . $dateStart->format("H:i") . "</option>";
@@ -126,7 +126,7 @@
                                     <input type="text" class="form-control" id="work" name="work" placeholder="Work Address" value="">
                                     <select name="hour_work_departure" class="select-date form-control">
                                         <?PHP
-                                        $dateStart = new DateTime();
+                                        $dateStart = new \DateTime();
                                         $dateStart->setTime(6, 0, 0);
                                         while ($dateStart->format("H") < 21) {
                                             echo "<option value='" . $dateStart->format("H:i") . "'>" . $dateStart->format("H:i") . "</option>";
