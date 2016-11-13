@@ -178,7 +178,11 @@
                             </li>
                         </ul>
                         <hr class="small">
-                        <p class="text-muted">Copyright &copy; Your Website 2014</p>
+                        <p class="text-muted">
+                        <?PHP
+                        echo "Server Name: " . gethostname()
+                                ?>
+                        </p>
                     </div>
                 </div>
             </div>
