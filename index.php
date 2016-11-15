@@ -180,7 +180,7 @@
                         <hr class="small">
                        <p class="text-muted">
                         <?PHP
-                        echo "Server Name (dev): " . gethostname()
+                        echo "Server Name: " . gethostname()
                                 ?>
                         </p>
                     </div>
