@@ -8,9 +8,14 @@ $weekdays_work_duration = array("Monday", "Tuesday", "Wednesday", "Thursday", "F
 $stats = array("week" => "0", "month" => "0", "year" => "0", "life" => "0");
 
 //SQL variables
-$servername = "localhost";
+//For deployment through docker compose
+//$servername = "tito-sql";
+//For Deployment through vRA
+$servername = getenv('TITO-SQL');
+echo $servername;
 $username = "root";
 $password = "Tito2016";
+$tablename = "TitoTable";
 
 //Obtention des infos de Google
 function GetDataFromGoogle() {
@@ -275,11 +280,11 @@ function createStatBlock($key, $seconds, $class_color) {
 
 function writeintodb() {
     //variables SQL
-    $servername = $_SERVER['SERVER_NAME'];
-    $username = "root";
-    $password = "Tito2016";
-    $dbname = "TitoDB";
-    $tablename = "TitoTable";
+    global $servername;
+    global $username;
+    global $password;
+    global $dbname;
+    global $tablename;
 
     //Autres
     global $home;
