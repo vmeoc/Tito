@@ -21,7 +21,7 @@ sudo yum update -y
 sudo yum install httpd -y
 sudo service httpd start
 sudo yum install php -y
-sudo yum install php-mysql
+sudo yum install php-mysql -y
 sudo chkconfig httpd on
 
 echo
