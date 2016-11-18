@@ -299,7 +299,7 @@ function writeintodb() {
     echo "variables: ";
     echo $servername . " " . $username . " " . $password . " " . $dbname;
     $conn = new mysqli($servername, $username, $password, $dbname);
-
+echo "after mysqli function call";
 // Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
