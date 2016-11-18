@@ -16,6 +16,7 @@ echo $servername;
 $username = "root";
 $password = "Tito2016";
 $tablename = "TitoTable";
+$dbname = "TitoDB";
 
 //Obtention des infos de Google
 function GetDataFromGoogle() {
@@ -295,6 +296,7 @@ function writeintodb() {
 
 // Create connection 
     echo "create connection";
+    echo 
     $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
