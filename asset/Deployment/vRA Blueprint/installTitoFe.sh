@@ -1,14 +1,14 @@
 #!/bin/bash
 #This script install all the packages needed for the Tito Front End (Apache, git)
 #It also configure the necessary files
-#it download the ncessary sources from  Git
+#it download the necessary sources from  Git
 #and it start the service
 
-#variables
+#variables#######################
 HTMLPATH=/var/www/html
 GITREPO=https://github.com/vmeoc/Tito/
 HTTPDCONF=/etc/httpd/conf/httpd.conf
-
+#################################
 echo 
 echo -e "Arrêt du Firewall car utilisation NSX\n"
 
@@ -21,7 +21,12 @@ sudo yum update -y
 sudo yum install httpd -y
 sudo service httpd start
 sudo yum install php -y
+sudo yum install php-mysql
 sudo chkconfig httpd on
+
+echo
+echo -e "deactive selinux to reach remote db"
+echo "SELINUXTYPE=disabled" > /etc/sysconfig/selinux
 
 echo
 echo -e "install Git\n"
@@ -34,7 +39,6 @@ echo -e "Install Tito sources \n"
 
 cd $HTMLPATH
 git clone $GITREPO .
-git checkout tags/V1
 
 echo
 echo -e "conf httpd.conf pour prise en compte de PHP et paramètrage du serveur SQL\n"

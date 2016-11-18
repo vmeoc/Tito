@@ -12,7 +12,6 @@ $stats = array("week" => "0", "month" => "0", "year" => "0", "life" => "0");
 //$servername = "tito-sql";
 //For Deployment through vRA
 $servername = getenv('TITO-SQL');
-echo $servername;
 $username = "root";
 $password = "Tito2016";
 $tablename = "TitoTable";
@@ -295,26 +294,20 @@ function writeintodb() {
 
 
 // Create connection 
-    echo "create connection";
-    echo "variables: ";
-    echo $servername . " " . $username . " " . $password . " " . $dbname;
     $conn = new mysqli($servername, $username, $password, $dbname);
-echo "after mysqli function call";
+
 // Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
 
     $sql = "INSERT INTO $tablename (home, work, hour_home_departure, hour_work_departure) VALUES ('$home', '$work', '$hour_home_departure', '$hour_work_departure')";
-echo "after check connection";
     if ($conn->query($sql) === TRUE) {
         
     } else {
         echo "Error writing values: " . $conn->error;
     }
-echo "after connection query";
     $conn->close();
-    echo "after connection closed";
 }
 
 // Réception des variables
