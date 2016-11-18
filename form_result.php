@@ -294,6 +294,7 @@ function writeintodb() {
 
 
 // Create connection 
+    echo "create connection";
     $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
@@ -302,14 +303,15 @@ function writeintodb() {
     }
 
     $sql = "INSERT INTO $tablename (home, work, hour_home_departure, hour_work_departure) VALUES ('$home', '$work', '$hour_home_departure', '$hour_work_departure')";
-
+echo "after check connection";
     if ($conn->query($sql) === TRUE) {
         
     } else {
         echo "Error writing values: " . $conn->error;
     }
-
+echo "after connection query";
     $conn->close();
+    echo "after connection closed";
 }
 
 // Réception des variables
