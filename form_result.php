@@ -296,7 +296,8 @@ function writeintodb() {
 
 // Create connection 
     echo "create connection";
-    echo 
+    echo "variables: ";
+    echo $servername . " " . $username . " " . $password . " " . $dbname;
     $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
