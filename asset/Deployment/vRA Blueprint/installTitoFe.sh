@@ -41,7 +41,7 @@ echo -e "Install Tito sources \n"
 
 cd $HTMLPATH
 git clone $GITREPO .
-git checkout Dev
+git checkout tags/V1.5
 
 echo
 echo -e "conf httpd.conf pour prise en compte de PHP et paramètrage du serveur SQL\n"
