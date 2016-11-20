@@ -93,7 +93,10 @@
         <section id="services" class="services bg-primary">
             <div class="container">
                 <hr class="small">
-                <form class="form-horizontal" role="form" action="index.php#titleResult" method="POST">
+                <form class="form-horizontal" role="form" action="index.php#titleResult" method="POST" id="form_result">
+                    <div id="form_error">
+                        
+                    </div>
                     <div class="row text-center">
                         <div class="col-lg-4 col-md-4 col-lg-offset-1 col-md-offset-1">
                             <div class="form-group">
@@ -178,7 +181,7 @@
                             </li>
                         </ul>
                         <hr class="small">
-                        <p class="text-muted">
+                       <p class="text-muted">
                         <?PHP
                         echo "Server Name: " . gethostname()
                                 ?>
@@ -200,6 +203,30 @@
 
         <!-- Custom Theme JavaScript -->
         <script>
+            // Check the form inputs
+            $('#form_result').submit(function(e){
+                if($('#home').val() === "" || $('#work').val() === ""){
+                    e.stopPropagation();
+                    e.preventDefault();
+                    $('#form_error').html("All fields are required");
+                    return;
+                }
+            });
+           /*
+            $('#submit').click(function(e){
+                console.log("home input: "+$('#home').val());
+                console.log("work input: "+$('#work').val());
+                if($('#home').val() === "" || $('#work').val() === ""){
+                    e.stopPropagation();
+                    e.preventDefault();
+                    $('#form_error').html("All fields are required");
+                    return;
+                }
+                console.log('submit form');
+                $('#form_result').submit();
+            });
+            */
+            
             // Closes the sidebar menu
             $("#menu-close").click(function (e) {
                 e.preventDefault();
