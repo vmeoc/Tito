@@ -10,19 +10,21 @@ GITREPO=https://github.com/vmeoc/Tito/
 HTTPDCONF=/etc/httpd/conf/httpd.conf
 #################################
 echo 
-echo -e "Arrêt du Firewall car utilisation NSX\n"
+echo -e "Open Firewall port 80\n"
 
-sudo service firewalld stop
+firewall-cmd --zone=public --add-port=80/tcp --permanent
+firewall-cmd --reload
+
 
 echo
 echo -e "Install Apache & PHP\n"
 
-sudo yum update -y
-sudo yum install httpd -y
-sudo service httpd start
-sudo yum install php -y
-sudo yum install php-mysql -y
-sudo chkconfig httpd on
+yum update -y
+yum install httpd -y
+service httpd start
+yum install php -y
+yum install php-mysql -y
+/usr/sbin/chkconfig httpd on
 
 echo
 echo -e "deactive selinux to reach remote db"
@@ -31,7 +33,7 @@ echo "SELINUXTYPE=disabled" > /etc/sysconfig/selinux
 echo
 echo -e "install Git\n"
 
-sudo yum install git -y
+yum install git -y
 
 echo
 echo -e "Install Tito sources \n"
@@ -39,6 +41,7 @@ echo -e "Install Tito sources \n"
 
 cd $HTMLPATH
 git clone $GITREPO .
+git checkout Dev
 
 echo
 echo -e "conf httpd.conf pour prise en compte de PHP et paramètrage du serveur SQL\n"
@@ -56,9 +59,4 @@ echo -e "conf php.ini pour Timezone \n"
 echo "date.timezone = \"Europe/Paris\"" >> /etc/php.ini
 
 
-echo -e "démarrage Apache \n"
-
-sudo service httpd restart
-
-
-echo "Fin du script"
+#reboot to be done at the end by vRA
