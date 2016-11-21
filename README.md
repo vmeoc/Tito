@@ -13,3 +13,5 @@ The folder deployment contain the various Infra as a code files to deploy the ap
 The other folder are just css files, picture files and other stuff.
 
 For more information, visit www.vmcloud.fr.
+
+![My image](http://img.over-blog-kiwi.com/1/53/11/35/20160926/ob_6f2ff9_container01-jpg-492x0-q85-crop-smart.jpg)
