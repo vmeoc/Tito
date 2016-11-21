@@ -1,4 +1,4 @@
-test
+
 ![My image](https://vmeoc.github.io/vmeoc/TitoRoad.png)
 
 Tito is  a sample multi tiers application used to showcase the various ways of deploying and running an app across multiple technologies such as VMware vRealize Automation, virtual machines, containers, Kubernetes, public cloud, PaaS, etc... etc... etc...
