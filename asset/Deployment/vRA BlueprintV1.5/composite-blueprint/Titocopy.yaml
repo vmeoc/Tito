@@ -1,0 +1,264 @@
+id: Titocopy
+name: Tito
+description: |-
+  A very simple 3 Tier app using Apache and MySQL displaying stats about commuting by leveraging external API based service (Google Directions).
+  Goal is to showcase various ways of deploying an application.
+  More information: https://github.com/vmeoc/Tito
+status: PUBLISHED
+properties:
+  __nsx.management_endpoint_name:
+    fixed: p-vc-paris01.showroom.local
+    required: false
+    secured: false
+    visible: false
+  __nsx.transport_zone_name:
+    fixed: TZ-NewShowroom
+    required: false
+    secured: false
+    visible: false
+  _leaseDays:
+    default: 1
+    max: 999
+    min: 1
+components:
+  LabvRA:
+    type: Infrastructure.Network.Network.Existing
+    data:
+      name:
+        fixed: LabvRA
+      network_profile:
+        fixed: Lab vRA
+  MySQLInstall:
+    type: Software.MYSQLDATABASEVMwareSamplecopyMariaDB
+    data:
+      BIND_IP:
+        default: ${_resource~Tito-SQL~ip_address}
+        required: true
+      DB_PORT:
+        default: '3306'
+        required: true
+      DB_ROOT_PASSWORD:
+        default: Tito2016
+        required: false
+        secured: true
+      DB_ROOT_USERNAME:
+        default: root
+        required: false
+      host:
+        fixed: ${_resource~Tito-SQL}
+  Tito-FE:
+    type: Infrastructure.CatalogItem.Machine.Virtual.vSphere
+    data:
+      _cluster:
+        default: 1
+        max: 4
+        min: 1
+      action:
+        fixed: LinkedClone
+      allow_storage_policies:
+        fixed: false
+      blueprint_type:
+        fixed: '1'
+      cpu:
+        default: 1
+        max: 2
+        min: 1
+      disks:
+      - capacity: 100
+        custom_properties: null
+        id: 1479560192642
+        initial_location: ''
+        is_clone: true
+        label: Hard disk 1
+        storage_reservation_policy: ''
+        userCreated: false
+        volumeId: 0
+      guest_customization_specification: Linux
+      max_network_adapters: {}
+      max_volumes: {}
+      memory:
+        default: 4096
+        max: 4096
+        min: 4096
+      nics:
+      - address: ''
+        assignment_type: Static
+        id: 0
+        load_balancing: HTTP,HTTPS,TCP
+        network: ${_resource~LabvRA}
+        network_profile: Lab vRA
+      provisioning_workflow:
+        fixed:
+          id: CloneWorkflow
+          label: CloneWorkflow
+      security_groups:
+      - ${_resource~Vince_SG_Ext_Web}
+      security_tags: []
+      source_machine:
+        fixed:
+          id: b36c7d8d-7706-4d2b-8dce-8c786ebdb3bc
+          label: CentOSprVRA7parVinceV3-Lab
+      source_machine_external_snapshot:
+        fixed: 1
+      source_machine_name:
+        fixed: CentOSprVRA7parVinceV3-Lab
+      source_machine_vmsnapshot:
+        fixed:
+          id: '153'
+      storage:
+        default: 100
+        max: 100
+        min: 100
+  Tito-FE_1:
+    type: Software.TitoFE
+    dependsOn:
+    - TitoDB_conf_1
+    data:
+      SQLSERVER:
+        default: ${_resource~Tito-SQL~ip_address}
+        required: true
+      host:
+        fixed: ${_resource~Tito-FE}
+  Tito-SQL:
+    type: Infrastructure.CatalogItem.Machine.Virtual.vSphere
+    data:
+      _cluster:
+        default: 1
+        max: 1
+        min: 1
+      action:
+        fixed: LinkedClone
+      allow_storage_policies:
+        fixed: false
+      blueprint_type:
+        fixed: '1'
+      cpu:
+        default: 2
+        max: 2
+        min: 2
+      disks:
+      - capacity: 100
+        custom_properties: null
+        id: 1479560238258
+        initial_location: ''
+        is_clone: true
+        label: Hard disk 1
+        storage_reservation_policy: ''
+        userCreated: false
+        volumeId: 0
+      guest_customization_specification: Linux
+      max_network_adapters: {}
+      max_volumes: {}
+      memory:
+        default: 4096
+        max: 4096
+        min: 4096
+      nics:
+      - address: ''
+        assignment_type: Static
+        id: 0
+        load_balancing: ''
+        network: ${_resource~LabvRA}
+        network_profile: Lab vRA
+      provisioning_workflow:
+        fixed:
+          id: CloneWorkflow
+          label: CloneWorkflow
+      security_groups:
+      - ${_resource~vince_SG_DB}
+      security_tags: []
+      source_machine:
+        fixed:
+          id: b36c7d8d-7706-4d2b-8dce-8c786ebdb3bc
+          label: CentOSprVRA7parVinceV3-Lab
+      source_machine_external_snapshot:
+        fixed: 1
+      source_machine_name:
+        fixed: CentOSprVRA7parVinceV3-Lab
+      source_machine_vmsnapshot:
+        fixed:
+          id: '153'
+      storage:
+        default: 100
+        max: 100
+        min: 100
+  TitoDB_conf_1:
+    type: Software.TitoDBconf
+    data:
+      DB_NAME:
+        default: TitoDB
+        required: true
+      DB_PASSWORD: {}
+      DB_USERNAME:
+        default: root
+        required: true
+      INIT_DB_PASSWORD: {}
+      INIT_DB_USERNAME:
+        default: root
+        required: true
+      host:
+        fixed: ${_resource~MySQLInstall}
+  TitoLB:
+    type: Infrastructure.Network.LoadBalancer.NSX.OnDemand
+    data:
+      name:
+        fixed: TitoLB
+      services:
+        fixed:
+        - health_check_interval: 5
+          health_threshold: 5
+          id: HTTP
+          isSelected: true
+          name: HTTP
+          port: 80
+          response_timeout: 5
+          service_URI: ''
+          unhealth_threshold: 10
+        - health_check_interval: 5
+          health_threshold: 5
+          id: HTTPS
+          isSelected: true
+          name: HTTPS
+          port: 443
+          response_timeout: 5
+          service_URI: ''
+          unhealth_threshold: 10
+        - health_check_interval: 5
+          health_threshold: 5
+          id: TCP
+          isSelected: true
+          name: TCP
+          port: 8080
+          response_timeout: 5
+          service_URI: ''
+          unhealth_threshold: 10
+      tier:
+        fixed: ${_resource~Tito-FE}
+      tier_nic_index:
+        fixed: 0
+      vip_network:
+        fixed: ${_resource~LabvRA}
+  Vince_SG_Ext_Web:
+    type: Infrastructure.Network.SecurityGroup.NSX.Existing
+    data:
+      endpoint:
+        fixed: p-vc-paris01.showroom.local
+      name:
+        fixed: Vince_SG_Ext_Web
+  vince_SG_DB:
+    type: Infrastructure.Network.SecurityGroup.NSX.Existing
+    data:
+      endpoint:
+        fixed: p-vc-paris01.showroom.local
+      name:
+        fixed: vince_SG_DB
+layout:
+  LabvRA: 2,0
+  MySQLInstall: 0,0
+  Tito-FE: 1,3
+  Tito-FE_1: 0,0
+  Tito-SQL: 1,4
+  TitoDB_conf_1: 0,0
+  TitoLB: 1,2
+  Vince_SG_Ext_Web: 0,3
+  vince_SG_DB: 0,4

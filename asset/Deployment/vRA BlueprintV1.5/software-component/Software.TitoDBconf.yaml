@@ -1,0 +1,192 @@
+'@type': "SoftwareComponentType"
+createdDate: "2016-11-17T20:56:33.144Z"
+lastUpdated: "2016-11-17T21:00:28.603Z"
+id: "Software.TitoDBconf"
+name: "TitoDB conf"
+description: "Created by Vince"
+publishStatus: "PUBLISHED"
+publishStatusName: "Published"
+schema:
+  fields:
+  - id: "INIT_DB_PASSWORD"
+    label: "INIT_DB_PASSWORD"
+    description: "MySql root user password"
+    dataType:
+      type: "primitive"
+      typeId: "STRING"
+    state:
+      dependencies: []
+      facets:
+      - type: "mandatory"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: true
+      - type: "encrypted"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: true
+      - type: "defaultValue"
+        value:
+          type: "constant"
+          value:
+            type: "secureString"
+            value: "Tito2016"
+    isMultiValued: false
+  - id: "DB_USERNAME"
+    label: "DB_USERNAME"
+    description: "Database username"
+    dataType:
+      type: "primitive"
+      typeId: "STRING"
+    state:
+      dependencies: []
+      facets:
+      - type: "defaultValue"
+        value:
+          type: "constant"
+          value:
+            type: "string"
+            value: "root"
+      - type: "mandatory"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: true
+    isMultiValued: false
+  - id: "INIT_DB_USERNAME"
+    label: "INIT_DB_USERNAME"
+    description: "MySql root username"
+    dataType:
+      type: "primitive"
+      typeId: "STRING"
+    state:
+      dependencies: []
+      facets:
+      - type: "defaultValue"
+        value:
+          type: "constant"
+          value:
+            type: "string"
+            value: "root"
+      - type: "mandatory"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: true
+    isMultiValued: false
+  - id: "host"
+    label: "Container"
+    description: ""
+    dataType:
+      type: "ref"
+      componentTypeId: "com.vmware.csp.component.software.service"
+      classId: "softwareResourceType"
+      typeFilter: "Software.MYSQLDATABASEVMwareSamplecopyMariaDB"
+      label: "MYSQL DATABASE - VMware Sample - MariaDB"
+    state:
+      dependencies: []
+      facets:
+      - type: "internal"
+        value:
+          type: "constantClause"
+          value:
+            type: "boolean"
+            value: true
+      - type: "visible"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: false
+      - type: "mandatory"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: true
+    isMultiValued: false
+  - id: "DB_NAME"
+    label: "DB_NAME"
+    description: "Database name"
+    dataType:
+      type: "primitive"
+      typeId: "STRING"
+    state:
+      dependencies: []
+      facets:
+      - type: "defaultValue"
+        value:
+          type: "constant"
+          value:
+            type: "string"
+            value: "TitoDB"
+      - type: "mandatory"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: true
+    isMultiValued: false
+  - id: "DB_PASSWORD"
+    label: "DB_PASSWORD"
+    description: "Database password"
+    dataType:
+      type: "primitive"
+      typeId: "STRING"
+    state:
+      dependencies: []
+      facets:
+      - type: "mandatory"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: true
+      - type: "encrypted"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: true
+      - type: "defaultValue"
+        value:
+          type: "constant"
+          value:
+            type: "secureString"
+            value: "Tito2016"
+    isMultiValued: false
+containerFieldId: "host"
+lifecycleTasks:
+- createdDate: "2016-11-17T20:56:33.148Z"
+  lastUpdated: "2016-11-18T17:02:48.348Z"
+  script:
+    scriptContent: "#!/bin/bash\n#\n# Copyright 2011-2015 VMware, Inc. All rights\
+      \ reserved. \n#\n# ==============================================================================================\n\
+      # LAM-Java Database Example - INSTALLATION script\n#\n## INPUT PROPERTIES:\n\
+      # Property Name                                       Type         Description\n\
+      # DB_NAME        String       Database name\n# DB_PASSWORD        String   \
+      \    Database password\n# DB_USERNAME       String       Database username\n\
+      # INIT_DB_PASSWORD  String       MySql root user password\n# INIT_DB_USERNAME\
+      \  String       MySql root user username\n#\n## OUTPUT PROPERTIES:\n# n/a\n\
+      # ==============================================================================================\n\
+      \ \n##### Variables from Script properties ####\ndb_name=${DB_NAME}\ndb_password=${DB_PASSWORD}\n\
+      db_username=${DB_USERNAME}\ninit_db_password=${INIT_DB_PASSWORD}\ninit_db_username=${INIT_DB_USERNAME}\n\
+      \necho \"####### BIND VARIABLES #######\"\necho 'db_name'=$db_name\necho 'db_username'=$db_username\n\
+      echo 'init_db_username'=$init_db_username\necho \"##############################\"\
+      \n#####\n\n##### Write MySQL Script to create DB\n\ncat > $db_name.sql <<EOF\n\
+      \ncreate database if not exists TitoDB;\nuse TitoDB;\n\nCREATE TABLE TitoTable\
+      \ (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, home VARCHAR(50) NOT NULL,\
+      \ work VARCHAR(50) NOT NULL, hour_home_departure VARCHAR(50) NOT NULL, hour_work_departure\
+      \ VARCHAR(50) NOT NULL)\n\nEOF\n\n##### Run Script\n\nmysql -u$init_db_username\
+      \ -p$init_db_password < $db_name.sql"
+    isRebootAfter: false
+    scriptTypeId: "Bash"
+  taskDescriptorRef:
+    id: "INSTALL"
+    label: "Install"

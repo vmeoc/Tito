@@ -1,0 +1,24 @@
+name: "auto-generated-pkg-62c609ad-4f02-42d4-b14e-df2083942542"
+productVersion: "7.1.0-SNAPSHOT"
+data:
+- locator: "composite-blueprint/Titocopy.yaml"
+  name: "Tito"
+  description: "Tito"
+  dependencies:
+  - "software-component/Software.MYSQLDATABASEVMwareSamplecopyMariaDB.yaml"
+  - "software-component/Software.TitoDBconf.yaml"
+  - "software-component/Software.TitoFE.yaml"
+- locator: "software-component/Software.TitoDBconf.yaml"
+  name: "TitoDB conf"
+  description: "Created by Vince"
+  dependencies:
+  - "software-component/Software.MYSQLDATABASEVMwareSamplecopyMariaDB.yaml"
+- locator: "software-component/Software.MYSQLDATABASEVMwareSamplecopyMariaDB.yaml"
+  name: "MYSQL DATABASE - VMware Sample - MariaDB"
+  description: "Developed by VMware Inc, this software component is to install MySQL\
+    \ server 5.6.28.\nModified by Vince on the 13th of June 16"
+- locator: "software-component/Software.TitoFE.yaml"
+  name: "Tito-FE"
+  description: "Created by Vince on the 19 of Nov 2016\nContains all necessary step\
+    \ to properly install the Tito Front end"
+exportTime: "2016-11-22T08:28:05.037Z"
