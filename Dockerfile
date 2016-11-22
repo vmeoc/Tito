@@ -1,3 +1,6 @@
+#Created by Vincent Meoc
+# Create the Tito Front End container
+
 FROM php:rc-apache
 COPY . /var/www/html/
 

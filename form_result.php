@@ -8,9 +8,6 @@ $weekdays_work_duration = array("Monday", "Tuesday", "Wednesday", "Thursday", "F
 $stats = array("week" => "0", "month" => "0", "year" => "0", "life" => "0");
 
 //SQL variables
-//For deployment through docker compose
-//$servername = "tito-sql";
-//For Deployment through vRA
 $servername = getenv('TITO-SQL');
 $username = "root";
 $password = "Tito2016";
