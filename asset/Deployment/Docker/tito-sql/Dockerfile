@@ -4,5 +4,4 @@
 FROM mysql:5.7
 ENV MYSQL_ROOT_PASSWORD: Tito2016
 
-ADD asset/Deployment/Docker/tito-sql/db_name.sql /tmp/
-RUN mysql -uroot -pTito2016 < /tmp/db_name.sql
+ADD asset/Deployment/Docker/tito-sql/db_name.sql /docker-entrypoint-initdb.d
