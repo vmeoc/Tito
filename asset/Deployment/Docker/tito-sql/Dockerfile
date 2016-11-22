@@ -8,4 +8,4 @@ ENV MYSQL_USER: root
 ENV MYSQL_PASSWORD: Tito2016
 
 ADD asset/Deployment/Docker/tito-sql/db_name.sql /tmp/
-RUN mysql -uroot -pTito2016 < /tmp/db_name.sql
+#RUN mysql -uroot -pTito2016 < /tmp/db_name.sql
