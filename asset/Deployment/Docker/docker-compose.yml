@@ -1,3 +1,7 @@
+#Created by Vincent Meoc
+#To automate the deployment of the Front end and back end tier of Tito
+#tested and validated on the 22/11/16
+
 version: '2'
 
 services:
