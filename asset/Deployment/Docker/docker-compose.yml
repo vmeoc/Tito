@@ -10,6 +10,7 @@ services:
      environment:
        MYSQL_ROOT_PASSWORD: Tito2016
        MYSQL_USER: root
+       MYSQL_DATABASE: TitoDB
        MYSQL_PASSWORD: Tito2016
 
    Tito-FE:
