@@ -9,9 +9,7 @@ services:
      restart: always
      environment:
        MYSQL_ROOT_PASSWORD: Tito2016
-       MYSQL_USER: root
-       MYSQL_PASSWORD: Tito2016
-
+   
    Tito-FE:
      depends_on:
        - Tito-SQL
