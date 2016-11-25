@@ -8,8 +8,9 @@ services:
    Tito-SQL:
      container_name: tito-sql
      image: vmeoc/tito-sql:V1.5
-     volumes:
-       - "./data/db:/var/lib/mysql"
+ #removed until automated volume deployment is available
+ #    volumes:
+ #      - "./data/db:/var/lib/mysql"
      restart: always
      environment:
        MYSQL_ROOT_PASSWORD: Tito2016
