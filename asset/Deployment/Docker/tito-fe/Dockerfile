@@ -5,6 +5,7 @@
 FROM php:rc-apache
 COPY . /var/www/html/
 COPY asset/Deployment/Docker/tito-fe/apache2-foreground /usr/local/bin/apache2-foreground
+RUN chmod +x /usr/local/bin/apache2-foreground
 
 RUN apt-get update
 RUN apt-get install php5-mysql vim libmcrypt-dev -y
