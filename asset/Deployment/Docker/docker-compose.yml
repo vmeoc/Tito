@@ -1,26 +1,41 @@
-#Created by Vincent Meoc
-#To automate the deployment of the Front end and back end tier of Tito
-#tested and validated on the 22/11/16
-
 version: '2'
-
 services:
-   Tito-SQL:
-     container_name: tito-sql
-     image: vmeoc/tito-sql:V1.5
- #removed until automated volume deployment is available
- #    volumes:
- #      - "./data/db:/var/lib/mysql"
-     restart: always
-     environment:
-       MYSQL_ROOT_PASSWORD: Tito2016
-   
-   Tito-FE:
-     depends_on:
-       - Tito-SQL
-     image: vmeoc/tito-fe:V1.5.1
-     links:
-       - Tito-SQL
-     ports:
-       - "80:80"
-     restart: always     
+  Tito-FE:
+    image: vmeoc/tito-fe:V1.5.1
+    ports:
+      - 80
+    networks:
+      - front-tier
+      - back-tier
+    restart: always
+
+  Tito-SQL:
+    image: vmeoc/tito-sql:V1.5
+    links:
+      - Tito-FE
+    networks:
+      - back-tier
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Tito2016
+#removed until automated volume deployment is available
+#    volumes:
+#      - "./data/db:/var/lib/mysql"
+
+  lb:
+    image: dockercloud/haproxy
+    ports:
+      - 80:80
+    links:
+      - Tito-FE
+    networks:
+      - front-tier
+      - back-tier
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  front-tier:
+    driver: bridge
+  back-tier:
+    driver: bridge
