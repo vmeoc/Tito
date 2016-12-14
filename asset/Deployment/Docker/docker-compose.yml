@@ -22,18 +22,7 @@ services:
 #    volumes:
 #      - "./data/db:/var/lib/mysql"
 
-  lb:
-    image: dockercloud/haproxy
-    ports:
-      - 80:80
-    links:
-      - Tito-FE
-    networks:
-      - front-tier
-      - back-tier
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-
+ 
 networks:
   front-tier:
     driver: bridge
