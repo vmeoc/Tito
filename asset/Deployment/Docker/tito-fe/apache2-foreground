@@ -18,10 +18,19 @@ rm -f "$APACHE_PID_FILE"
 if [ -n "$TITOSQL" ]; then
         rm /etc/apache2/mods-enabled/env.conf
         cat <<EOF >> /etc/apache2/mods-enabled/env.conf
-                <IfModule env_module>
-                        SetEnv TITO-SQL $TITOSQL
-                </IfModule>
+                    <IfModule env_module>
+                            SetEnv TITO-SQL $TITOSQL
+                    </IfModule>
 EOF
+fi
+#if it's running in a kubernetes environement
+if [ -n "$TITO_SQL_SERVICE_SERVICE_HOST" ]; then
+     cat <<EOF >> /etc/apache2/mods-enabled/env.conf
+                    <IfModule env_module>
+                            SetEnv TITO-SQL $TITO_SQL_SERVICE_SERVICE_HOST
+                    </IfModule>
+EOF
+     
 fi
 
 exec apache2 -DFOREGROUND "$@"
