@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
     - name: tito-sql
-      image: vmeoc/tito-fe:V1.5
+      image: vmeoc/tito-sql:V1.5
       ports:
       - containerPort: 3306
       env:
