@@ -4,13 +4,13 @@ metadata:
   generateName: titofe-
   labels:
     name: tito-fe
-    version: "1.6" #1.6 contain dynamic variable setting through env variable. Need special check for K8
+    version: "1.7.1" #1.7.1 contain dynamic variable setting through env variable. with special check for K8
     app: tito
     tiers: tito-fe
 spec:
   containers:
     - name: tito
-      image: vmeoc/tito-fe:V1.6
+      image: vmeoc/tito-fe:V1.7.1
       ports:
       - containerPort: 80
       env:
