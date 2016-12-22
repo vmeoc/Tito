@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  generateName: titosql
+  generateName: titosql-
   labels:
     name: tito-sql
     version: "1.5.1"

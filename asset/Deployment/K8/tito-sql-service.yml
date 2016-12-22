@@ -6,10 +6,7 @@ metadata:
     app: tito
     tiers: tito-sql
 spec:
-  type: NodePort
   ports:
-    - name: sql
-      port: 3306               # port expose par docker  (pas le port dans le container)
-      nodePort:
+      - port: 3306               # port expose par docker  (pas le port dans le container)
   selector:                     # key/value, label permettant de definir le pod cible (doit etre danslabels du pod)
     tiers: tito-sql
