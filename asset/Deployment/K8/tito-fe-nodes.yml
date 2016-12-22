@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  generateName: titofe-
+  labels:
+    name: tito-fe
+    version: "1.6" #1.6 contain dynamic variable setting through env variable. Need special check for K8
+    app: tito
+    tiers: tito-fe
+spec:
+  containers:
+    - name: tito
+      image: vmeoc/tito-fe:V1.6
+      ports:
+        - containerPort: 80
