@@ -11,4 +11,4 @@ spec:
       port: 80               # port expose par docker  (pas le port dans le container)
       nodePort:
   selector:                     # key/value, label permettant de definir le pod cible (doit etre danslabels du pod)
-    tiers: tito-fe
+    type: tito-fe
