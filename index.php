@@ -101,7 +101,7 @@
                         <div class="col-lg-4 col-md-4 col-lg-offset-1 col-md-offset-1">
                             <div class="form-group">
                                 <div class="service-item">
-                                    <img src="./asset/img/home-icon.png" width="128" height="128">
+                                    <i class="fa fa-home fa-5x"></i>                                    
                                     <h4>
                                         <strong>Home address</strong>
                                     </h4>
@@ -122,7 +122,7 @@
                         <div class="col-lg-4 col-md-4 col-lg-offset-2 col-md-offset-2">
                             <div class="form-group">
                                 <div class="service-item">
-                                    <img src="./asset/img/building-icon.png" width="128" height="128">
+                                    <i class="fa fa-building fa-5x"></i>                                    
                                     <h4>
                                         <strong>Work address</strong>
                                     </h4>
