@@ -163,27 +163,20 @@
                         <h4><strong>Powered by PHP/Bootstrap/Javascript/SDDC</strong>
                         </h4>
                         <p>VMware France
-                            <br>La Défense, Paris</p>
                         <ul class="list-unstyled">
                             <li><i class="fa fa-envelope-o fa-fw"></i> <a href="mailto:name@example.com">vmeoc@vmware.com</a>
                             </li>
                         </ul>
                         <br>
-                        <ul class="list-inline">
-                            <li>
-                                <a href="#"><i class="fa fa-facebook fa-fw fa-3x"></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-twitter fa-fw fa-3x"></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-dribbble fa-fw fa-3x"></i></a>
-                            </li>
-                        </ul>
                         <hr class="small">
                        <p class="text-muted">
                         <?PHP
-                        echo "Server Name: " . gethostname()
+                        echo "V1.7.1";
+                        echo "<br>";
+                        echo "Tito Front End: " . gethostname() . " (" . getHostByName(getHostName()) .")";
+                        echo "<br>";
+                        echo "Tito Back End: " . getenv('TITO-SQL');
+
                                 ?>
                         </p>
                     </div>
