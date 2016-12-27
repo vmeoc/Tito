@@ -1,6 +1,6 @@
 '@type': "SoftwareComponentType"
 createdDate: "2016-06-13T12:36:49.322Z"
-lastUpdated: "2016-06-15T20:26:02.880Z"
+lastUpdated: "2016-12-02T10:56:28.222Z"
 id: "Software.MYSQLDATABASEVMwareSamplecopyMariaDB"
 name: "MYSQL DATABASE - VMware Sample - MariaDB"
 description: "Developed by VMware Inc, this software component is to install MySQL\
@@ -64,6 +64,12 @@ schema:
     state:
       dependencies: []
       facets:
+      - type: "mandatory"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: true
       - type: "internal"
         value:
           type: "constantClause"
@@ -76,12 +82,6 @@ schema:
           value:
             type: "boolean"
             value: false
-      - type: "mandatory"
-        value:
-          type: "constant"
-          value:
-            type: "boolean"
-            value: true
     isMultiValued: false
   - id: "DB_ROOT_USERNAME"
     label: "DB_ROOT_USERNAME"
@@ -137,7 +137,44 @@ schema:
 containerFieldId: "host"
 lifecycleTasks:
 - createdDate: "2016-06-13T12:36:49.324Z"
-  lastUpdated: "2016-07-08T13:24:37.484Z"
+  lastUpdated: "2016-12-02T11:20:13.312Z"
+  script:
+    scriptContent: "#!/bin/bash\n#modified by Vince on the 24/12/15 since CentOS7\
+      \ use Mariadb\n#/usr/bin/yum install mysql-server mysql-client -y\n#/sbin/chkconfig\
+      \ mysqld on\n#/sbin/service mysqld start\n# new script by vince\necho \"yum\
+      \ update\"\nyum update\necho \"install mariadb-server mariadb\"\nyum -y install\
+      \ mariadb-server mariadb\necho \"activation des services\"\nsystemctl start\
+      \ mariadb.service\nsystemctl enable mariadb.service\necho \"fin de la configuration\""
+    isRebootAfter: false
+    scriptTypeId: "Bash"
+  taskDescriptorRef:
+    id: "INSTALL"
+    label: "Install"
+- createdDate: "2016-06-13T12:36:49.323Z"
+  lastUpdated: "2016-12-02T11:20:13.312Z"
+  script:
+    scriptContent: "#!/bin/sh\n#\n# Copyright 2011-2015 VMware, Inc. All rights reserved.\
+      \ \n#\n# ==============================================================================================\n\
+      ## MYSQL DB installation - START script\n# MYSQL DB installation\n#\n## INPUT\
+      \ PROPERTIES:\n# Property Name             Type           Description\n# DB_ROOT_USERNAME\
+      \          String         User name of DB admin account\n# DB_ROOT_PASSWORD\
+      \          String         Password of DB admin account\n#\n## OUTPUT PROPERTIES:\n\
+      # n/a\n#\n# ==============================================================================================\n\
+      \ \n##### Variables from Script properties ####\ndb_root_username=${DB_ROOT_USERNAME}\n\
+      db_root_password=${DB_ROOT_PASSWORD}\n####\n\n# Set global variables\nset -e\n\
+      export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$JAVA_HOME/bin\n\
+      \necho \"Starting MYSQL\"\necho \"Granting privileges for remote access.\"\n\
+      echo \"db_root_username=$db_root_username\"\necho \"db_root_password=$db_root_password\"\
+      \nmysql -u $db_root_username -p$db_root_password <<!\ngrant all privileges on\
+      \ *.* to '$db_root_username'@'%' identified by '$db_root_password' with grant\
+      \ option;\n!\necho \"Done - START script of MYSQL Database\""
+    isRebootAfter: false
+    scriptTypeId: "Bash"
+  taskDescriptorRef:
+    id: "START"
+    label: "Start"
+- createdDate: "2016-06-13T12:36:49.324Z"
+  lastUpdated: "2016-12-02T11:20:13.312Z"
   script:
     scriptContent: "#!/bin/sh\n#\n# Copyright 2011-2015 VMware, Inc. All rights reserved.\
       \ \n#\n# ==============================================================================================\n\
@@ -150,7 +187,8 @@ lifecycleTasks:
       \ Port\n#\n## OUTPUT PROPERTIES:\n# n/a\n#\n# ==============================================================================================\n\
       \n##### Variables from Script properties ####\ndb_root_username=${DB_ROOT_USERNAME}\n\
       db_root_password=${DB_ROOT_PASSWORD}\nbind_ip=${BIND_IP}\ndb_port=${DB_PORT}\n\
-      ####\n \n# Set global variables\nset -e\nexport PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$JAVA_HOME/bin\n\
+      ####\n\n### UPDATE ALEX\necho \"UPDATE ALEX\"\necho $DB_ROOT_PASSWORD\n### FIN\
+      \ UPDATE ALEX\n\n \n# Set global variables\nset -e\nexport PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$JAVA_HOME/bin\n\
       \n# FUNTION TO CHECK ERROR\nfunction check_error()\n{\n    if [ ! \"$?\" = \"\
       0\" ]; then\n        error_exit \"$1\";\n    fi\n}\n\n# FUNCTION TO DISPLAY\
       \ ERROR AND EXIT\nfunction error_exit()\n{\n    echo \"${PROGNAME}: ${1:-\"\
@@ -181,40 +219,3 @@ lifecycleTasks:
   taskDescriptorRef:
     id: "CONFIGURE"
     label: "Configure"
-- createdDate: "2016-06-13T12:36:49.324Z"
-  lastUpdated: "2016-07-08T13:24:37.484Z"
-  script:
-    scriptContent: "#!/bin/bash\n#modified by Vince on the 24/12/15 since CentOS7\
-      \ use Mariadb\n#/usr/bin/yum install mysql-server mysql-client -y\n#/sbin/chkconfig\
-      \ mysqld on\n#/sbin/service mysqld start\n# new script by vince\necho \"yum\
-      \ update\"\nyum update\necho \"install mariadb-server mariadb\"\nyum -y install\
-      \ mariadb-server mariadb\necho \"activation des services\"\nsystemctl start\
-      \ mariadb.service\nsystemctl enable mariadb.service\necho \"fin de la configuration\""
-    isRebootAfter: false
-    scriptTypeId: "Bash"
-  taskDescriptorRef:
-    id: "INSTALL"
-    label: "Install"
-- createdDate: "2016-06-13T12:36:49.323Z"
-  lastUpdated: "2016-07-08T13:24:37.484Z"
-  script:
-    scriptContent: "#!/bin/sh\n#\n# Copyright 2011-2015 VMware, Inc. All rights reserved.\
-      \ \n#\n# ==============================================================================================\n\
-      ## MYSQL DB installation - START script\n# MYSQL DB installation\n#\n## INPUT\
-      \ PROPERTIES:\n# Property Name             Type           Description\n# DB_ROOT_USERNAME\
-      \          String         User name of DB admin account\n# DB_ROOT_PASSWORD\
-      \          String         Password of DB admin account\n#\n## OUTPUT PROPERTIES:\n\
-      # n/a\n#\n# ==============================================================================================\n\
-      \ \n##### Variables from Script properties ####\ndb_root_username=${DB_ROOT_USERNAME}\n\
-      db_root_password=${DB_ROOT_PASSWORD}\n####\n\n# Set global variables\nset -e\n\
-      export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$JAVA_HOME/bin\n\
-      \necho \"Starting MYSQL\"\necho \"Granting privileges for remote access.\"\n\
-      echo \"db_root_username=$db_root_username\"\necho \"db_root_password=$db_root_password\"\
-      \nmysql -u $db_root_username -p$db_root_password <<!\ngrant all privileges on\
-      \ *.* to '$db_root_username'@'%' identified by '$db_root_password' with grant\
-      \ option;\n!\necho \"Done - START script of MYSQL Database\""
-    isRebootAfter: false
-    scriptTypeId: "Bash"
-  taskDescriptorRef:
-    id: "START"
-    label: "Start"

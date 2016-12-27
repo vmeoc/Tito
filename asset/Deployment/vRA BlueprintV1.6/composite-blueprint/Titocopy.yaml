@@ -16,6 +16,16 @@ properties:
     required: false
     secured: false
     visible: false
+  _debug_deployment:
+    fixed: 'true'
+    required: false
+    secured: false
+    visible: false
+  _deploymentName:
+    default: ''
+    required: true
+    secured: false
+    visible: true
   _leaseDays:
     default: 1
     max: 999
@@ -60,13 +70,13 @@ components:
       blueprint_type:
         fixed: '1'
       cpu:
-        default: 1
+        default: 2
         max: 2
-        min: 1
+        min: 2
       disks:
       - capacity: 100
         custom_properties: null
-        id: 1479560192642
+        id: 1481620607671
         initial_location: ''
         is_clone: true
         label: Hard disk 1
@@ -99,12 +109,12 @@ components:
           id: b36c7d8d-7706-4d2b-8dce-8c786ebdb3bc
           label: CentOSprVRA7parVinceV3-Lab
       source_machine_external_snapshot:
-        fixed: 1
+        fixed: 4
       source_machine_name:
         fixed: CentOSprVRA7parVinceV3-Lab
       source_machine_vmsnapshot:
         fixed:
-          id: '153'
+          id: '1379'
       storage:
         default: 100
         max: 100
@@ -114,9 +124,17 @@ components:
     dependsOn:
     - TitoDB_conf_1
     data:
+      CodeVersion:
+        default: V1.5
+        visible: true
+      Github:
+        default: https://github.com/vmeoc/Tito/
+        required: true
+        visible: true
       SQLSERVER:
         default: ${_resource~Tito-SQL~ip_address}
         required: true
+        visible: false
       host:
         fixed: ${_resource~Tito-FE}
   Tito-SQL:
@@ -139,7 +157,7 @@ components:
       disks:
       - capacity: 100
         custom_properties: null
-        id: 1479560238258
+        id: 1479999766184
         initial_location: ''
         is_clone: true
         label: Hard disk 1
@@ -172,12 +190,12 @@ components:
           id: b36c7d8d-7706-4d2b-8dce-8c786ebdb3bc
           label: CentOSprVRA7parVinceV3-Lab
       source_machine_external_snapshot:
-        fixed: 1
+        fixed: 2
       source_machine_name:
         fixed: CentOSprVRA7parVinceV3-Lab
       source_machine_vmsnapshot:
         fixed:
-          id: '153'
+          id: '1370'
       storage:
         default: 100
         max: 100
@@ -188,11 +206,11 @@ components:
       DB_NAME:
         default: TitoDB
         required: true
-      DB_PASSWORD: {}
+      DB_PASSWORD: Tito2016
       DB_USERNAME:
         default: root
         required: true
-      INIT_DB_PASSWORD: {}
+      INIT_DB_PASSWORD: Tito2016
       INIT_DB_USERNAME:
         default: root
         required: true
@@ -255,10 +273,12 @@ components:
 layout:
   LabvRA: 2,0
   MySQLInstall: 0,0
-  Tito-FE: 1,3
+  Tito-FE: 1,2
   Tito-FE_1: 0,0
-  Tito-SQL: 1,4
+  Tito-SQL: 1,3
   TitoDB_conf_1: 0,0
-  TitoLB: 1,2
-  Vince_SG_Ext_Web: 0,3
-  vince_SG_DB: 0,4
+  TitoLB: 1,1
+  Vince_SG_Ext_Web: 0,2
+  vince_SG_DB: 0,3
+propertyGroups:
+- EBSExtensibility

@@ -1,6 +1,6 @@
 '@type': "SoftwareComponentType"
 createdDate: "2016-11-17T20:56:33.144Z"
-lastUpdated: "2016-11-17T21:00:28.603Z"
+lastUpdated: "2016-12-02T09:40:37.630Z"
 id: "Software.TitoDBconf"
 name: "TitoDB conf"
 description: "Created by Vince"
@@ -92,6 +92,12 @@ schema:
     state:
       dependencies: []
       facets:
+      - type: "mandatory"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: true
       - type: "internal"
         value:
           type: "constantClause"
@@ -104,12 +110,6 @@ schema:
           value:
             type: "boolean"
             value: false
-      - type: "mandatory"
-        value:
-          type: "constant"
-          value:
-            type: "boolean"
-            value: true
     isMultiValued: false
   - id: "DB_NAME"
     label: "DB_NAME"
@@ -164,7 +164,7 @@ schema:
 containerFieldId: "host"
 lifecycleTasks:
 - createdDate: "2016-11-17T20:56:33.148Z"
-  lastUpdated: "2016-11-18T17:02:48.348Z"
+  lastUpdated: "2016-12-02T13:35:55.262Z"
   script:
     scriptContent: "#!/bin/bash\n#\n# Copyright 2011-2015 VMware, Inc. All rights\
       \ reserved. \n#\n# ==============================================================================================\n\
@@ -175,16 +175,19 @@ lifecycleTasks:
       # INIT_DB_PASSWORD  String       MySql root user password\n# INIT_DB_USERNAME\
       \  String       MySql root user username\n#\n## OUTPUT PROPERTIES:\n# n/a\n\
       # ==============================================================================================\n\
-      \ \n##### Variables from Script properties ####\ndb_name=${DB_NAME}\ndb_password=${DB_PASSWORD}\n\
-      db_username=${DB_USERNAME}\ninit_db_password=${INIT_DB_PASSWORD}\ninit_db_username=${INIT_DB_USERNAME}\n\
-      \necho \"####### BIND VARIABLES #######\"\necho 'db_name'=$db_name\necho 'db_username'=$db_username\n\
-      echo 'init_db_username'=$init_db_username\necho \"##############################\"\
-      \n#####\n\n##### Write MySQL Script to create DB\n\ncat > $db_name.sql <<EOF\n\
-      \ncreate database if not exists TitoDB;\nuse TitoDB;\n\nCREATE TABLE TitoTable\
-      \ (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, home VARCHAR(50) NOT NULL,\
-      \ work VARCHAR(50) NOT NULL, hour_home_departure VARCHAR(50) NOT NULL, hour_work_departure\
-      \ VARCHAR(50) NOT NULL)\n\nEOF\n\n##### Run Script\n\nmysql -u$init_db_username\
-      \ -p$init_db_password < $db_name.sql"
+      \ \n##### Variables from Script properties ####\ndb_name=${DB_NAME}\ndb_password=${DB_PASSWORD}\
+      \          # UNUSED ?????\ndb_username=${DB_USERNAME}\ninit_db_password=${INIT_DB_PASSWORD}\n\
+      init_db_username=${INIT_DB_USERNAME}\n\necho \"####### BIND VARIABLES #######\"\
+      \necho 'db_name'=$db_name\necho 'db_username'=$db_username\necho 'init_db_username'=$init_db_username\n\
+      echo \"##############################\"\n#####\n\n##### Write MySQL Script to\
+      \ create DB\n\ncat > $db_name.sql <<EOF\n\ncreate database if not exists TitoDB;\n\
+      use TitoDB;\n\nCREATE TABLE TitoTable (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY\
+      \ KEY, home VARCHAR(50) NOT NULL, work VARCHAR(50) NOT NULL, hour_home_departure\
+      \ VARCHAR(50) NOT NULL, hour_work_departure VARCHAR(50) NOT NULL)\n\nEOF\n\n\
+      ##### Run Script\necho \"DEBUT DU SCRIPT mysql -u .....\"\n#   OLD NOOK - mysql\
+      \ -u$init_db_username -p$init_db_password  <  $db_name.sql   # NOOK\n\nmysql\
+      \ --user=$init_db_username --password=$init_db_password < $db_name.sql    #\
+      \ OK\n\n\n"
     isRebootAfter: false
     scriptTypeId: "Bash"
   taskDescriptorRef:

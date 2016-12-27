@@ -1,0 +1,147 @@
+'@type': "SoftwareComponentType"
+createdDate: "2016-11-19T13:03:11.930Z"
+lastUpdated: "2016-12-26T20:54:49.170Z"
+id: "Software.TitoFE"
+name: "Tito-FE"
+description: "Created by Vince on the 19 of Nov 2016\nContains all necessary step\
+  \ to properly install the Tito Front end"
+publishStatus: "PUBLISHED"
+publishStatusName: "Published"
+schema:
+  fields:
+  - id: "Github"
+    label: "Github"
+    description: "GitHub URL"
+    dataType:
+      type: "primitive"
+      typeId: "STRING"
+    state:
+      dependencies: []
+      facets:
+      - type: "defaultValue"
+        value:
+          type: "constant"
+          value:
+            type: "string"
+            value: "https://github.com/vmeoc/Tito/"
+      - type: "mandatory"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: true
+    isMultiValued: false
+  - id: "host"
+    label: "Container"
+    description: ""
+    dataType:
+      type: "ref"
+      componentTypeId: "com.vmware.csp.iaas.blueprint.service"
+      classId: "Infrastructure.Machine.Schema"
+      label: "Machine"
+    state:
+      dependencies: []
+      facets:
+      - type: "mandatory"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: true
+      - type: "internal"
+        value:
+          type: "constantClause"
+          value:
+            type: "boolean"
+            value: true
+      - type: "visible"
+        value:
+          type: "constantClause"
+          value:
+            type: "boolean"
+            value: false
+    isMultiValued: false
+  - id: "CodeVersion"
+    label: "CodeVersion"
+    description: "Version (based on tag) of the code to pull"
+    dataType:
+      type: "primitive"
+      typeId: "STRING"
+    state:
+      dependencies: []
+      facets:
+      - type: "defaultValue"
+        value:
+          type: "constant"
+          value:
+            type: "string"
+            value: "V1.5"
+    isMultiValued: false
+  - id: "SQLSERVER"
+    label: "SQLSERVER"
+    description: "IP/FQDN dur serveur MySQL"
+    dataType:
+      type: "primitive"
+      typeId: "STRING"
+    state:
+      dependencies: []
+      facets:
+      - type: "defaultValue"
+        value:
+          type: "constant"
+          value:
+            type: "string"
+            value: ""
+      - type: "mandatory"
+        value:
+          type: "constant"
+          value:
+            type: "boolean"
+            value: true
+    isMultiValued: false
+containerFieldId: "host"
+lifecycleTasks:
+- createdDate: "2016-11-19T13:03:11.931Z"
+  lastUpdated: "2016-12-26T20:54:49.170Z"
+  script:
+    scriptContent: "#!/bin/bash\n#This script install all the packages needed for\
+      \ the Tito Front End (Apache, git)\n#It also configure the necessary files\n\
+      #it download the necessary sources from  Git\n#and it start the service\n\n\
+      #variables#######################\nHTMLPATH=/var/www/html\nGITREPO=$Github\n\
+      HTTPDCONF=/etc/httpd/conf/httpd.conf\n#################################\necho\
+      \ \necho -e \"Open Firewall port 80\\n\"\n\nfirewall-cmd --zone=public --add-port=80/tcp\
+      \ --permanent\nfirewall-cmd --reload\n\n\necho\necho -e \"Install Apache & PHP\\\
+      n\"\n\n#yum update -y\nyum install httpd -y\n/usr/sbin/service httpd start\n\
+      yum install php -y\nyum install php-mysql -y\n/usr/sbin/chkconfig httpd on\n\
+      \necho\necho -e \"install Git\\n\"\n\nyum install git -y\n\necho\necho -e \"\
+      Install Tito sources \\n\""
+    isRebootAfter: false
+    scriptTypeId: "Bash"
+  taskDescriptorRef:
+    id: "INSTALL"
+    label: "Install"
+- createdDate: "2016-12-13T09:44:09.779Z"
+  lastUpdated: "2016-12-26T20:54:49.170Z"
+  script:
+    scriptContent: "#variables#######################\nHTMLPATH=/var/www/html\nGITREPO=$Github\n\
+      HTTPDCONF=/etc/httpd/conf/httpd.conf\n#################################\n\n\
+      cd $HTMLPATH\ngit clone $GITREPO .\ngit checkout tags/$CodeVersion\n\necho\n\
+      echo -e \"conf httpd.conf pour prise en compte de PHP et paramètrage du serveur\
+      \ SQL\\n\"\n\n\necho \"LoadModule php5_module modules/libphp5.so\" >> $HTTPDCONF\n\
+      cat <<EOF >> $HTTPDCONF\n<IfModule env_module>\n    SetEnv TITO-SQL \"$SQLSERVER\"\
+      \n</IfModule>\nEOF\n\necho -e \"conf php.ini pour Timezone \\n\"\n\necho \"\
+      date.timezone = \\\"Europe/Paris\\\"\" >> /etc/php.ini\n\n"
+    isRebootAfter: false
+    scriptTypeId: "Bash"
+  taskDescriptorRef:
+    id: "CONFIGURE"
+    label: "Configure"
+- createdDate: "2016-12-13T10:49:43.336Z"
+  lastUpdated: "2016-12-26T20:54:49.170Z"
+  script:
+    scriptContent: "/usr/sbin/service httpd restart"
+    isRebootAfter: false
+    scriptTypeId: "Bash"
+  taskDescriptorRef:
+    id: "START"
+    label: "Start"

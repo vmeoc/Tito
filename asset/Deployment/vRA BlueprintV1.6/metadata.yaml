@@ -1,5 +1,5 @@
-name: "auto-generated-pkg-62c609ad-4f02-42d4-b14e-df2083942542"
-productVersion: "7.1.0-SNAPSHOT"
+name: "auto-generated-pkg-f8fbde26-e2f1-4457-b456-6f13e558aab5"
+productVersion: "7.2.0-SNAPSHOT"
 data:
 - locator: "composite-blueprint/Titocopy.yaml"
   name: "Tito"
@@ -21,4 +21,4 @@ data:
   name: "Tito-FE"
   description: "Created by Vince on the 19 of Nov 2016\nContains all necessary step\
     \ to properly install the Tito Front end"
-exportTime: "2016-11-22T08:28:05.037Z"
+exportTime: "2016-12-27T08:21:17.686Z"
