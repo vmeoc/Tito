@@ -14,6 +14,30 @@ $password = "Tito2016";
 $tablename = "TitoTable";
 $dbname = "TitoDB";
 
+// Réception des variables
+$hour_home_departure = $_POST['hour_home_departure'];
+$hour_work_departure = $_POST['hour_work_departure'];
+
+$home = $_POST['home'];
+$work = $_POST['work'];
+
+//nettoyage des variables
+$home = str_replace(' ', '%20', $home);
+$work = str_replace(' ', '%20', $work);
+
+//Conversion
+dataconversion($hour_home_departure, $hour_work_departure);
+GetDataFromGoogle();
+CreateStats();
+echo "<div class='parallax-container' data-parallax='scroll' data-speed='0.1' data-bleed='50' data-natural-height='223' data-image-src='./asset/img/bg.jpg'>";
+echo "<section>";
+DisplayTable();
+DisplayStats();
+echo "</section>";
+echo "</div>";
+showmap();
+writeintodb();
+
 //Obtention des infos de Google
 function GetDataFromGoogle() {
     global $weekdays_home_duration;
@@ -232,24 +256,6 @@ function DisplayStats() {
     foreach ($stats as $key => $val) {
         echo createStatBlock($key, $val, (isset($class_colors[$key]) ? $class_colors[$key] : "stat-block-default"));
     }
-    /*
-      echo "by week: ";
-      echo secondsToTime($stats["week"]);
-      echo "<br>";
-
-      echo "by Month: ";
-      echo secondsToTime($stats["month"]);
-      echo "<br>";
-
-      echo "by year: ";
-      echo secondsToTime($stats["year"]);
-      echo "<br>";
-
-      echo "over a lifetime: ";
-      echo secondsToTime($stats["life"]);
-      echo "<br>";
-     */
-
     echo "</div>";
     echo "</div>";
 }
@@ -307,30 +313,5 @@ function writeintodb() {
     $conn->close();
 }
 
-// Réception des variables
-//$hour_home_departure = $_POST['hour_home_departure'];
-//$hour_work_departure = $_POST['hour_work_departure'];
-$hour_home_departure = $_POST['hour_home_departure'];
-$hour_work_departure = $_POST['hour_work_departure'];
 
-$home = $_POST['home'];
-$work = $_POST['work'];
-
-//nettoyage des variables
-$home = str_replace(' ', '%20', $home);
-$work = str_replace(' ', '%20', $work);
-
-
-//Conversion
-dataconversion($hour_home_departure, $hour_work_departure);
-GetDataFromGoogle();
-CreateStats();
-echo "<div class='parallax-container' data-parallax='scroll' data-speed='0.1' data-bleed='50' data-natural-height='223' data-image-src='./asset/img/bg.jpg'>";
-echo "<section>";
-DisplayTable();
-DisplayStats();
-echo "</section>";
-echo "</div>";
-showmap();
-writeintodb();
 ?>
