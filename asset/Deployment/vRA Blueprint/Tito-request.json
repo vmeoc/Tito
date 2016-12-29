@@ -1,0 +1,267 @@
+{
+  "catalogItemId" : "4f69efdf-4795-4ec6-9e26-e401806d12f5",
+  "requestedFor" : null,
+  "businessGroupId" : "8e7189ae-b875-40c7-a816-4afed38e0a55",
+  "description" : null,
+  "reasons" : "Demo",
+  "data" : {
+    "Extensibility.Lifecycle.Properties.CloneWorkflow.CustomizeMachine" : "*",
+    "Extensibility.Lifecycle.Properties.CloneWorkflow.InitialPowerOn" : "*",
+    "Extensibility.Lifecycle.Properties.VMPSMasterWorkflow32.BuildingMachine" : "*",
+    "Extensibility.Lifecycle.Properties.VMPSMasterWorkflow32.Disposing" : "*",
+    "Extensibility.Lifecycle.Properties.VMPSMasterWorkflow32.Expired" : "*",
+    "Extensibility.Lifecycle.Properties.VMPSMasterWorkflow32.MachineProvisioned" : "*",
+    "Extensibility.Lifecycle.Properties.VMPSMasterWorkflow32.Off" : "*",
+    "Extensibility.Lifecycle.Properties.VMPSMasterWorkflow32.On" : "*",
+    "Extensibility.Lifecycle.Properties.VMPSMasterWorkflow32.Rebooting" : "*",
+    "Extensibility.Lifecycle.Properties.VMPSMasterWorkflow32.Requested" : "*",
+    "Extensibility.Lifecycle.Properties.VMPSMasterWorkflow32.UnprovisionMachine" : "*",
+    "Install_vRops_EP_Agent_depuis_Web_Server_1" : {
+      "componentTypeId" : "com.vmware.csp.component.cafe.composition",
+      "componentId" : null,
+      "classId" : "Blueprint.Component.Declaration",
+      "typeFilter" : "Titocopy*Install_vRops_EP_Agent_depuis_Web_Server_1",
+      "data" : {
+        "_hasChildren" : false
+      }
+    },
+    "Install_vRops_EP_Agent_depuis_Web_Server_2" : {
+      "componentTypeId" : "com.vmware.csp.component.cafe.composition",
+      "componentId" : null,
+      "classId" : "Blueprint.Component.Declaration",
+      "typeFilter" : "Titocopy*Install_vRops_EP_Agent_depuis_Web_Server_2",
+      "data" : {
+        "_hasChildren" : false
+      }
+    },
+    "LabvRA" : {
+      "componentTypeId" : "com.vmware.csp.component.cafe.composition",
+      "componentId" : null,
+      "classId" : "Blueprint.Component.Declaration",
+      "typeFilter" : "Titocopy*LabvRA",
+      "data" : {
+        "_hasChildren" : false
+      }
+    },
+    "MySQLInstall" : {
+      "componentTypeId" : "com.vmware.csp.component.cafe.composition",
+      "componentId" : null,
+      "classId" : "Blueprint.Component.Declaration",
+      "typeFilter" : "Titocopy*MySQLInstall",
+      "data" : {
+        "DB_PORT" : "3306",
+        "DB_ROOT_PASSWORD" : "s2enc~GvViSNq8WFJNCOtSwb2+xQ==",
+        "DB_ROOT_USERNAME" : "root",
+        "_hasChildren" : true
+      }
+    },
+    "Tito-FE" : {
+      "componentTypeId" : "com.vmware.csp.component.cafe.composition",
+      "componentId" : null,
+      "classId" : "Blueprint.Component.Declaration",
+      "typeFilter" : "Titocopy*Tito-FE",
+      "data" : {
+        "_allocation" : {
+          "componentTypeId" : "com.vmware.csp.iaas.blueprint.service",
+          "componentId" : null,
+          "classId" : "Infrastructure.Compute.Machine.Allocation",
+          "typeFilter" : null,
+          "data" : {
+            "machines" : [ {
+              "componentTypeId" : "com.vmware.csp.iaas.blueprint.service",
+              "componentId" : null,
+              "classId" : "Infrastructure.Compute.Machine.Allocation.Machine",
+              "typeFilter" : null,
+              "data" : {
+                "machine_id" : "",
+                "nics" : [ {
+                  "componentTypeId" : "com.vmware.csp.iaas.blueprint.service",
+                  "componentId" : null,
+                  "classId" : "Infrastructure.Compute.Machine.Nic",
+                  "typeFilter" : null,
+                  "data" : {
+                    "address" : "",
+                    "assignment_type" : "Static",
+                    "external_address" : "",
+                    "id" : null,
+                    "load_balancing" : null,
+                    "network" : null,
+                    "network_profile" : null
+                  }
+                } ]
+              }
+            } ]
+          }
+        },
+        "_cluster" : 1,
+        "_hasChildren" : true,
+        "cpu" : 2,
+        "datacenter_location" : null,
+        "description" : null,
+        "disks" : [ {
+          "componentTypeId" : "com.vmware.csp.iaas.blueprint.service",
+          "componentId" : null,
+          "classId" : "Infrastructure.Compute.Machine.MachineDisk",
+          "typeFilter" : null,
+          "data" : {
+            "capacity" : 100,
+            "custom_properties" : null,
+            "id" : 1481620607671,
+            "initial_location" : "",
+            "is_clone" : true,
+            "label" : "Hard disk 1",
+            "storage_reservation_policy" : "",
+            "userCreated" : false,
+            "volumeId" : 0
+          }
+        } ],
+        "display_location" : false,
+        "guest_customization_specification" : "Linux",
+        "machine_prefix" : null,
+        "max_network_adapters" : -1,
+        "max_per_user" : 0,
+        "max_volumes" : 60,
+        "memory" : 4096,
+        "reservation_policy" : null,
+        "security_groups" : null,
+        "security_tags" : [ ],
+        "storage" : 100
+      }
+    },
+    "Tito-FE_1" : {
+      "componentTypeId" : "com.vmware.csp.component.cafe.composition",
+      "componentId" : null,
+      "classId" : "Blueprint.Component.Declaration",
+      "typeFilter" : "Titocopy*Tito-FE_1",
+      "data" : {
+        "CodeVersion" : "V1.5",
+        "Github" : "https://github.com/vmeoc/Tito/",
+        "_hasChildren" : false
+      }
+    },
+    "Tito-SQL" : {
+      "componentTypeId" : "com.vmware.csp.component.cafe.composition",
+      "componentId" : null,
+      "classId" : "Blueprint.Component.Declaration",
+      "typeFilter" : "Titocopy*Tito-SQL",
+      "data" : {
+        "_allocation" : {
+          "componentTypeId" : "com.vmware.csp.iaas.blueprint.service",
+          "componentId" : null,
+          "classId" : "Infrastructure.Compute.Machine.Allocation",
+          "typeFilter" : null,
+          "data" : {
+            "machines" : [ {
+              "componentTypeId" : "com.vmware.csp.iaas.blueprint.service",
+              "componentId" : null,
+              "classId" : "Infrastructure.Compute.Machine.Allocation.Machine",
+              "typeFilter" : null,
+              "data" : {
+                "machine_id" : "",
+                "nics" : [ {
+                  "componentTypeId" : "com.vmware.csp.iaas.blueprint.service",
+                  "componentId" : null,
+                  "classId" : "Infrastructure.Compute.Machine.Nic",
+                  "typeFilter" : null,
+                  "data" : {
+                    "address" : "",
+                    "assignment_type" : "Static",
+                    "external_address" : "",
+                    "id" : null,
+                    "load_balancing" : null,
+                    "network" : null,
+                    "network_profile" : null
+                  }
+                } ]
+              }
+            } ]
+          }
+        },
+        "_cluster" : 1,
+        "_hasChildren" : true,
+        "cpu" : 2,
+        "datacenter_location" : null,
+        "description" : null,
+        "disks" : [ {
+          "componentTypeId" : "com.vmware.csp.iaas.blueprint.service",
+          "componentId" : null,
+          "classId" : "Infrastructure.Compute.Machine.MachineDisk",
+          "typeFilter" : null,
+          "data" : {
+            "capacity" : 100,
+            "custom_properties" : null,
+            "id" : 1479999766184,
+            "initial_location" : "",
+            "is_clone" : true,
+            "label" : "Hard disk 1",
+            "storage_reservation_policy" : "",
+            "userCreated" : false,
+            "volumeId" : 0
+          }
+        } ],
+        "display_location" : false,
+        "guest_customization_specification" : "Linux",
+        "machine_prefix" : null,
+        "max_network_adapters" : -1,
+        "max_per_user" : 0,
+        "max_volumes" : 60,
+        "memory" : 4096,
+        "reservation_policy" : null,
+        "security_groups" : null,
+        "security_tags" : [ ],
+        "storage" : 100
+      }
+    },
+    "TitoDB_conf_1" : {
+      "componentTypeId" : "com.vmware.csp.component.cafe.composition",
+      "componentId" : null,
+      "classId" : "Blueprint.Component.Declaration",
+      "typeFilter" : "Titocopy*TitoDB_conf_1",
+      "data" : {
+        "DB_NAME" : "TitoDB",
+        "DB_PASSWORD" : "s2enc~GvViSNq8WFJNCOtSwb2+xQ==",
+        "DB_USERNAME" : "root",
+        "INIT_DB_PASSWORD" : "s2enc~GvViSNq8WFJNCOtSwb2+xQ==",
+        "INIT_DB_USERNAME" : "root",
+        "_hasChildren" : false
+      }
+    },
+    "TitoLB" : {
+      "componentTypeId" : "com.vmware.csp.component.cafe.composition",
+      "componentId" : null,
+      "classId" : "Blueprint.Component.Declaration",
+      "typeFilter" : "Titocopy*TitoLB",
+      "data" : {
+        "_hasChildren" : false,
+        "description" : null,
+        "edge" : null,
+        "edge_nic_index" : null,
+        "vip_address" : null
+      }
+    },
+    "Vince_SG_Ext_Web" : {
+      "componentTypeId" : "com.vmware.csp.component.cafe.composition",
+      "componentId" : null,
+      "classId" : "Blueprint.Component.Declaration",
+      "typeFilter" : "Titocopy*Vince_SG_Ext_Web",
+      "data" : {
+        "_hasChildren" : false,
+        "description" : null
+      }
+    },
+    "_deploymentName" : "Tito requested from CLI",
+    "_leaseDays" : 1,
+    "_number_of_instances" : 1,
+    "vince_SG_DB" : {
+      "componentTypeId" : "com.vmware.csp.component.cafe.composition",
+      "componentId" : null,
+      "classId" : "Blueprint.Component.Declaration",
+      "typeFilter" : "Titocopy*vince_SG_DB",
+      "data" : {
+        "_hasChildren" : false,
+        "description" : null
+      }
+    }
+  },
+  "type" : "com.vmware.vcac.catalog.domain.request.CatalogItemProvisioningRequest"
+}
