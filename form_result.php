@@ -7,12 +7,13 @@ $weekdays_home_duration = array("Monday", "Tuesday", "Wednesday", "Thursday", "F
 $weekdays_work_duration = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
 $stats = array("week" => "0", "month" => "0", "year" => "0", "life" => "0");
 
-//SQL variables
+//**************SQL variables*********************
 $servername = getenv('TITO-SQL');
 $username = "root";
 $password = "Tito2016";
 $tablename = "TitoTable";
 $dbname = "TitoDB";
+//*************************************************
 
 // Réception des variables
 $hour_home_departure = $_POST['hour_home_departure'];
@@ -25,7 +26,8 @@ $work = $_POST['work'];
 $home = str_replace(' ', '%20', $home);
 $work = str_replace(' ', '%20', $work);
 
-//Conversion
+
+//**************Fonctions*********************
 dataconversion($hour_home_departure, $hour_work_departure);
 GetDataFromGoogle();
 CreateStats();
@@ -37,6 +39,24 @@ echo "</section>";
 echo "</div>";
 showmap();
 writeintodb();
+//****************************************
+
+//convertit les données au format nécessaire pour Google
+function dataconversion($hour_home_departure, $hour_work_departure) {
+
+    //calcul des dates de départ de la maison
+    global $weekdays_home_departure;
+    foreach ($weekdays_home_departure as $day) {
+        $weekdays_home_departure[$day] = strtotime("next " . $day . "+" . substr($hour_home_departure, 0, 2) . "hours +" . substr($hour_home_departure, 3, 2) . "minutes");
+    }
+
+    //calcul des dates de départ du travail
+    global $weekdays_work_departure;
+    foreach ($weekdays_work_departure as $day) {
+        $weekdays_work_departure[$day] = strtotime("next " . $day . "+" . substr($hour_work_departure, 0, 2) . "hours +" . substr($hour_work_departure, 3, 2) . "minutes");
+    }
+}
+
 
 //Obtention des infos de Google
 function GetDataFromGoogle() {
@@ -90,21 +110,6 @@ function GetDataFromGoogle() {
     $weekdays_work_duration = $weekdays_work_duration_result;
 }
 
-//convertit les données au format nécessaire pour Google
-function dataconversion($hour_home_departure, $hour_work_departure) {
-
-    //calcul des dates de départ de la maison
-    global $weekdays_home_departure;
-    foreach ($weekdays_home_departure as $day) {
-        $weekdays_home_departure[$day] = strtotime("next " . $day . "+" . substr($hour_home_departure, 0, 2) . "hours +" . substr($hour_home_departure, 3, 2) . "minutes");
-    }
-
-    //calcul des dates de départ du travail
-    global $weekdays_work_departure;
-    foreach ($weekdays_work_departure as $day) {
-        $weekdays_work_departure[$day] = strtotime("next " . $day . "+" . substr($hour_work_departure, 0, 2) . "hours +" . substr($hour_work_departure, 3, 2) . "minutes");
-    }
-}
 
 //Show maps
 function showmap() {
