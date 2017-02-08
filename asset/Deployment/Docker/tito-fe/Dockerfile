@@ -15,3 +15,5 @@ RUN cp /usr/share/php5/php.ini-production /usr/local/etc/php/php.ini
 RUN echo "<IfModule env_module>" >> /etc/apache2/mods-enabled/env.conf
 RUN echo "     SetEnv TITO-SQL \"tito-sql\"" >> /etc/apache2/mods-enabled/env.conf
 RUN echo "</IfModule>" >> /etc/apache2/mods-enabled/env.conf
+
+CMD /usr/local/bin/apache2-foreground
