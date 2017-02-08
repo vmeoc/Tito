@@ -14,15 +14,6 @@ fi
 : "${APACHE_PID_FILE:=${APACHE_RUN_DIR:=/var/run/apache2}/apache2.pid}"
 rm -f "$APACHE_PID_FILE"
 
-#Added by Vince for Tito-FE to dynamically set the mysql IP at deployement time when it is needed.
-if [ -n "$TITOSQL" ]; then
-        rm /etc/apache2/mods-enabled/env.conf
-        cat <<EOF >> /etc/apache2/mods-enabled/env.conf
-                    <IfModule env_module>
-                            SetEnv TITO-SQL $TITOSQL
-                    </IfModule>
-EOF
-fi
 #if it's running in a kubernetes environement
 if [ -n "$TITO_SQL_SERVICE_SERVICE_HOST" ]; then
      cat <<EOF >> /etc/apache2/mods-enabled/env.conf
