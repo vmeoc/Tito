@@ -9,7 +9,7 @@ services:
       - back-tier
     restart: always
 
-  Tito-SQL:
+  TitoSQL:
     image: vmeoc/tito-sql:V1.5
     links:
       - Tito-FE
