@@ -13,8 +13,6 @@ services:
 
   Tito-SQL:
     image: vmeoc/tito-sql:V1.5
-    links:
-      - Tito-FE
     networks:
       - back-tier
     restart: always
