@@ -8,8 +8,10 @@ services:
       - front-tier
       - back-tier
     restart: always
+    links:
+        - Tito-SQL
 
-  TitoSQL:
+  Tito-SQL:
     image: vmeoc/tito-sql:V1.5
     links:
       - Tito-FE
