@@ -5,15 +5,14 @@ services:
     ports:
       - 80
     networks:
-      - Tito-nw
+      - tito-nw
     restart: always
     links:
         - Tito-SQL
-
   Tito-SQL:
     image: vmeoc/tito-sql:V1.5
     networks:
-      - Tito-nw
+      - tito-nw
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: Tito2016
@@ -23,5 +22,5 @@ services:
 
  
 networks:
-  Tito-nw:
+   tito-nw:
     driver: bridge
