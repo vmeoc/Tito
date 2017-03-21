@@ -13,7 +13,7 @@ services:
   Tito-SQL:
     image: vmeoc/tito-sql:V1.5
     networks:
-      - back-tier
+      - Tito-nw
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: Tito2016
