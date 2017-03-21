@@ -5,8 +5,7 @@ services:
     ports:
       - 80
     networks:
-      - front-tier
-      - back-tier
+      - Tito-nw
     restart: always
     links:
         - Tito-SQL
@@ -24,7 +23,5 @@ services:
 
  
 networks:
-  front-tier:
-    driver: bridge
-  back-tier:
+  Tito-nw:
     driver: bridge
