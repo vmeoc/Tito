@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-tito
+  labels:
+    app: tito
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.rule.type: PathPrefixStrip
+spec:
+  rules:
+  - host: ingress.k8s
+    http:
+      paths:
+      - path: /tito
+        backend:
+          serviceName: titofe-service
+          servicePort: http
+
