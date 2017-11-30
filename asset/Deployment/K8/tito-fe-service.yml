@@ -1,20 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  Name: titofe-service
+  name: titofe-service
   labels:
     app: tito
 spec:
-  type: ClusterIP
   ports:
-  -   port: 80               # port expose par docker  (pas le port dans le container)
+  - name: http
+    port: 80               # port expose par docker  (pas le port dans le container)
   selector:                     # key/value, label permettant de definir le pod cible (doit etre danslabels du pod)
     type: tito-fe
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: tito-ingress
-spec:
-  backend:
-    serviceName: titofe-service
-    servicePort: 80
