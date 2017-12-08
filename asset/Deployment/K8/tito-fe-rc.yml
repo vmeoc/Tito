@@ -8,7 +8,7 @@ metadata:
     app: tito
     tiers: tito-fe
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     type: tito-fe
   template:
