@@ -184,7 +184,7 @@
                         <hr class="small">
                        <p class="text-muted">
                         <?PHP
-                        echo "V1.7.1";
+                        echo "V1.8.6";
                         echo "<br>";
                         echo "Tito Front End: " . gethostname() . " (" . getHostByName(getHostName()) .")";
                         echo "<br>";

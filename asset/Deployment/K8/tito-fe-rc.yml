@@ -4,7 +4,7 @@ metadata:
   name: titofe
   labels:
     name: tito-fe
-    version: "1.7.1" #1.7.1 contain dynamic variable setting through env variable. with special check for K8
+    version: "latest"
     app: tito
     tiers: tito-fe
 spec:
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: tito
-          image: vmeoc/tito-fe:V1.7.1
+          image: vmeoc/tito-fe:latest
           ports:
           - containerPort: 80
           env:
