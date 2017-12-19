@@ -10,7 +10,7 @@
 TMP_DIR="/tmp/"
 TMP_DIR+=$(cat /dev/urandom | tr -dc '0-9' | fold -w 16 | head -n 1)
 TITO_GITHUB="https://github.com/vmeoc/Tito"
-VERSION="V1.8.6"
+VERSION=$1
 STAGE="dev"
 INGRESS_NAME="tito-dev-"
 INGRESS_NAME+=$(cat /dev/urandom | tr -dc '0-9' | fold -w 4 | head -n 1)
