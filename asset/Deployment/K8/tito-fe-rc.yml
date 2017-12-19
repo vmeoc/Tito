@@ -7,8 +7,9 @@ metadata:
     version: "latest"
     app: tito
     tiers: tito-fe
+    stage: prod
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     type: tito-fe
   template:
@@ -23,6 +24,8 @@ spec:
           ports:
           - containerPort: 80
           env:
+          - name: TITO_VERSION
+            value: V1.8
           - name: POD_NAME
             valueFrom:
               fieldRef:
@@ -31,4 +34,3 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
-

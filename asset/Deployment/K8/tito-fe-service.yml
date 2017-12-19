@@ -4,6 +4,7 @@ metadata:
   name: titofe-service
   labels:
     app: tito
+    stage: prod
 spec:
   ports:
   - name: http
