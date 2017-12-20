@@ -27,8 +27,9 @@ cd $TITO_PROD_DIR
 rm -rf $TITO_TEMP_DIR
 rm -f $TITO_RC_NEXT
 
+#destroy dev-demo K8
+kubectl --namespace=dev delete pods,services,rc,ing -l app=tito -l stage=dev
+
 #Set Tito prod tp V1
 kubectl -n=prod rolling-update titofe-next -f $TITO_RC
 
-#destroy dev-demo K8
-kubectl --namespace=dev delete pods,services,rc,ing -l app=tito -l stage=dev
