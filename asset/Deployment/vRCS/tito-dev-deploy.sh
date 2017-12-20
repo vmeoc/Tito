@@ -8,7 +8,7 @@
 
 #########initial setting
 TMP_DIR="/tmp/"
-TMP_DIR+=$(cat /dev/urandom | tr -dc '0-9' | fold -w 16 | head -n 1)
+TMP_DIR+=$2
 TITO_GITHUB="https://github.com/vmeoc/Tito"
 VERSION=$1
 STAGE="dev"

@@ -4,7 +4,7 @@ metadata:
   name: ingress-tito
   labels:
     app: tito
-    stage: prod
+    stage: dev
   annotations:
     kubernetes.io/ingress.class: traefik
     traefik.frontend.rule.type: PathPrefixStrip
@@ -13,7 +13,7 @@ spec:
   - host: ingress.k8s
     http:
       paths:
-      - path: /tito-prod
+      - path: /tito
         backend:
           serviceName: titofe-service
           servicePort: http
