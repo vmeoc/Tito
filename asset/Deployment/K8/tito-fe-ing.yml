@@ -13,7 +13,7 @@ spec:
   - host: ingress.k8s
     http:
       paths:
-      - path: /tito
+      - path: /tito-prod
         backend:
           serviceName: titofe-service
           servicePort: http
