@@ -10,11 +10,11 @@
 TITO_RC_NEXT="tito-fe-rc-next.yml"
 TITO_RC_CURRENT="tito-fe-rc.yml"
 TITO_TEMP_DIR="/tmp/"
-TITO_TEMP_DIR+=$1
+TITO_TEMP_DIR+=$2
 TITO_TEMP_DIR+="/Tito/asset/Deployment/K8/"
 NEXT_LABEL="next"
 NEXT_NAME="titofe-next"
-TITO_VERSION="V0.5"
+TITO_VERSION=$1
 
 echo "lancement du script update Prod Tito"
 echo -n "TITO_RC_NEXT="
