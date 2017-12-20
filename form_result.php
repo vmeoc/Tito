@@ -4,7 +4,6 @@
 $home = $_POST['home_addr'];
 $home_time = $_POST['home_time'];
 $work = $_POST['work_addr'];
-$password = "Tito2016";
 
 include 'getTrafficData.php';
 
@@ -19,7 +18,7 @@ $stats = array("week" => "0", "month" => "0", "year" => "0", "life" => "0");
 //**************SQL variables*********************
 $servername = getenv('TITO-SQL');
 $username = "root";
-
+$password = "Tito2016";
 $tablename = "TitoTable";
 $dbname = "TitoDB";
 //*************************************************
