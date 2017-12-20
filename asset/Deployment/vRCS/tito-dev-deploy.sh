@@ -31,7 +31,6 @@ echo $INGRESS_NAME
 echo "cleanup..."
 kubectl --namespace=dev delete pods,services,rc,ing -l app=tito -l stage=dev
 
-mkdir $TMP_DIR
 cd $TMP_DIR
 git clone $TITO_GITHUB
 
