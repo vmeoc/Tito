@@ -51,6 +51,3 @@ kubectl --namespace=dev create -f Tito/asset/Deployment/K8/.
 echo "Connect to: "
 echo http://ingress.k8s/$INGRESS_NAME/index.php
 
-#cleanup
-echo "cleanup TODO"
-
