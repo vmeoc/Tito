@@ -9,20 +9,18 @@
 #########initial setting
 TITO_RC_NEXT="tito-fe-rc-next.yml"
 TITO_RC_CURRENT="tito-fe-rc.yml"
-TITO_TEMP_DIR="/tmp/"
-TITO_TEMP_DIR+=$2
-TITO_TEMP_DIR+="/Tito/asset/Deployment/K8/"
 NEXT_LABEL="next"
 NEXT_NAME="titofe-next"
 TITO_VERSION=$1
+TITO_PROD_DIR="/home/vmware/Demo-do-not-touch/Tito/asset/Deployment/K8"
 
 echo "lancement du script update Prod Tito"
+echo -n "TITO_PROD_DIR="
+echo $TITO_PROD_DIR
 echo -n "TITO_RC_NEXT="
 echo $TITO_RC_NEXT
 echo -n "TITO_RC_CURRENT="
 echo $TITO_RC_CURRENT
-echo -n "TITO_TEMP_DIR="
-echo $TITO_TEMP_DIR
 echo -n "NEXT LABEL="
 echo $NEXT_LABEL
 echo -n "NEXT_NAME="
@@ -30,7 +28,7 @@ echo $NEXT_NAME
 echo -n "TITO_VERSION="
 echo $TITO_VERSION
 
-cd $TITO_TEMP_DIR
+cd $TITO_PROD_DIR
 cp $TITO_RC_CURRENT $TITO_RC_NEXT
 
 #change metadata.name
@@ -43,4 +41,4 @@ sed -i "/version:.*/s//version: ${NEXT_LABEL}/" $TITO_RC_NEXT
 sed -i "/value:.*/s//value: ${TITO_VERSION}/" $TITO_RC_NEXT
 
 #start rolling update
-kubectl -n=dev rolling-update titofe -f $TITO_RC_NEXT
+kubectl -n=prod rolling-update titofe -f $TITO_RC_NEXT
