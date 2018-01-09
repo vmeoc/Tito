@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  tasks:
+  - name: git install
+    yum:
+      name: git
+  - name: module to clone a git repository
+    git:
+      repo: '{{git_url}}'
+      dest: /var/www/html
+      clone: yes
+      update: yes
+      version: '{{tito_release}}'
