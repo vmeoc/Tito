@@ -144,11 +144,13 @@ function callGoogleApi($origin, $dest, $time) {
  */
 function extractParametersFromUrl(array $needed_params = array()) {
     if (!$_GET["home_addr"]) {
-       $LogLine = "_GET EST NULL;TITO-App requested from UI";
+       //$LogLine = "_GET EST NULL;TITO-App requested from UI";
+       $LogLine = "Appel de TITO via POST;TITO-App requested from UI";
        error_log(print_r($LogLine, TRUE));
        $params = $_POST;
     } else {
-       $LogLine = "_POST EST NULL;TITO-App requested from URL";
+       //$LogLine = "_POST EST NULL;TITO-App requested from URL";
+       $LogLine = "Appel de TITO via GET;TITO-App requested from URL";
        error_log(print_r($LogLine, TRUE));
        $params = $_GET;
     }
