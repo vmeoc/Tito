@@ -52,7 +52,6 @@ DisplayStats();
 */
 echo "</section>";
 echo "</div>";
-
 showmap($home, $work);
 //writeintodb();
 //****************************************
