@@ -3,8 +3,7 @@
 const GOOGLE_API_KEY = "AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk";
 
 // Extract parameters from URL
-$needed_params = array("home_addr", "home_time", "work_addr", "work_time","home_range");
-
+$needed_params = array("home_addr", "home_time", "work_addr", "work_time");
 $params = extractParametersFromUrl($needed_params);
 
 $result = getTrafficData($params);
@@ -21,90 +20,29 @@ function getTrafficData($params) {
     $days = array("monday", "tuesday", "wednesday", "thursday", "friday");
     
     foreach ($days as $day) {
-        $result[$day] = array("home_to_work" => array("time" => null, 'range_less'=>[], 'range_more'=>[]), "work_to_home" => array("time" => null));
+        $result[$day] = array("home_to_work" => array("time" => null), "work_to_home" => array("time" => null));
 
         $home_time = strtotime("next " . $day . "+" . substr($params['home_time'], 0, 2) . "hours +" . substr($params['home_time'], 3, 2) . "minutes");
         $work_time = strtotime("next " . $day . "+" . substr($params['work_time'], 0, 2) . "hours +" . substr($params['work_time'], 3, 2) . "minutes");
 
-        $array_times = [];
-
         // Home to work
         $home_response = callGoogleApi($params['home_addr'], $params['work_addr'], $home_time);
         if ($home_response->status !== "OK") {
-            echo "Google error response status (home): " . $home_response->status;
             throw new \Exception("Google error response status: " . $home_response->status, 502);
         }
-        $result[$day]['home_to_work']['start'] = $home_time;
         $result[$day]['home_to_work']['time'] = $home_response->routes[0]->legs[0]->duration_in_traffic->value;
-
-        for($i=(-1*$params['home_range']); $i<0;$i+=600){
-            $time_tmp = $home_time + $i;
-            $home_response = callGoogleApi($params['home_addr'], $params['work_addr'], $time_tmp);
-            if ($home_response->status !== "OK") {
-                echo "Google error response status (range): " . $home_response->status;
-                throw new \Exception("Google error response status (range): " . $home_response->status, 502);
-            }
-            $result[$day]['home_to_work']['range_less'][$time_tmp.""] = [$home_response->routes[0]->legs[0]->duration_in_traffic->value, false, false];
-            $array_times[$time_tmp] = $home_response->routes[0]->legs[0]->duration_in_traffic->value;
-        }
-        for($i=600; $i<=($params['home_range']);$i+=600){
-            $time_tmp = $home_time + $i;
-            $home_response = callGoogleApi($params['home_addr'], $params['work_addr'], $time_tmp);
-            if ($home_response->status !== "OK") {
-                echo "Google error response status (range): " . $home_response->status;
-                throw new \Exception("Google error response status (range): " . $home_response->status, 502);
-            }
-            $result[$day]['home_to_work']['range_more'][$time_tmp.""] = [$home_response->routes[0]->legs[0]->duration_in_traffic->value, false, false];
-            $array_times[$time_tmp] = $home_response->routes[0]->legs[0]->duration_in_traffic->value;
-        }
-
-        defineMinAndMax($result[$day]['home_to_work'], $array_times);
 
         // Work to home
         $work_response = callGoogleApi($params['work_addr'], $params['home_addr'], $work_time);
         if ($work_response->status !== "OK") {
-            echo "Google error response status (work): " . $work_response->status;
-            throw new \Exception("Google error response status (work): " . $work_response->status, 502);
+            throw new \Exception("Google error response status: " . $work_response->status, 502);
         }
-        $result[$day]['work_to_home']['start'] = $work_time;
         $result[$day]['work_to_home']['time'] = $work_response->routes[0]->legs[0]->duration_in_traffic->value;
 
         $result[$day]['total'] = $result[$day]['work_to_home']['time'] + $result[$day]['home_to_work']['time'];
         $result['total'] += $result[$day]['total'];
     }
     return $result;
-}
-
-function defineMinAndMax(&$result, $array_times){
-    $min_time = $result['time'];
-    $max_time = null;
-    $min_hour = null;
-    $max_hour = null;
-
-    foreach($array_times as $hour => $time){
-        if($time < $min_time){
-            $min_hour = $hour;
-            $min_time = $time;
-        }
-        if($time > $max_time){
-            $max_hour = $hour;
-            $max_time = $time;
-        }
-    }
-    if (isset($result['range_less'][$min_hour])){
-        $result['range_less'][$min_hour][1] = true;
-    } else if (isset($result['range_more'][$min_hour])){
-        $result['range_more'][$min_hour][1] = true;
-    } else{
-        $result['min'] = true;
-    }
-    if (isset($result['range_less'][$max_hour])){
-        $result['range_less'][$max_hour][2] = true;
-    } else if (isset($result['range_more'][$max_hour])){
-        $result['range_more'][$max_hour][2] = true;
-    } else{
-        $result['max'] = true;
-    }
 }
 
 /**
@@ -117,7 +55,7 @@ function defineMinAndMax(&$result, $array_times){
  */
 function callGoogleApi($origin, $dest, $time) {
 
-    $url = "https://maps.googleapis.com/maps/api/directions/json?origin=" . str_replace(' ', '%20', $origin) . "&destination=" . str_replace(' ', '%20', $dest) . "&departure_time=" . $time . "&traffic_model=pessimistic&key=" . GOOGLE_API_KEY;
+    $url = "https://maps.googleapis.com/maps/api/directions/json?origin=" . $origin . "&destination=" . $dest . "&departure_time=" . $time . "&traffic_model=best_guess&key=" . GOOGLE_API_KEY;
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -140,6 +78,7 @@ function callGoogleApi($origin, $dest, $time) {
  * @throws \Exception
  */
 function extractParametersFromUrl(array $needed_params = array()) {
+<<<<<<< HEAD
     if (!$_GET["home_addr"]) {
        $LogLine = "_GET EST NULL;TITO-App requested from UI";
        error_log(print_r($LogLine, TRUE));
@@ -156,10 +95,12 @@ function extractParametersFromUrl(array $needed_params = array()) {
     $LogLine = "TITO-App;home=\"$home_for_log\";work=\"$work_for_log\";";
     error_log(print_r($LogLine, TRUE));
 
+=======
+    $params = $_GET;
+>>>>>>> parent of 1c202d5... add range feature
     $result = array();
     foreach ($needed_params as $param_name) {
         if (!isset($params[$param_name])) {
-            echo "Missing parameter '" . $param_name . "' for this API function.";
             throw new \Exception("Missing parameter '" . $param_name . "' for this API function.", 501);
         }
         $result[$param_name] = $params[$param_name];

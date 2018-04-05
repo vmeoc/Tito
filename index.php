@@ -105,21 +105,14 @@
                                     <h4>
                                         <strong>Home address</strong>
                                     </h4>
-                                    <input type="text" class="form-control" id="home" name="home_addr" placeholder="Home Address" value="">
-                                    <select name="home_time" class="select-date form-control">
+                                    <input type="text" class="form-control" id="home" name="home" placeholder="Home Address" value="">
+                                    <select name="hour_home_departure" class="select-date form-control">
                                         <?PHP
                                         $dateStart = new \DateTime();
                                         $dateStart->setTime(6, 0, 0);
                                         while ($dateStart->format("H") < 21) {
                                             echo "<option value='" . $dateStart->format("H:i") . "'>" . $dateStart->format("H:i") . "</option>";
                                             $dateStart->modify("+30 min");
-                                        }
-                                        ?>
-                                    </select>
-                                    <select name="home_range" class="select-date form-control">
-                                        <?php
-                                        for($i=0;$i<=60;$i+=10){
-                                            echo '<option value="'.($i*60).'">+/- '.$i.'min</option>';
                                         }
                                         ?>
                                     </select>
@@ -133,8 +126,8 @@
                                     <h4>
                                         <strong>Work address</strong>
                                     </h4>
-                                    <input type="text" class="form-control" id="work" name="work_addr" placeholder="Work Address" value="">
-                                    <select name="work_time" class="select-date form-control">
+                                    <input type="text" class="form-control" id="work" name="work" placeholder="Work Address" value="">
+                                    <select name="hour_work_departure" class="select-date form-control">
                                         <?PHP
                                         $dateStart = new \DateTime();
                                         $dateStart->setTime(6, 0, 0);

@@ -1,14 +1,6 @@
 
 <?php
-
-$home = $_POST['home_addr'];
-$home_time = $_POST['home_time'];
-$work = $_POST['work_addr'];
-
-include 'getTrafficData.php';
-
-/*
-//array mgmt very nasty. To improve
+//array mgmt very nasty. To improve        
 $weekdays_home_departure = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
 $weekdays_work_departure = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
 $weekdays_home_duration = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
@@ -27,6 +19,9 @@ $dbname = "TitoDB";
 $hour_home_departure = $_POST['hour_home_departure'];
 $hour_work_departure = $_POST['hour_work_departure'];
 
+$home = $_POST['home'];
+$work = $_POST['work'];
+
 //nettoyage des variables
 $home = str_replace(' ', '%20', $home);
 $work = str_replace(' ', '%20', $work);
@@ -36,9 +31,9 @@ $work = str_replace(' ', '%20', $work);
 dataconversion($hour_home_departure, $hour_work_departure);
 GetDataFromGoogle();
 CreateStats();
-*/
 echo "<div class='parallax-container' data-parallax='scroll' data-speed='0.1' data-bleed='50' data-natural-height='223' data-image-src='./asset/img/bg.jpg'>";
 echo "<section>";
+<<<<<<< HEAD
 
 if(!isset($result['error'])){
     displayInfo($result, $home, $home_time, $work);
@@ -47,15 +42,17 @@ if(!isset($result['error'])){
     echo "Google Error";
 }
 /*
+=======
+>>>>>>> parent of 1c202d5... add range feature
 DisplayTable();
 DisplayStats();
-*/
 echo "</section>";
 echo "</div>";
-showmap($home, $work);
-//writeintodb();
+showmap();
+writeintodb();
 //****************************************
 
+<<<<<<< HEAD
 function displayInfo($result, $home, $home_time, $work){
 
     ?>
@@ -395,6 +392,8 @@ function getRoundedTime($seconds) {
     return array('time' => $result->format('%i'), 'unit' => "minute" . ($result->format("%i") > 1 ? "s" : ""));
 }
 /*
+=======
+>>>>>>> parent of 1c202d5... add range feature
 //convertit les données au format nécessaire pour Google
 function dataconversion($hour_home_departure, $hour_work_departure) {
 
@@ -462,6 +461,63 @@ function GetDataFromGoogle() {
         //unset($weekdays_work_duration[$key]);
     }
     $weekdays_work_duration = $weekdays_work_duration_result;
+}
+
+
+//Show maps
+function showmap() {
+    global $home;
+    global $work;
+
+    // echo '<div class="jumbotron text-center">';
+    
+    echo '<iframe width="100%" height="100%" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/directions?origin=' . $home . '&destination=' . $work . '&key=AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk" allowfullscreen></iframe>';
+    //  echo '</div>';
+}
+
+//create stats
+function CreateStats() {
+    global $stats;
+    global $weekdays_home_duration;
+    global $weekdays_work_duration;
+
+    foreach ($weekdays_work_duration as $key => $day) {
+
+        $stats["week"] = $stats["week"] + $weekdays_home_duration[$key] + $weekdays_work_duration[$key];
+    }
+
+    $stats["month"] = $stats["week"] * 4;
+    $stats["year"] = $stats["month"] * 12;
+    $stats["life"] = $stats["year"] * 40;
+}
+
+//conversion d'une durée en secondes en format humain
+function secondsToTime($seconds) {
+    $dtF = new \DateTime('@0');
+    $dtT = new \DateTime("@$seconds");
+    $result = $dtF->diff($dtT);
+    $stringResult = "";
+    if ($result->format("%a") != 0) {
+        $stringResult .= $result->format("%a") . " day" . ($result->format("%a") > 1 ? "s" : "") . " ";
+    }
+    if ($result->format("%h") != 0) {
+        $stringResult .= $result->format("%h") . " hour" . ($result->format("%h") > 1 ? "s" : "") . " ";
+    }
+    $stringResult .= $result->format("%i") . " minute" . ($result->format("%i") > 1 ? "s" : "") . " ";
+    return $stringResult;
+}
+
+function getRoundedTime($seconds) {
+    $dtF = new \DateTime('@0');
+    $dtT = new \DateTime("@$seconds");
+    $result = $dtF->diff($dtT);
+    if ($result->format('%a') > 0) {
+        return array('time' => $result->format('%a'), 'unit' => "day" . ($result->format("%a") > 1 ? "s" : ""));
+    }
+    if ($result->format('%h') > 0) {
+        return array('time' => $result->format('%h'), 'unit' => "hour" . ($result->format("%h") > 1 ? "s" : ""));
+    }
+    return array('time' => $result->format('%i'), 'unit' => "minute" . ($result->format("%i") > 1 ? "s" : ""));
 }
 
 //Affichage du tableau
@@ -546,7 +602,42 @@ function DisplayTable() {
     <?php
 }
 
-*/
+function DisplayStats() {
+    global $stats;
+
+    echo "<div class='container'>";
+    echo "<div class='row'>";
+
+    // Create stat block for each $stat (week, month, year, life)
+    //$class_colors = array('week' => 'stat-block-blue', 'month' => 'stat-block-yellow', 'year' => 'stat-block-black', 'life' => 'stat-block-green');
+    $class_colors = array();
+    foreach ($stats as $key => $val) {
+        echo createStatBlock($key, $val, (isset($class_colors[$key]) ? $class_colors[$key] : "stat-block-default"));
+    }
+    echo "</div>";
+    echo "</div>";
+}
+
+function createStatBlock($key, $seconds, $class_color) {
+    $block = "<div class='col-lg-3 col-md-3 col-sm-6 col-xs-12'>";
+    $block .= "<div class='stat-block $class_color'>";
+
+    $block .= "<div class='row'>";
+    $block .= "<div class='col-lg-6 col-md-6 text-center'>";
+    $block .= "<h3>" . ucfirst($key) . "</h3>";
+    $block .= "</div>";
+
+    $tmp = getRoundedTime($seconds);
+    $block .= "<div class='col-lg-6 col-md-6'>";
+    $block .= "<h1>" . $tmp['time'] . "</h1>";
+    $block .= "<p>" . $tmp['unit'] . "</p>";
+    $block .= "</div>";
+    $block .= "</div>";
+
+    $block .= "</div>";
+    $block .= "</div>";
+    return $block;
+}
 
 function writeintodb() {
     //variables SQL
