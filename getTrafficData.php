@@ -143,7 +143,6 @@ function callGoogleApi($origin, $dest, $time) {
  * @throws \Exception
  */
 function extractParametersFromUrl(array $needed_params = array()) {
-<<<<<<< HEAD
     if (!$_GET["home_addr"]) {
        //$LogLine = "_GET EST NULL;TITO-App requested from UI";
        $LogLine = "Appel de TITO via POST;TITO-App requested from UI";
@@ -162,9 +161,6 @@ function extractParametersFromUrl(array $needed_params = array()) {
     $LogLine = "TITO-App;home=\"$home_for_log\";work=\"$work_for_log\";";
     error_log(print_r($LogLine, TRUE));
 
-=======
-    $params = $_POST;
->>>>>>> parent of b41ad49... Prise en compte des appels depuis URL
     $result = array();
     foreach ($needed_params as $param_name) {
         if (!isset($params[$param_name])) {

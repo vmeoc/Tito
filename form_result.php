@@ -42,9 +42,6 @@ echo "<section>";
 
 if(!isset($result['error'])){
     displayInfo($result, $home, $home_time, $work);
-    // Adding LOG 
-    $LogLine = "TITO-App;home=\"$home\";work=\"$work\";";
-    error_log(print_r($LogLine, TRUE));
     }
     else{
     echo "Google Error";
