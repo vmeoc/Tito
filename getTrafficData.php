@@ -3,7 +3,12 @@
 const GOOGLE_API_KEY = "AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk";
 
 // Extract parameters from URL
+<<<<<<< HEAD
 $needed_params = array("home_addr", "home_time", "work_addr", "work_time");
+=======
+$needed_params = array("home_addr", "home_time", "work_addr", "work_time","home_range");
+
+>>>>>>> parent of ff2f15f... Merge branch 'master' of https://github.com/vmeoc/Tito
 $params = extractParametersFromUrl($needed_params);
 
 $result = getTrafficData($params);
@@ -25,6 +30,11 @@ function getTrafficData($params) {
         $home_time = strtotime("next " . $day . "+" . substr($params['home_time'], 0, 2) . "hours +" . substr($params['home_time'], 3, 2) . "minutes");
         $work_time = strtotime("next " . $day . "+" . substr($params['work_time'], 0, 2) . "hours +" . substr($params['work_time'], 3, 2) . "minutes");
 
+<<<<<<< HEAD
+=======
+        $array_times = [];
+
+>>>>>>> parent of ff2f15f... Merge branch 'master' of https://github.com/vmeoc/Tito
         // Home to work
         $home_response = callGoogleApi($params['home_addr'], $params['work_addr'], $home_time);
         if ($home_response->status !== "OK") {
@@ -45,6 +55,41 @@ function getTrafficData($params) {
     return $result;
 }
 
+<<<<<<< HEAD
+=======
+function defineMinAndMax(&$result, $array_times){
+    $min_time = $result['time'];
+    $max_time = null;
+    $min_hour = null;
+    $max_hour = null;
+
+    foreach($array_times as $hour => $time){
+        if($time < $min_time){
+            $min_hour = $hour;
+            $min_time = $time;
+        }
+        if($time > $max_time){
+            $max_hour = $hour;
+            $max_time = $time;
+        }
+    }
+    if (isset($result['range_less'][$min_hour])){
+        $result['range_less'][$min_hour][1] = true;
+    } else if (isset($result['range_more'][$min_hour])){
+        $result['range_more'][$min_hour][1] = true;
+    } else{
+        $result['min'] = true;
+    }
+    if (isset($result['range_less'][$max_hour])){
+        $result['range_less'][$max_hour][2] = true;
+    } else if (isset($result['range_more'][$max_hour])){
+        $result['range_more'][$max_hour][2] = true;
+    } else{
+        $result['max'] = true;
+    }
+}
+
+>>>>>>> parent of ff2f15f... Merge branch 'master' of https://github.com/vmeoc/Tito
 /**
  * Call the Google API
  * 

@@ -48,8 +48,13 @@ DisplayTable();
 DisplayStats();
 echo "</section>";
 echo "</div>";
+<<<<<<< HEAD
 showmap();
 writeintodb();
+=======
+showmap($home, $work);
+//writeintodb();
+>>>>>>> parent of ff2f15f... Merge branch 'master' of https://github.com/vmeoc/Tito
 //****************************************
 
 <<<<<<< HEAD
