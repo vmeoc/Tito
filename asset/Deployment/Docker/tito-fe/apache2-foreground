@@ -21,16 +21,7 @@ if [ -n "$TITO_SQL_SERVICE_SERVICE_HOST" ]; then
                             SetEnv TITO-SQL $TITO_SQL_SERVICE_SERVICE_HOST
                     </IfModule>
 EOF
-fi
-
-#get Tito code
-git clone https://github.com/vmeoc/Tito /var/www/html/
-
-#if the env variable TITO_VERSION is available, then checkout the needed version.
-
-if [ -n "$TITO_VERSION" ]; then
-    cd /var/www/html/
-    git checkout $TITO_VERSION
+     
 fi
 
 exec apache2 -DFOREGROUND "$@"
