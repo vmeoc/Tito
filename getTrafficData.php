@@ -8,6 +8,9 @@ $needed_params = array("home_addr", "home_time", "work_addr", "work_time");
 =======
 $needed_params = array("home_addr", "home_time", "work_addr", "work_time","home_range");
 
+<<<<<<< HEAD
+>>>>>>> parent of ff2f15f... Merge branch 'master' of https://github.com/vmeoc/Tito
+=======
 >>>>>>> parent of ff2f15f... Merge branch 'master' of https://github.com/vmeoc/Tito
 $params = extractParametersFromUrl($needed_params);
 
@@ -34,6 +37,9 @@ function getTrafficData($params) {
 =======
         $array_times = [];
 
+<<<<<<< HEAD
+>>>>>>> parent of ff2f15f... Merge branch 'master' of https://github.com/vmeoc/Tito
+=======
 >>>>>>> parent of ff2f15f... Merge branch 'master' of https://github.com/vmeoc/Tito
         // Home to work
         $home_response = callGoogleApi($params['home_addr'], $params['work_addr'], $home_time);
