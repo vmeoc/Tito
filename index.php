@@ -11,7 +11,6 @@
 
         <title>Time Traffic overview by Vince</title>
 
-
         <!-- Bootstrap Core CSS -->
         <link href="./asset/css/bootstrap.min.css" rel="stylesheet">
 
@@ -70,11 +69,6 @@
                 <h1>Tito</h1>
                 <h3>Time Traffic Overview</h3>
                 <h5>by Vince :)</h5>
-                 <?PHP
-                 echo "Runs on : " . gethostname() . " (" . getHostByName(getHostName()) .")";
-
-                                 ?>
-                <br>
                 <br>
                 <a href="#about" class="btn btn-dark btn-lg">Find Out More</a>
             </div>
@@ -101,13 +95,13 @@
                 <hr class="small">
                 <form class="form-horizontal" role="form" action="index.php#titleResult" method="POST" id="form_result">
                     <div id="form_error">
-
+                        
                     </div>
                     <div class="row text-center">
                         <div class="col-lg-4 col-md-4 col-lg-offset-1 col-md-offset-1">
                             <div class="form-group">
                                 <div class="service-item">
-                                    <i class="fa fa-home fa-5x"></i>
+                                    <i class="fa fa-home fa-5x"></i>                                    
                                     <h4>
                                         <strong>Home address</strong>
                                     </h4>
@@ -135,7 +129,7 @@
                         <div class="col-lg-4 col-md-4 col-lg-offset-2 col-md-offset-2">
                             <div class="form-group">
                                 <div class="service-item">
-                                    <i class="fa fa-building fa-5x"></i>
+                                    <i class="fa fa-building fa-5x"></i>                                    
                                     <h4>
                                         <strong>Work address</strong>
                                     </h4>
@@ -205,7 +199,7 @@
 
         <!-- Bootstrap Core JavaScript -->
         <script src="./asset/js/bootstrap.min.js"></script>
-
+        
         <!-- Parallax Core JavaScript -->
         <script src="./asset/js/parallax.min.js"></script>
 
@@ -234,7 +228,7 @@
                 $('#form_result').submit();
             });
             */
-
+            
             // Closes the sidebar menu
             $("#menu-close").click(function (e) {
                 e.preventDefault();
@@ -259,7 +253,7 @@
                         }
                     }
                 });
-
+                
                 $('.stat-block').fadeIn(1000);
 
                 //window.setTimeout("displayStatBlock()", 200);

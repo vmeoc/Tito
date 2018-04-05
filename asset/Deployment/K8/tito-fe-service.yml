@@ -1,13 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: titofe-service
+  generateName: titofe-service-
   labels:
     app: tito
     stage: dev
 spec:
+  type: NodePort
   ports:
-  - name: http
-    port: 80               # port expose par docker  (pas le port dans le container)
+    - name: http
+      port: 80               # port expose par docker  (pas le port dans le container)
+      nodePort:
   selector:                     # key/value, label permettant de definir le pod cible (doit etre danslabels du pod)
     type: tito-fe
