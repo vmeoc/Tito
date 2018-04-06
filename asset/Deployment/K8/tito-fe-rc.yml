@@ -9,15 +9,7 @@ metadata:
     tiers: tito-fe
     stage: dev
 spec:
-<<<<<<< HEAD
-<<<<<<< HEAD
   replicas: 2
-=======
-  replicas: 3
->>>>>>> parent of f77ba58... Merge branch 'Dev'
-=======
-  replicas: 3
->>>>>>> parent of f77ba58... Merge branch 'Dev'
   selector:
     type: tito-fe
     version: v1

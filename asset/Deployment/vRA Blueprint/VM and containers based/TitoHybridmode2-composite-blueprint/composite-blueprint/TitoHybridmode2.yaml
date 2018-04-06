@@ -1,0 +1,162 @@
+id: TitoHybridmode2
+name: Tito-Hybrid mode
+description: ''
+status: PUBLISHED
+components:
+  DB:
+    type: Infrastructure.CatalogItem.Machine.Virtual.vSphere
+    data:
+      _cluster:
+        default: 1
+        max: 1
+        min: 1
+      action:
+        fixed: LinkedClone
+      allow_storage_policies:
+        fixed: false
+      blueprint_type:
+        fixed: '1'
+      cpu:
+        default: 1
+        max: 4
+        min: 1
+      disks:
+      - capacity: 4
+        custom_properties: null
+        id: 1514304173747
+        initial_location: ''
+        is_clone: true
+        label: Hard disk 1
+        storage_reservation_policy: ''
+        userCreated: false
+        volumeId: 0
+      guest_customization_specification: Linux
+      max_network_adapters: {}
+      max_volumes: {}
+      memory:
+        default: 2048
+        max: 8192
+        min: 2048
+      nics:
+      - address: ''
+        assignment_type: Static
+        id: 0
+        load_balancing: ''
+        network: ${_resource~External}
+        network_profile: External
+      provisioning_workflow:
+        fixed:
+          id: CloneWorkflow
+          label: CloneWorkflow
+      security_groups: []
+      security_tags: []
+      snapshot_name:
+        fixed: vRA-Agent
+      source_machine:
+        fixed:
+          id: 209622c1-c436-40d8-8519-29c6bf9980af
+          label: template-Centos-7.3-vRA-Agent
+      source_machine_external_snapshot:
+        fixed: 1
+      source_machine_name:
+        fixed: template-Centos-7.3-vRA-Agent
+      source_machine_vmsnapshot:
+        fixed:
+          id: '4'
+      storage:
+        default: 4
+        max: 4
+        min: 4
+  External:
+    type: Infrastructure.Network.Network.Existing
+    data:
+      name:
+        fixed: External
+      network_profile:
+        fixed: External
+  MYSQL_DATABASE_-_VMware_Sample_-_MariaDB_2:
+    type: Software.MYSQLDATABASEVMwareSamplecopyMariaDB
+    data:
+      BIND_IP:
+        default: ${_resource~DB~ip_address}
+        required: true
+      DB_PORT:
+        default: '3306'
+        required: true
+      DB_ROOT_PASSWORD:
+        default: ''
+        required: false
+        secured: true
+      DB_ROOT_USERNAME:
+        default: root
+        required: false
+      host:
+        fixed: ${_resource~DB}
+  TitoDB_conf_2:
+    type: Software.TitoDBconf
+    data:
+      DB_NAME:
+        default: TitoDB
+        required: true
+      DB_PASSWORD:
+        default: ${_resource~MYSQL_DATABASE_-_VMware_Sample_-_MariaDB_2~DB_ROOT_PASSWORD}
+        required: true
+        secured: true
+      DB_USERNAME:
+        default: root
+        required: true
+      INIT_DB_PASSWORD:
+        default: ${_resource~MYSQL_DATABASE_-_VMware_Sample_-_MariaDB_2~DB_ROOT_PASSWORD}
+        required: true
+        secured: true
+      INIT_DB_USERNAME:
+        default: root
+        required: true
+      host:
+        fixed: ${_resource~MYSQL_DATABASE_-_VMware_Sample_-_MariaDB_2}
+  tito-fe:
+    type: App.Container
+    dependsOn:
+    - DB
+    data:
+      _cluster:
+        default: 3
+        max: 999
+        min: 1
+      affinity:
+        fixed: []
+      command:
+        fixed: []
+      env:
+        fixed:
+        - value: ${_resource~MYSQL_DATABASE_-_VMware_Sample_-_MariaDB_2~DB_ROOT_PASSWORD}
+          var: MYSQL_ROOT_PASSWORD
+        - value: ${_resource~DB~ip_address}
+          var: TITO_SQL_SERVICE_SERVICE_HOST
+      health_config: {}
+      image:
+        fixed: registry.hub.docker.com/vmeoc/tito-fe:V1.8
+      links:
+        fixed: []
+      log_config:
+        fixed: {}
+      name:
+        fixed: tito-fe
+      networks: []
+      ports:
+        fixed:
+        - binding_host: ''
+          container_port: '80'
+          host_port: ''
+          id: 1
+          protocol: tcp
+      volumes:
+        fixed: []
+      volumes_from:
+        fixed: []
+layout:
+  DB: 0,1
+  External: 1,0
+  MYSQL_DATABASE_-_VMware_Sample_-_MariaDB_2: 0,0
+  TitoDB_conf_2: 0,0
+  tito-fe: 0,0

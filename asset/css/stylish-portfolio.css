@@ -4,7 +4,18 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 
+
 /* Global Styles */
+
+.min-range {
+    background: green;
+    color: white;
+}
+
+.max-range {
+    background: red;
+    color: white;
+}
 
 html,
 body {
@@ -13,9 +24,12 @@ body {
 }
 
 body {
-    font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-.span12 {text-align: center}
+
+.span12 {
+    text-align: center
+}
 
 .text-vertical-center {
     display: table-cell;
@@ -30,39 +44,42 @@ body {
     font-weight: 700;
 }
 
+
 /* Custom Button Styles */
 
 .btn-dark {
     border-radius: 0;
     color: #fff;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .btn-dark:hover,
 .btn-dark:focus,
 .btn-dark:active {
     color: #fff;
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 .btn-light {
     border-radius: 0;
     color: #333;
-    background-color: rgb(255,255,255);
+    background-color: rgb(255, 255, 255);
 }
 
 .btn-light:hover,
 .btn-light:focus,
 .btn-light:active {
     color: #333;
-    background-color: rgba(255,255,255,0.8);
+    background-color: rgba(255, 255, 255, 0.8);
 }
+
 
 /* Custom Horizontal Rule */
 
 hr.small {
     max-width: 100px;
 }
+
 
 /* Side Menu */
 
@@ -105,7 +122,7 @@ hr.small {
 .sidebar-nav li a:hover {
     text-decoration: none;
     color: #fff;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .sidebar-nav li a:active,
@@ -113,17 +130,17 @@ hr.small {
     text-decoration: none;
 }
 
-.sidebar-nav > .sidebar-brand {
+.sidebar-nav>.sidebar-brand {
     height: 55px;
     font-size: 18px;
     line-height: 55px;
 }
 
-.sidebar-nav > .sidebar-brand a {
+.sidebar-nav>.sidebar-brand a {
     color: #999;
 }
 
-.sidebar-nav > .sidebar-brand a:hover {
+.sidebar-nav>.sidebar-brand a:hover {
     color: #fff;
     background: none;
 }
@@ -149,6 +166,7 @@ hr.small {
     margin: 5px 5px 0 0;
 }
 
+
 /* Header */
 
 .header {
@@ -163,11 +181,13 @@ hr.small {
     -o-background-size: cover;
 }
 
+
 /* About */
 
 .about {
     padding: 50px 0;
 }
+
 
 /* Services */
 
@@ -178,6 +198,7 @@ hr.small {
 .service-item {
     margin-bottom: 30px;
 }
+
 
 /* Callout */
 
@@ -192,6 +213,7 @@ hr.small {
     background-size: cover;
     -o-background-size: cover;
 }
+
 
 /* Portfolio */
 
@@ -211,6 +233,7 @@ hr.small {
     opacity: 0.8;
 }
 
+
 /* Call to Action */
 
 .call-to-action {
@@ -220,6 +243,7 @@ hr.small {
 .call-to-action .btn {
     margin: 10px;
 }
+
 
 /* Map */
 
@@ -237,6 +261,7 @@ hr.small {
     pointer-events: none;
 }
 
+
 /* Footer */
 
 footer {
@@ -250,58 +275,72 @@ footer {
     right: 5px;
 }
 
+
 /*
     CUSTOM
 */
 
 .select-date {
-    width:auto;
-    margin:auto;
+    width: auto;
+    margin: auto;
     margin-top: 5px;
 }
+
+
 /*
     Stat block
 */
-.stat-block{
+
+.stat-block {
     min-height: 50px;
     color: white;
     margin-bottom: 10px;
     display: none;
 }
-.stat-block.stat-block-default{
+
+.stat-block.stat-block-default {
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid white;
 }
-.stat-block.stat-block-blue{
+
+.stat-block.stat-block-blue {
     background: rgb(93, 132, 225);
 }
-.stat-block.stat-block-yellow{
+
+.stat-block.stat-block-yellow {
     background: rgb(201, 175, 84);
 }
-.stat-block.stat-block-black{
-    background: rgb(100,100,100);
+
+.stat-block.stat-block-black {
+    background: rgb(100, 100, 100);
 }
-.stat-block.stat-block-green{
+
+.stat-block.stat-block-green {
     background: rgb(81, 191, 121);
 }
-.stat-block h3{
+
+.stat-block h3 {
     margin-top: 30px;
     font-weight: bold;
 }
-.stat-block h1{
+
+.stat-block h1 {
     margin-top: 30px;
     margin-bottom: 3px;
 }
+
 @media(max-width:992px) {
-    .stat-block h1, .stat-block p{
+    .stat-block h1,
+    .stat-block p {
         text-align: center;
     }
 }
-.stat-block p{
+
+.stat-block p {
     margin-top: 0px;
     margin-bottom: 20px;
 }
 
-table{
+table {
     color: white;
 }

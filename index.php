@@ -11,6 +11,7 @@
 
         <title>Time Traffic overview by Vince</title>
 
+
         <!-- Bootstrap Core CSS -->
         <link href="./asset/css/bootstrap.min.css" rel="stylesheet">
 
@@ -69,6 +70,11 @@
                 <h1>Tito</h1>
                 <h3>Time Traffic Overview</h3>
                 <h5>by Vince :)</h5>
+                 <?PHP
+                 echo "Runs on : " . gethostname() . " (" . getHostByName(getHostName()) .")";
+
+                                 ?>
+                <br>
                 <br>
                 <a href="#about" class="btn btn-dark btn-lg">Find Out More</a>
             </div>
@@ -95,18 +101,18 @@
                 <hr class="small">
                 <form class="form-horizontal" role="form" action="index.php#titleResult" method="POST" id="form_result">
                     <div id="form_error">
-                        
+
                     </div>
                     <div class="row text-center">
                         <div class="col-lg-4 col-md-4 col-lg-offset-1 col-md-offset-1">
                             <div class="form-group">
                                 <div class="service-item">
-                                    <i class="fa fa-home fa-5x"></i>                                    
+                                    <i class="fa fa-home fa-5x"></i>
                                     <h4>
                                         <strong>Home address</strong>
                                     </h4>
-                                    <input type="text" class="form-control" id="home" name="home" placeholder="Home Address" value="">
-                                    <select name="hour_home_departure" class="select-date form-control">
+                                    <input type="text" class="form-control" id="home" name="home_addr" placeholder="Home Address" value="">
+                                    <select name="home_time" class="select-date form-control">
                                         <?PHP
                                         $dateStart = new \DateTime();
                                         $dateStart->setTime(6, 0, 0);
@@ -116,18 +122,25 @@
                                         }
                                         ?>
                                     </select>
+                                    <select name="home_range" class="select-date form-control">
+                                        <?php
+                                        for($i=0;$i<=60;$i+=10){
+                                            echo '<option value="'.($i*60).'">+/- '.$i.'min</option>';
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-lg-offset-2 col-md-offset-2">
                             <div class="form-group">
                                 <div class="service-item">
-                                    <i class="fa fa-building fa-5x"></i>                                    
+                                    <i class="fa fa-building fa-5x"></i>
                                     <h4>
                                         <strong>Work address</strong>
                                     </h4>
-                                    <input type="text" class="form-control" id="work" name="work" placeholder="Work Address" value="">
-                                    <select name="hour_work_departure" class="select-date form-control">
+                                    <input type="text" class="form-control" id="work" name="work_addr" placeholder="Work Address" value="">
+                                    <select name="work_time" class="select-date form-control">
                                         <?PHP
                                         $dateStart = new \DateTime();
                                         $dateStart->setTime(6, 0, 0);
@@ -171,7 +184,7 @@
                         <hr class="small">
                        <p class="text-muted">
                         <?PHP
-                        echo "V1.8.6";
+                        echo "V1.8.9";
                         echo "<br>";
                         echo "Tito Front End: " . gethostname() . " (" . getHostByName(getHostName()) .")";
                         echo "<br>";
@@ -192,7 +205,7 @@
 
         <!-- Bootstrap Core JavaScript -->
         <script src="./asset/js/bootstrap.min.js"></script>
-        
+
         <!-- Parallax Core JavaScript -->
         <script src="./asset/js/parallax.min.js"></script>
 
@@ -221,7 +234,7 @@
                 $('#form_result').submit();
             });
             */
-            
+
             // Closes the sidebar menu
             $("#menu-close").click(function (e) {
                 e.preventDefault();
@@ -246,7 +259,7 @@
                         }
                     }
                 });
-                
+
                 $('.stat-block').fadeIn(1000);
 
                 //window.setTimeout("displayStatBlock()", 200);
