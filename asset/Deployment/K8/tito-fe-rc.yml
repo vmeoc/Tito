@@ -4,25 +4,30 @@ metadata:
   name: titofe
   labels:
     name: tito-fe
-    version: "1.7.1" #1.7.1 contain dynamic variable setting through env variable. with special check for K8
+    version: "latest"
     app: tito
     tiers: tito-fe
+    stage: dev
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     type: tito-fe
+    version: v1
   template:
     metadata:
       labels:
         app: tito
         type: tito-fe
+        version: v1
     spec:
       containers:
         - name: tito
-          image: vmeoc/tito-fe:V1.7.1
+          image: vmeoc/tito-fe:latest
           ports:
           - containerPort: 80
           env:
+          - name: TITO_VERSION
+            value: V1
           - name: POD_NAME
             valueFrom:
               fieldRef:
@@ -31,4 +36,3 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
-

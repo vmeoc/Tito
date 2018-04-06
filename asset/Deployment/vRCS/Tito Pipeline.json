@@ -1,0 +1,1411 @@
+{
+    "metadata": {
+        "pluginInstances": {
+            "instance": []
+        }
+    },
+    "model": {
+        "name": "Tito Pipeline",
+        "description": null,
+        "modelVersion": "2.2",
+        "notificationList": "",
+        "version": 5,
+        "tags": {
+            "tag": []
+        },
+        "pipelineParams": {
+            "property": [
+                {
+                    "name": "version",
+                    "type": "STRING",
+                    "value": "V1.8.6",
+                    "description": "Release Version (list available here: https://github.com/vmeoc/Tito/releases)",
+                    "additional": false
+                }
+            ]
+        },
+        "stages": {
+            "stage": [
+                {
+                    "name": "Dev",
+                    "index": 0,
+                    "tasks": {
+                        "task": [
+                            {
+                                "index": 0,
+                                "name": "Generate pipeline params",
+                                "plugin": {
+                                    "provider": "vrcs.vco:execute",
+                                    "category": "ALL",
+                                    "instanceId": null
+                                },
+                                "inputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "workflowName",
+                                            "type": "String",
+                                            "value": "Random_characters",
+                                            "description": "workflowName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "properties",
+                                            "type": "JSON[]",
+                                            "value": "[]",
+                                            "description": "properties",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "workflowId",
+                                            "type": "String",
+                                            "value": "95e657ee-9232-48f3-82dc-3f839c9e51e6",
+                                            "description": "workflowId",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "outputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "random_char",
+                                            "type": "number",
+                                            "value": "true",
+                                            "description": null,
+                                            "additional": true
+                                        }
+                                    ]
+                                },
+                                "conditionalExpression": "",
+                                "continueOnFailure": false,
+                                "dependsOn": []
+                            },
+                            {
+                                "index": 1,
+                                "name": "Deploy Tito",
+                                "plugin": {
+                                    "provider": "vrcs.script:script",
+                                    "category": "ALL",
+                                    "instanceId": null
+                                },
+                                "inputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "scriptContent",
+                                            "type": "String",
+                                            "value": "mkdir /tmp/${Dev.Generate pipeline params.random_char}\ncd /tmp/${Dev.Generate pipeline params.random_char}\nwget https://raw.githubusercontent.com/vmeoc/Tito/master/asset/Deployment/vRCS/tito-dev-deploy.sh\nchmod +x tito-dev-deploy.sh\n./tito-dev-deploy.sh ${pipeline.version} ${Dev.Generate pipeline params.random_char}",
+                                            "description": "scriptContent",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "inputConfig",
+                                            "type": "JSON",
+                                            "value": "{\"inputProperties\":[]}",
+                                            "description": "inputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "password",
+                                            "type": "SecureString",
+                                            "value": "",
+                                            "description": "password",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptArguments",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptArguments",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "workingDirectory",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "workingDirectory",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptType",
+                                            "type": "String",
+                                            "value": "Bash",
+                                            "description": "scriptType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "isUserDefinedScript",
+                                            "type": "Boolean",
+                                            "value": "true",
+                                            "description": "isUserDefinedScript",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptName",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostConfig",
+                                            "type": "JSON",
+                                            "value": "{\"hostGroup\":\"userDefinedHost\",\"hosts\":[\"jumpbox.cpod-devops.shwrfr.mooo.com\"],\"isUserDefinedHosts\":true}",
+                                            "description": "hostConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "transportType",
+                                            "type": "String",
+                                            "value": "HTTPS",
+                                            "description": "transportType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "userName",
+                                            "type": "String",
+                                            "value": "vmware",
+                                            "description": "userName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "artifactConfig",
+                                            "type": "JSON",
+                                            "value": "null",
+                                            "description": "artifactConfig",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "outputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "hostList",
+                                            "type": "String[]",
+                                            "value": "true",
+                                            "description": "hostList",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "outputConfig",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "outputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostResponse",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "hostResponse",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "conditionalExpression": "",
+                                "continueOnFailure": false,
+                                "dependsOn": [
+                                    "Generate pipeline params"
+                                ]
+                            },
+                            {
+                                "index": 2,
+                                "name": "Gating Rule",
+                                "plugin": {
+                                    "provider": "vrcs.gatingrule:ui",
+                                    "category": "GATING_RULE",
+                                    "instanceId": null
+                                },
+                                "inputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "workflowId",
+                                            "type": "STRING",
+                                            "value": "e9114f8f-c437-46af-8400-adbae2c52960",
+                                            "description": "",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "workflowName",
+                                            "type": "STRING",
+                                            "value": "Approval",
+                                            "description": "",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "properties",
+                                            "type": "JSON",
+                                            "value": "[{\"name\":\"approvalGroupDn\",\"displayName\":\"Approval Group (DN)\",\"description\":\"DN Name of the LdapGroup who can approve the release pipeline execution.\",\"type\":\"string\",\"mandatory\":true,\"value\":\"approval\",\"devops.model.workflowinfo_id\":\"e9114f8f-c437-46af-8400-adbae2c52960\"},{\"name\":\"approvalMessage\",\"displayName\":\"Approval Message\",\"description\":\"Content of the message that needs to be sent to the approver.\",\"type\":\"string\",\"mandatory\":true,\"value\":\"The execution of  ${releasePipelineName} has successfully passed through ${stageName}. Please Approve or Reject further execution of this pipeline by clicking on an appropriate button below.  Your Approval will trigger further execution of this pipeline in ${nextStageName}. If you Reject, this execution will stop at ${stageName}.  (Click \\\"Submit\\\" to Approve or \\\"Reject\\\" to Reject)\",\"devops.model.workflowinfo_id\":\"e9114f8f-c437-46af-8400-adbae2c52960\"}]",
+                                            "description": "",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "outputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "result",
+                                            "type": "STRING",
+                                            "value": "false",
+                                            "description": "Result of workflow run.",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "message",
+                                            "type": "STRING",
+                                            "value": "false",
+                                            "description": "Message",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "conditionalExpression": "",
+                                "continueOnFailure": false,
+                                "dependsOn": [
+                                    "Deploy Tito"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Test",
+                    "index": 1,
+                    "tasks": {
+                        "task": [
+                            {
+                                "index": 0,
+                                "name": "Units tests",
+                                "plugin": {
+                                    "provider": "vrcs.script:script",
+                                    "category": "ALL",
+                                    "instanceId": null
+                                },
+                                "inputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "scriptContent",
+                                            "type": "String",
+                                            "value": "sleep 1",
+                                            "description": "scriptContent",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "inputConfig",
+                                            "type": "JSON",
+                                            "value": "{\"inputProperties\":[]}",
+                                            "description": "inputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "password",
+                                            "type": "SecureString",
+                                            "value": "",
+                                            "description": "password",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptArguments",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptArguments",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "workingDirectory",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "workingDirectory",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptType",
+                                            "type": "String",
+                                            "value": "Bash",
+                                            "description": "scriptType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "isUserDefinedScript",
+                                            "type": "Boolean",
+                                            "value": "true",
+                                            "description": "isUserDefinedScript",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptName",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostConfig",
+                                            "type": "JSON",
+                                            "value": "{\"hostGroup\":\"userDefinedHost\",\"hosts\":[\"jumpbox.cpod-devops.shwrfr.mooo.com\"],\"isUserDefinedHosts\":true}",
+                                            "description": "hostConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "transportType",
+                                            "type": "String",
+                                            "value": "HTTPS",
+                                            "description": "transportType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "userName",
+                                            "type": "String",
+                                            "value": "vmware",
+                                            "description": "userName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "artifactConfig",
+                                            "type": "JSON",
+                                            "value": "null",
+                                            "description": "artifactConfig",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "outputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "hostList",
+                                            "type": "String[]",
+                                            "value": "true",
+                                            "description": "hostList",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "outputConfig",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "outputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostResponse",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "hostResponse",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "conditionalExpression": "",
+                                "continueOnFailure": false,
+                                "dependsOn": []
+                            },
+                            {
+                                "index": 1,
+                                "name": "Selenium tests",
+                                "plugin": {
+                                    "provider": "vrcs.script:script",
+                                    "category": "ALL",
+                                    "instanceId": null
+                                },
+                                "inputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "scriptContent",
+                                            "type": "String",
+                                            "value": "sleep 1",
+                                            "description": "scriptContent",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "inputConfig",
+                                            "type": "JSON",
+                                            "value": "{\"inputProperties\":[]}",
+                                            "description": "inputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "password",
+                                            "type": "SecureString",
+                                            "value": "",
+                                            "description": "password",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptArguments",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptArguments",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "workingDirectory",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "workingDirectory",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptType",
+                                            "type": "String",
+                                            "value": "Bash",
+                                            "description": "scriptType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "isUserDefinedScript",
+                                            "type": "Boolean",
+                                            "value": "true",
+                                            "description": "isUserDefinedScript",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptName",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostConfig",
+                                            "type": "JSON",
+                                            "value": "{\"hostGroup\":\"userDefinedHost\",\"hosts\":[\"jumpbox.cpod-devops.shwrfr.mooo.com\"],\"isUserDefinedHosts\":true}",
+                                            "description": "hostConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "transportType",
+                                            "type": "String",
+                                            "value": "HTTPS",
+                                            "description": "transportType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "userName",
+                                            "type": "String",
+                                            "value": "vmware",
+                                            "description": "userName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "artifactConfig",
+                                            "type": "JSON",
+                                            "value": "null",
+                                            "description": "artifactConfig",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "outputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "hostList",
+                                            "type": "String[]",
+                                            "value": "true",
+                                            "description": "hostList",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "outputConfig",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "outputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostResponse",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "hostResponse",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "conditionalExpression": "",
+                                "continueOnFailure": false,
+                                "dependsOn": [
+                                    "Units tests"
+                                ]
+                            },
+                            {
+                                "index": 2,
+                                "name": "Load tests",
+                                "plugin": {
+                                    "provider": "vrcs.script:script",
+                                    "category": "ALL",
+                                    "instanceId": null
+                                },
+                                "inputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "scriptContent",
+                                            "type": "String",
+                                            "value": "sleep 1",
+                                            "description": "scriptContent",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "inputConfig",
+                                            "type": "JSON",
+                                            "value": "{\"inputProperties\":[]}",
+                                            "description": "inputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "password",
+                                            "type": "SecureString",
+                                            "value": "",
+                                            "description": "password",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptArguments",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptArguments",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "workingDirectory",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "workingDirectory",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptType",
+                                            "type": "String",
+                                            "value": "Bash",
+                                            "description": "scriptType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "isUserDefinedScript",
+                                            "type": "Boolean",
+                                            "value": "true",
+                                            "description": "isUserDefinedScript",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptName",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostConfig",
+                                            "type": "JSON",
+                                            "value": "{\"hostGroup\":\"userDefinedHost\",\"hosts\":[\"jumpbox.cpod-devops.shwrfr.mooo.com\"],\"isUserDefinedHosts\":true}",
+                                            "description": "hostConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "transportType",
+                                            "type": "String",
+                                            "value": "HTTPS",
+                                            "description": "transportType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "userName",
+                                            "type": "String",
+                                            "value": "vmware",
+                                            "description": "userName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "artifactConfig",
+                                            "type": "JSON",
+                                            "value": "null",
+                                            "description": "artifactConfig",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "outputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "hostList",
+                                            "type": "String[]",
+                                            "value": "true",
+                                            "description": "hostList",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "outputConfig",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "outputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostResponse",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "hostResponse",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "conditionalExpression": "",
+                                "continueOnFailure": false,
+                                "dependsOn": [
+                                    "Selenium tests"
+                                ]
+                            },
+                            {
+                                "index": 3,
+                                "name": "Gating Rule",
+                                "plugin": {
+                                    "provider": "vrcs.gatingrule:ui",
+                                    "category": "GATING_RULE",
+                                    "instanceId": null
+                                },
+                                "inputProperties": {
+                                    "property": []
+                                },
+                                "outputProperties": {
+                                    "property": []
+                                },
+                                "conditionalExpression": "",
+                                "continueOnFailure": false,
+                                "dependsOn": [
+                                    "Load tests"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Sys integration",
+                    "index": 2,
+                    "tasks": {
+                        "task": [
+                            {
+                                "index": 0,
+                                "name": "Jira update",
+                                "plugin": {
+                                    "provider": "vrcs.script:script",
+                                    "category": "ALL",
+                                    "instanceId": null
+                                },
+                                "inputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "scriptContent",
+                                            "type": "String",
+                                            "value": "sleep 1",
+                                            "description": "scriptContent",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "inputConfig",
+                                            "type": "JSON",
+                                            "value": "{\"inputProperties\":[]}",
+                                            "description": "inputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "password",
+                                            "type": "SecureString",
+                                            "value": "",
+                                            "description": "password",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptArguments",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptArguments",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "workingDirectory",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "workingDirectory",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptType",
+                                            "type": "String",
+                                            "value": "Bash",
+                                            "description": "scriptType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "isUserDefinedScript",
+                                            "type": "Boolean",
+                                            "value": "true",
+                                            "description": "isUserDefinedScript",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptName",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostConfig",
+                                            "type": "JSON",
+                                            "value": "{\"hostGroup\":\"userDefinedHost\",\"hosts\":[\"jumpbox.cpod-devops.shwrfr.mooo.com\"],\"isUserDefinedHosts\":true}",
+                                            "description": "hostConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "transportType",
+                                            "type": "String",
+                                            "value": "HTTPS",
+                                            "description": "transportType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "userName",
+                                            "type": "String",
+                                            "value": "vmware",
+                                            "description": "userName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "artifactConfig",
+                                            "type": "JSON",
+                                            "value": "null",
+                                            "description": "artifactConfig",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "outputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "hostList",
+                                            "type": "String[]",
+                                            "value": "true",
+                                            "description": "hostList",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "outputConfig",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "outputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostResponse",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "hostResponse",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "conditionalExpression": "",
+                                "continueOnFailure": false,
+                                "dependsOn": []
+                            },
+                            {
+                                "index": 1,
+                                "name": "CMDB update",
+                                "plugin": {
+                                    "provider": "vrcs.script:script",
+                                    "category": "ALL",
+                                    "instanceId": null
+                                },
+                                "inputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "scriptContent",
+                                            "type": "String",
+                                            "value": "sleep 1",
+                                            "description": "scriptContent",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "inputConfig",
+                                            "type": "JSON",
+                                            "value": "{\"inputProperties\":[]}",
+                                            "description": "inputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "password",
+                                            "type": "SecureString",
+                                            "value": "",
+                                            "description": "password",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptArguments",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptArguments",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "workingDirectory",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "workingDirectory",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptType",
+                                            "type": "String",
+                                            "value": "Bash",
+                                            "description": "scriptType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "isUserDefinedScript",
+                                            "type": "Boolean",
+                                            "value": "true",
+                                            "description": "isUserDefinedScript",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptName",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostConfig",
+                                            "type": "JSON",
+                                            "value": "{\"hostGroup\":\"userDefinedHost\",\"hosts\":[\"jumpbox.cpod-devops.shwrfr.mooo.com\"],\"isUserDefinedHosts\":true}",
+                                            "description": "hostConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "transportType",
+                                            "type": "String",
+                                            "value": "HTTPS",
+                                            "description": "transportType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "userName",
+                                            "type": "String",
+                                            "value": "vmware",
+                                            "description": "userName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "artifactConfig",
+                                            "type": "JSON",
+                                            "value": "null",
+                                            "description": "artifactConfig",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "outputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "hostList",
+                                            "type": "String[]",
+                                            "value": "true",
+                                            "description": "hostList",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "outputConfig",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "outputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostResponse",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "hostResponse",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "conditionalExpression": "",
+                                "continueOnFailure": false,
+                                "dependsOn": [
+                                    "Jira update"
+                                ]
+                            },
+                            {
+                                "index": 2,
+                                "name": "Slack update",
+                                "plugin": {
+                                    "provider": "vrcs.script:script",
+                                    "category": "ALL",
+                                    "instanceId": null
+                                },
+                                "inputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "scriptContent",
+                                            "type": "String",
+                                            "value": "sleep 1",
+                                            "description": "scriptContent",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "inputConfig",
+                                            "type": "JSON",
+                                            "value": "{\"inputProperties\":[]}",
+                                            "description": "inputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "password",
+                                            "type": "SecureString",
+                                            "value": "",
+                                            "description": "password",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptArguments",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptArguments",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "workingDirectory",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "workingDirectory",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptType",
+                                            "type": "String",
+                                            "value": "Bash",
+                                            "description": "scriptType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "isUserDefinedScript",
+                                            "type": "Boolean",
+                                            "value": "true",
+                                            "description": "isUserDefinedScript",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptName",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostConfig",
+                                            "type": "JSON",
+                                            "value": "{\"hostGroup\":\"userDefinedHost\",\"hosts\":[\"jumpbox.cpod-devops.shwrfr.mooo.com\"],\"isUserDefinedHosts\":true}",
+                                            "description": "hostConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "transportType",
+                                            "type": "String",
+                                            "value": "HTTPS",
+                                            "description": "transportType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "userName",
+                                            "type": "String",
+                                            "value": "vmware",
+                                            "description": "userName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "artifactConfig",
+                                            "type": "JSON",
+                                            "value": "null",
+                                            "description": "artifactConfig",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "outputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "hostList",
+                                            "type": "String[]",
+                                            "value": "true",
+                                            "description": "hostList",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "outputConfig",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "outputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostResponse",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "hostResponse",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "conditionalExpression": "",
+                                "continueOnFailure": false,
+                                "dependsOn": [
+                                    "CMDB update"
+                                ]
+                            },
+                            {
+                                "index": 3,
+                                "name": "Gating Rule",
+                                "plugin": {
+                                    "provider": "vrcs.gatingrule:ui",
+                                    "category": "GATING_RULE",
+                                    "instanceId": null
+                                },
+                                "inputProperties": {
+                                    "property": []
+                                },
+                                "outputProperties": {
+                                    "property": []
+                                },
+                                "conditionalExpression": "",
+                                "continueOnFailure": false,
+                                "dependsOn": [
+                                    "Slack update"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Prod",
+                    "index": 3,
+                    "tasks": {
+                        "task": [
+                            {
+                                "index": 1,
+                                "name": "Update Tito Prod",
+                                "plugin": {
+                                    "provider": "vrcs.script:script",
+                                    "category": "ALL",
+                                    "instanceId": null
+                                },
+                                "inputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "scriptContent",
+                                            "type": "String",
+                                            "value": "cd /tmp/${Dev.Generate pipeline params.random_char}\nwget https://raw.githubusercontent.com/vmeoc/Tito/master/asset/Deployment/vRCS/tito-prod-update.sh\nchmod +x tito-prod-update.sh\n./tito-prod-update.sh ${pipeline.version}",
+                                            "description": "scriptContent",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "inputConfig",
+                                            "type": "JSON",
+                                            "value": "{\"inputProperties\":[]}",
+                                            "description": "inputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "password",
+                                            "type": "SecureString",
+                                            "value": "",
+                                            "description": "password",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptArguments",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptArguments",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "workingDirectory",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "workingDirectory",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptType",
+                                            "type": "String",
+                                            "value": "Bash",
+                                            "description": "scriptType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "isUserDefinedScript",
+                                            "type": "Boolean",
+                                            "value": "true",
+                                            "description": "isUserDefinedScript",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptName",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostConfig",
+                                            "type": "JSON",
+                                            "value": "{\"hostGroup\":\"userDefinedHost\",\"hosts\":[\"jumpbox.cpod-devops.shwrfr.mooo.com\"],\"isUserDefinedHosts\":true}",
+                                            "description": "hostConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "transportType",
+                                            "type": "String",
+                                            "value": "HTTPS",
+                                            "description": "transportType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "userName",
+                                            "type": "String",
+                                            "value": "vmware",
+                                            "description": "userName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "artifactConfig",
+                                            "type": "JSON",
+                                            "value": "null",
+                                            "description": "artifactConfig",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "outputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "hostList",
+                                            "type": "String[]",
+                                            "value": "true",
+                                            "description": "hostList",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "outputConfig",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "outputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostResponse",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "hostResponse",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "conditionalExpression": "",
+                                "continueOnFailure": false,
+                                "dependsOn": []
+                            },
+                            {
+                                "index": 2,
+                                "name": "Gating Rule",
+                                "plugin": {
+                                    "provider": "vrcs.gatingrule:ui",
+                                    "category": "GATING_RULE",
+                                    "instanceId": null
+                                },
+                                "inputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "workflowId",
+                                            "type": "STRING",
+                                            "value": "e9114f8f-c437-46af-8400-adbae2c52960",
+                                            "description": "",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "workflowName",
+                                            "type": "STRING",
+                                            "value": "Approval",
+                                            "description": "",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "properties",
+                                            "type": "JSON",
+                                            "value": "[{\"name\":\"approvalGroupDn\",\"displayName\":\"Approval Group (DN)\",\"description\":\"DN Name of the LdapGroup who can approve the release pipeline execution.\",\"type\":\"string\",\"mandatory\":true,\"value\":\"approval\",\"devops.model.workflowinfo_id\":\"e9114f8f-c437-46af-8400-adbae2c52960\"},{\"name\":\"approvalMessage\",\"displayName\":\"Approval Message\",\"description\":\"Content of the message that needs to be sent to the approver.\",\"type\":\"string\",\"mandatory\":true,\"value\":\"The execution of  ${releasePipelineName} has successfully passed through ${stageName}. Please Approve or Reject further execution of this pipeline by clicking on an appropriate button below.  Your Approval will trigger further execution of this pipeline in ${nextStageName}. If you Reject, this execution will stop at ${stageName}.  (Click \\\"Submit\\\" to Approve or \\\"Reject\\\" to Reject)\",\"devops.model.workflowinfo_id\":\"e9114f8f-c437-46af-8400-adbae2c52960\"}]",
+                                            "description": "",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "outputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "result",
+                                            "type": "STRING",
+                                            "value": "false",
+                                            "description": "Result of workflow run.",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "message",
+                                            "type": "STRING",
+                                            "value": "false",
+                                            "description": "Message",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "conditionalExpression": "",
+                                "continueOnFailure": false,
+                                "dependsOn": [
+                                    "Update Tito Prod"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "CleanUp",
+                    "index": 4,
+                    "tasks": {
+                        "task": [
+                            {
+                                "index": 0,
+                                "name": "cleanup",
+                                "plugin": {
+                                    "provider": "vrcs.script:script",
+                                    "category": "ALL",
+                                    "instanceId": null
+                                },
+                                "inputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "scriptContent",
+                                            "type": "String",
+                                            "value": "cd /tmp/${Dev.Generate pipeline params.random_char}\nwget https://raw.githubusercontent.com/vmeoc/Tito/master/asset/Deployment/vRCS/cleanup.sh\nchmod +x cleanup.sh\n./cleanup.sh ${Dev.Generate pipeline params.random_char}",
+                                            "description": "scriptContent",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "inputConfig",
+                                            "type": "JSON",
+                                            "value": "{\"inputProperties\":[]}",
+                                            "description": "inputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "password",
+                                            "type": "SecureString",
+                                            "value": "",
+                                            "description": "password",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptArguments",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptArguments",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "workingDirectory",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "workingDirectory",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptType",
+                                            "type": "String",
+                                            "value": "Bash",
+                                            "description": "scriptType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "isUserDefinedScript",
+                                            "type": "Boolean",
+                                            "value": "true",
+                                            "description": "isUserDefinedScript",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "scriptName",
+                                            "type": "String",
+                                            "value": "",
+                                            "description": "scriptName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostConfig",
+                                            "type": "JSON",
+                                            "value": "{\"hostGroup\":\"userDefinedHost\",\"hosts\":[\"jumpbox.cpod-devops.shwrfr.mooo.com\"],\"isUserDefinedHosts\":true}",
+                                            "description": "hostConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "transportType",
+                                            "type": "String",
+                                            "value": "HTTPS",
+                                            "description": "transportType",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "userName",
+                                            "type": "String",
+                                            "value": "vmware",
+                                            "description": "userName",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "artifactConfig",
+                                            "type": "JSON",
+                                            "value": "null",
+                                            "description": "artifactConfig",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "outputProperties": {
+                                    "property": [
+                                        {
+                                            "name": "hostList",
+                                            "type": "String[]",
+                                            "value": "true",
+                                            "description": "hostList",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "outputConfig",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "outputConfig",
+                                            "additional": false
+                                        },
+                                        {
+                                            "name": "hostResponse",
+                                            "type": "JSON[]",
+                                            "value": "true",
+                                            "description": "hostResponse",
+                                            "additional": false
+                                        }
+                                    ]
+                                },
+                                "conditionalExpression": "",
+                                "continueOnFailure": false,
+                                "dependsOn": []
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "concurrentExecutionsSupported": true,
+        "users": []
+    }
+}

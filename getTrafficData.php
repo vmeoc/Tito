@@ -5,6 +5,7 @@ const GOOGLE_API_KEY = "AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk";
 // Extract parameters from URL
 $needed_params = array("home_addr", "home_time", "work_addr", "work_time","home_range");
 
+
 $params = extractParametersFromUrl($needed_params);
 
 $result = getTrafficData($params);
@@ -12,14 +13,14 @@ $result = getTrafficData($params);
 //------------------------------------------------------------------------------
 
 /**
- * 
+ *
  * @param type $params
  * @throws \Exception
  */
 function getTrafficData($params) {
     $result = array('total'=>0);
     $days = array("monday", "tuesday", "wednesday", "thursday", "friday");
-    
+
     foreach ($days as $day) {
         $result[$day] = array("home_to_work" => array("time" => null, 'range_less'=>[], 'range_more'=>[]), "work_to_home" => array("time" => null));
 
@@ -27,7 +28,6 @@ function getTrafficData($params) {
         $work_time = strtotime("next " . $day . "+" . substr($params['work_time'], 0, 2) . "hours +" . substr($params['work_time'], 3, 2) . "minutes");
 
         $array_times = [];
-
         // Home to work
         $home_response = callGoogleApi($params['home_addr'], $params['work_addr'], $home_time);
         if ($home_response->status !== "OK") {
@@ -91,6 +91,7 @@ function defineMinAndMax(&$result, $array_times){
             $max_time = $time;
         }
     }
+    $result['min'] = false;
     if (isset($result['range_less'][$min_hour])){
         $result['range_less'][$min_hour][1] = true;
     } else if (isset($result['range_more'][$min_hour])){
@@ -98,6 +99,8 @@ function defineMinAndMax(&$result, $array_times){
     } else{
         $result['min'] = true;
     }
+
+    $result['max'] = false;
     if (isset($result['range_less'][$max_hour])){
         $result['range_less'][$max_hour][2] = true;
     } else if (isset($result['range_more'][$max_hour])){
@@ -109,7 +112,7 @@ function defineMinAndMax(&$result, $array_times){
 
 /**
  * Call the Google API
- * 
+ *
  * @param type $origin
  * @param type $dest
  * @param type $time
@@ -134,13 +137,30 @@ function callGoogleApi($origin, $dest, $time) {
 /**
  * Get an array of parameters from the URL
  * If a needed parameter is missing, throw an exception
- * 
+ *
  * @param array $needed_params
  * @return array
  * @throws \Exception
  */
 function extractParametersFromUrl(array $needed_params = array()) {
-    $params = $_POST;
+    if (empty($_GET['home_addr'])) {
+       //$LogLine = "_GET EST NULL;TITO-App requested from UI";
+       $LogLine = "Appel de TITO via POST;TITO-App requested from UI";
+       error_log(print_r($LogLine, TRUE));
+       $params = $_POST;
+    } else {
+       //$LogLine = "_POST EST NULL;TITO-App requested from URL";
+       $LogLine = "Appel de TITO via GET;TITO-App requested from URL";
+       error_log(print_r($LogLine, TRUE));
+       $params = $_GET;
+    }
+
+    // Adding LOG
+    $home_for_log = $params['home_addr'];
+    $work_for_log = $params['work_addr'];
+    $LogLine = "TITO-App;home=\"$home_for_log\";work=\"$work_for_log\";";
+    error_log(print_r($LogLine, TRUE));
+
     $result = array();
     foreach ($needed_params as $param_name) {
         if (!isset($params[$param_name])) {

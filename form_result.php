@@ -42,7 +42,8 @@ echo "<section>";
 
 if(!isset($result['error'])){
     displayInfo($result, $home, $home_time, $work);
-}else{
+    }
+    else{
     echo "Google Error";
 }
 /*
@@ -51,6 +52,7 @@ DisplayStats();
 */
 echo "</section>";
 echo "</div>";
+
 showmap($home, $work);
 //writeintodb();
 //****************************************
@@ -59,7 +61,7 @@ function displayInfo($result, $home, $home_time, $work){
 
     ?>
     <div class="container">
-        <div class="row">    
+        <div class="row">
             <div class="span12">
                 <h2 id="titleResult" style="color: white;"><i class="fa fa-car"></i> Average commuting time</h2>
             </div>
@@ -106,14 +108,14 @@ function displayInfo($result, $home, $home_time, $work){
                                     }
                                 }
                                 ?>
-                                <?php 
+                                <?php
                                 if(count($result['monday']['home_to_work']['range_less']) > 0 && $result['monday']['home_to_work']['min']){
-                                    echo "<span class='min-range'>".$home_time." - ".secondsToTime($result['monday']['home_to_work']['time']) . '</span></br>'; 
+                                    echo "<span class='min-range'>".$home_time." - ".secondsToTime($result['monday']['home_to_work']['time']) . '</span></br>';
                                 }
                                 if(count($result['monday']['home_to_work']['range_less']) > 0 && $result['monday']['home_to_work']['max']){
-                                    echo "<span class='max-range'>".$home_time." - ".secondsToTime($result['monday']['home_to_work']['time']) . '</span></br>'; 
+                                    echo "<span class='max-range'>".$home_time." - ".secondsToTime($result['monday']['home_to_work']['time']) . '</span></br>';
                                 }else{
-                                    echo $home_time." - ".secondsToTime($result['monday']['home_to_work']['time']) . '</br>'; 
+                                    echo $home_time." - ".secondsToTime($result['monday']['home_to_work']['time']) . '</br>';
                                 }
                                 ?>
                                 <?php
@@ -144,14 +146,14 @@ function displayInfo($result, $home, $home_time, $work){
                                     }
                                 }
                                 ?>
-                                <?php 
+                                <?php
                                 if(count($result['tuesday']['home_to_work']['range_less']) > 0 && $result['tuesday']['home_to_work']['min']){
-                                    echo "<span class='min-range'>".$home_time." - ".secondsToTime($result['tuesday']['home_to_work']['time']) . '</span></br>'; 
+                                    echo "<span class='min-range'>".$home_time." - ".secondsToTime($result['tuesday']['home_to_work']['time']) . '</span></br>';
                                 }
                                 if(count($result['tuesday']['home_to_work']['range_less']) > 0 && $result['tuesday']['home_to_work']['max']){
-                                    echo "<span class='max-range'>".$home_time." - ".secondsToTime($result['tuesday']['home_to_work']['time']) . '</span></br>'; 
+                                    echo "<span class='max-range'>".$home_time." - ".secondsToTime($result['tuesday']['home_to_work']['time']) . '</span></br>';
                                 }else{
-                                    echo $home_time." - ".secondsToTime($result['tuesday']['home_to_work']['time']) . '</br>'; 
+                                    echo $home_time." - ".secondsToTime($result['tuesday']['home_to_work']['time']) . '</br>';
                                 }
                                 ?>
                                 <?php
@@ -183,14 +185,14 @@ function displayInfo($result, $home, $home_time, $work){
                                 }
                                 ?>
 
-                                <?php 
+                                <?php
                                 if(count($result['wednesday']['home_to_work']['range_less']) > 0 && $result['wednesday']['home_to_work']['min']){
-                                    echo "<span class='min-range'>".$home_time." - ".secondsToTime($result['wednesday']['home_to_work']['time']) . '</span></br>'; 
+                                    echo "<span class='min-range'>".$home_time." - ".secondsToTime($result['wednesday']['home_to_work']['time']) . '</span></br>';
                                 }
                                 if(count($result['wednesday']['home_to_work']['range_less']) > 0 && $result['wednesday']['home_to_work']['max']){
-                                    echo "<span class='max-range'>".$home_time." - ".secondsToTime($result['wednesday']['home_to_work']['time']) . '</span></br>'; 
+                                    echo "<span class='max-range'>".$home_time." - ".secondsToTime($result['wednesday']['home_to_work']['time']) . '</span></br>';
                                 }else{
-                                    echo $home_time." - ".secondsToTime($result['wednesday']['home_to_work']['time']) . '</br>'; 
+                                    echo $home_time." - ".secondsToTime($result['wednesday']['home_to_work']['time']) . '</br>';
                                 }
                                 ?>
 
@@ -222,16 +224,16 @@ function displayInfo($result, $home, $home_time, $work){
                                     }
                                 }
                                 ?>
-                                
 
-                                <?php 
+
+                                <?php
                                 if(count($result['thursday']['home_to_work']['range_less']) > 0 && $result['thursday']['home_to_work']['min']){
-                                    echo "<span class='min-range'>".$home_time." - ".secondsToTime($result['thursday']['home_to_work']['time']) . '</span></br>'; 
+                                    echo "<span class='min-range'>".$home_time." - ".secondsToTime($result['thursday']['home_to_work']['time']) . '</span></br>';
                                 }
                                 if(count($result['thursday']['home_to_work']['range_less']) > 0 && $result['thursday']['home_to_work']['max']){
-                                    echo "<span class='max-range'>".$home_time." - ".secondsToTime($result['thursday']['home_to_work']['time']) . '</span></br>'; 
+                                    echo "<span class='max-range'>".$home_time." - ".secondsToTime($result['thursday']['home_to_work']['time']) . '</span></br>';
                                 }else{
-                                    echo $home_time." - ".secondsToTime($result['thursday']['home_to_work']['time']) . '</br>'; 
+                                    echo $home_time." - ".secondsToTime($result['thursday']['home_to_work']['time']) . '</br>';
                                 }
                                 ?>
 
@@ -263,15 +265,15 @@ function displayInfo($result, $home, $home_time, $work){
                                     }
                                 }
                                 ?>
-                                
-                                <?php 
+
+                                <?php
                                 if(count($result['friday']['home_to_work']['range_less']) > 0 && $result['friday']['home_to_work']['min']){
-                                    echo "<span class='min-range'>".$home_time." - ".secondsToTime($result['friday']['home_to_work']['time']) . '</span></br>'; 
+                                    echo "<span class='min-range'>".$home_time." - ".secondsToTime($result['friday']['home_to_work']['time']) . '</span></br>';
                                 }
                                 if(count($result['friday']['home_to_work']['range_less']) > 0 && $result['friday']['home_to_work']['max']){
-                                    echo "<span class='max-range'>".$home_time." - ".secondsToTime($result['friday']['home_to_work']['time']) . '</span></br>'; 
+                                    echo "<span class='max-range'>".$home_time." - ".secondsToTime($result['friday']['home_to_work']['time']) . '</span></br>';
                                 }else{
-                                    echo $home_time." - ".secondsToTime($result['friday']['home_to_work']['time']) . '</br>'; 
+                                    echo $home_time." - ".secondsToTime($result['friday']['home_to_work']['time']) . '</br>';
                                 }
                                 ?>
                                 <?php
@@ -318,7 +320,7 @@ function displayInfo($result, $home, $home_time, $work){
 function showmap($home, $work) {
 
     // echo '<div class="jumbotron text-center">';
-    
+
     echo '<iframe width="100%" height="100%" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/directions?origin=' . $home . '&destination=' . $work . '&key=AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk" allowfullscreen></iframe>';
     //  echo '</div>';
 }
@@ -473,7 +475,7 @@ function DisplayTable() {
     ?>
 
     <div class="container">
-        <div class="row">    
+        <div class="row">
             <div class="span12">
                 <h2 id="titleResult" style="color: white;"><i class="fa fa-car"></i> Average commuting time</h2>
             </div>
@@ -562,7 +564,7 @@ function writeintodb() {
     global $hour_work_departure;
 
 
-// Create connection 
+// Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
@@ -572,7 +574,7 @@ function writeintodb() {
 
     $sql = "INSERT INTO $tablename (home, work, hour_home_departure, hour_work_departure) VALUES ('$home', '$work', '$hour_home_departure', '$hour_work_departure')";
     if ($conn->query($sql) === TRUE) {
-        
+
     } else {
         echo "Error writing values: " . $conn->error;
     }

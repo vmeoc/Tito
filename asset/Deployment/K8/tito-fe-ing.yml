@@ -4,6 +4,7 @@ metadata:
   name: ingress-tito
   labels:
     app: tito
+    stage: dev
   annotations:
     kubernetes.io/ingress.class: traefik
     traefik.frontend.rule.type: PathPrefixStrip
