@@ -143,8 +143,6 @@ function callGoogleApi($origin, $dest, $time) {
  * @throws \Exception
  */
 function extractParametersFromUrl(array $needed_params = array()) {
-//Test vince
-var_dump($_GET);
     if (empty($_GET['home_addr'])) {
        //$LogLine = "_GET EST NULL;TITO-App requested from UI";
        $LogLine = "Appel de TITO via POST;TITO-App requested from UI";
