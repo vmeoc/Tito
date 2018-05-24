@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: titofe
+  labels:
+    name: tito-fe
+    version: "latest"
+    app: tito
+    tiers: tito-fe
+    stage: prod
+spec:
+  replicas: 2
+  selector:
+    type: tito-fe
+    version: v1
+  template:
+    metadata:
+      labels:
+        app: tito
+        type: tito-fe
+        version: v1
+    spec:
+      containers:
+        - name: tito
+          image: vmeoc/tito-fe:latest
+          ports:
+          - containerPort: 80
+          env:
+          - name: TITO_VERSION
+            value: V1.8.9
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
