@@ -12,7 +12,7 @@ TITO_RC_CURRENT="tito-fe-rc.yml"
 NEXT_LABEL="next"
 NEXT_NAME="titofe-next"
 TITO_VERSION=$1
-TITO_PROD_DIR="/home/vmware/Demo-do-not-touch/Tito/asset/Deployment/K8"
+TITO_PROD_DIR="/home/vmware/DemoTito/Prod/Tito/asset/Deployment/K8-PKS"
 
 echo "lancement du script update Prod Tito"
 echo -n "TITO_PROD_DIR="
