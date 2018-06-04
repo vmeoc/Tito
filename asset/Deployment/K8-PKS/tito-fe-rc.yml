@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: tito
-          image: vmeoc/tito-fe:latest
+          image: vmeoc/tito-fe:V1.9
           ports:
           - containerPort: 80
           env:

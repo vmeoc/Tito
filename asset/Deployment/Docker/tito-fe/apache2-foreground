@@ -24,7 +24,9 @@ EOF
 fi
 
 #get Tito code
-git clone https://github.com/vmeoc/Tito /var/www/html/
+if [ -z "$(ls -A /var/www/html)" ]; then
+	git clone https://github.com/vmeoc/Tito /var/www/html/
+fi
 
 #if the env variable TITO_VERSION is available, then checkout the needed version.
 

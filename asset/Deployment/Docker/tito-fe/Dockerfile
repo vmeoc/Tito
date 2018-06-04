@@ -11,7 +11,9 @@ RUN apt-get update
 RUN apt-get install php-mysql vim libmcrypt-dev -y
 RUN apt-get install git -y
 RUN docker-php-ext-install mysqli pdo pdo_mysql
-#RUN cp /usr/share/php5/php.ini-production /usr/local/etc/php/php.ini
+
+#Deploy Tito
+RUN git clone https://github.com/vmeoc/Tito /var/www/html/
 
 RUN echo "<IfModule env_module>" >> /etc/apache2/mods-enabled/env.conf
 RUN echo "     SetEnv TITO-SQL \"Tito-SQL\"" >> /etc/apache2/mods-enabled/env.conf
