@@ -1,6 +1,6 @@
 <?php
 
-const GOOGLE_API_KEY = "AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk";
+const GOOGLE_API_KEY = "AIzaSyD0WWBRHvqc0zOcGKE04gnIYr4Dq_0m-A0";
 
 // Extract parameters from URL
 $needed_params = array("home_addr", "home_time", "work_addr", "work_time","home_range");
