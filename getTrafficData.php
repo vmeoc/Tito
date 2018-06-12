@@ -124,6 +124,11 @@ function defineMinAndMax(&$result, $array_times){
  */
 function callGoogleApi($origin, $dest, $time) {
 
+#retrieving variables
+global $metric_name;
+global $tag_name;
+global $tag_value;
+
     $url = "https://maps.googleapis.com/maps/api/directions/json?origin=" . str_replace(' ', '%20', $origin) . "&destination=" . str_replace(' ', '%20', $dest) . "&departure_time=" . $time . "&traffic_model=pessimistic&key=" . GOOGLE_API_KEY;
 
 #to monitor the google maps call duration_in_traffic
@@ -141,7 +146,7 @@ function callGoogleApi($origin, $dest, $time) {
 
 #to monitor the google maps call duration_in_traffic
     $time2=time();
-    wavefront(gethostname(),global $metric_name,$time2-$time1,$time2,global $tag_name,global $tag_value);
+    wavefront(gethostname(), $metric_name,$time2-$time1,$time2, $tag_name, $tag_value);
 
     return json_decode($response);
 }
