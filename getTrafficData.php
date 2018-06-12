@@ -2,7 +2,7 @@
 
 const GOOGLE_API_KEY = "AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk";
 
-$metric_name = google_maps_call_duration;
+$metric_name = "google_maps_call_duration";
 $tag_name = "TitoTier";
 $tag_value = "TitoFE";
 
@@ -141,7 +141,7 @@ function callGoogleApi($origin, $dest, $time) {
 
 #to monitor the google maps call duration_in_traffic
     $time2=time();
-    wavefront(gethostname(),$metric_name,$time2-$time1,$time2,$tag_name,$tag_value);
+    wavefront(gethostname(),global $metric_name,$time2-$time1,$time2,global $tag_name,global $tag_value);
 
     return json_decode($response);
 }
