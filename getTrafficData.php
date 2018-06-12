@@ -202,7 +202,7 @@ if ($socket === false) {
 syslog (LOG_INFO,"Attempting to connect to ‘$wf_proxy_name' on port ‘$wf_proxy_port'...");
 $result = socket_connect($socket, $wf_proxy_name, $wf_proxy_port);
 if ($result === false) {
-    error_log()"socket_connect() failed.\nReason: ($result) " . socket_strerror(socket_last_error($socket)) . "\n");
+    error_log("socket_connect() failed.\nReason: ($result) " . socket_strerror(socket_last_error($socket)) . "\n");
 }
 $data_point = "$metric_name $metric_value $metric_epoch source=$source_name  $tag_name=$tag_value\n";
 syslog (LOG_INFO, "Sending Wavefront Data point \n");
