@@ -2,6 +2,11 @@
 
 const GOOGLE_API_KEY = "AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk";
 
+global $source_name=gethostname();
+global $metric_name="google_maps_call_duration";
+global $tag_name="TitoTier";
+global $tag_value="TitoFE";
+
 // Extract parameters from URL
 $needed_params = array("home_addr", "home_time", "work_addr", "work_time","home_range");
 
@@ -122,6 +127,9 @@ function callGoogleApi($origin, $dest, $time) {
 
     $url = "https://maps.googleapis.com/maps/api/directions/json?origin=" . str_replace(' ', '%20', $origin) . "&destination=" . str_replace(' ', '%20', $dest) . "&departure_time=" . $time . "&traffic_model=pessimistic&key=" . GOOGLE_API_KEY;
 
+#to monitor the google maps call duration_in_traffic
+    $time1=time();
+
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -130,6 +138,10 @@ function callGoogleApi($origin, $dest, $time) {
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
     $response = curl_exec($ch);
     curl_close($ch);
+
+#to monitor the google maps call duration_in_traffic
+    $time2=time();
+    wavefront($source_name,$metric_name,$time2-$time1,$time2,$tag_name,$tag_value)
 
     return json_decode($response);
 }
@@ -170,4 +182,30 @@ function extractParametersFromUrl(array $needed_params = array()) {
         $result[$param_name] = $params[$param_name];
     }
     return $result;
+}
+
+#this function send data to Wavefront to showcase Wavefront ability to ingest metric application
+function wavefront($source_name,$metric_name,$metric_value,$metric_epoch,$tag_name,$tag_value) {
+#to delete later on
+  $wf_proxy_name="10.100.200.52";
+  $wf_proxy_port=2878;
+
+  $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+if ($socket === false) {
+    echo "socket_create() failed: reason: " . socket_strerror(socket_last_error()) . "\n";
+} else {
+    echo "OK.\n";
+}
+echo "Attempting to connect to ‘$wf_proxy_name' on port ‘$wf_proxy_port'...";
+$result = socket_connect($socket, $wf_proxy_name, $wf_proxy_port);
+if ($result === false) {
+    echo "socket_connect() failed.\nReason: ($result) " . socket_strerror(socket_last_error($socket)) . "\n";
+} else {
+    echo "OK.\n";
+}
+$data_point = "$metric_name $metric_value $metric_epoch source=$source_name  $tag_name=$tag_value\n";
+echo "Sending Wavefront Data point";
+socket_write($socket, $data_point, strlen($data_point));
+echo "Closing socket...";
+socket_close($socket);
 }
