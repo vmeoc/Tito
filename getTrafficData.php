@@ -132,7 +132,7 @@ global $tag_value;
     $url = "https://maps.googleapis.com/maps/api/directions/json?origin=" . str_replace(' ', '%20', $origin) . "&destination=" . str_replace(' ', '%20', $dest) . "&departure_time=" . $time . "&traffic_model=pessimistic&key=" . GOOGLE_API_KEY;
 
 #to monitor the google maps call duration_in_traffic
-    $time1=time();
+    $time1=microtime(true);
 
 #Google call
     $ch = curl_init();
@@ -145,7 +145,7 @@ global $tag_value;
     curl_close($ch);
 
 #to monitor the google maps call duration_in_traffic
-    $time2=time();
+    $time2=microtime(TRUE);
     wavefront(gethostname(), $metric_name,$time2-$time1,$time2, $tag_name, $tag_value);
 
     return json_decode($response);
