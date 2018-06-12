@@ -22,12 +22,16 @@ spec:
     spec:
       containers:
         - name: tito
-          image: vmeoc/tito-fe:V1.9
+          image: vmeoc/tito-fe:V1.9.2
           ports:
           - containerPort: 80
           env:
           - name: TITO_VERSION
-            value: V1.8.9
+            value: V1.9
+          - name: PROXY_NAME
+            value: x.x.x
+          - name: PROXY_PORT
+            value: "3878"
           - name: POD_NAME
             valueFrom:
               fieldRef:
