@@ -7,13 +7,6 @@ $work = $_POST['work_addr'];
 
 include 'getTrafficData.php';
 
-/*
-//array mgmt very nasty. To improve
-$weekdays_home_departure = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
-$weekdays_work_departure = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
-$weekdays_home_duration = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
-$weekdays_work_duration = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
-$stats = array("week" => "0", "month" => "0", "year" => "0", "life" => "0");
 
 //**************SQL variables*********************
 $servername = getenv('TITO-SQL');
@@ -22,7 +15,7 @@ $password = "Tito2016";
 $tablename = "TitoTable";
 $dbname = "TitoDB";
 //*************************************************
-
+/*
 // Réception des variables
 $hour_home_departure = $_POST['hour_home_departure'];
 $hour_work_departure = $_POST['hour_work_departure'];
