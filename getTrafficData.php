@@ -130,6 +130,7 @@ function callGoogleApi($origin, $dest, $time) {
 #to monitor the google maps call duration_in_traffic
     $time1=time();
 
+#Google call
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -141,7 +142,7 @@ function callGoogleApi($origin, $dest, $time) {
 
 #to monitor the google maps call duration_in_traffic
     $time2=time();
-    wavefront($source_name,$metric_name,$time2-$time1,$time2,$tag_name,$tag_value)
+    wavefront($source_name,$metric_name,$time2-$time1,$time2,$tag_name,$tag_value);
 
     return json_decode($response);
 }
