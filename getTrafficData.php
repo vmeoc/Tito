@@ -2,9 +2,9 @@
 
 const GOOGLE_API_KEY = "AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk";
 
-global $metric_name = google_maps_call_duration;
-global $tag_name = "TitoTier";
-global $tag_value = "TitoFE";
+$metric_name = google_maps_call_duration;
+$tag_name = "TitoTier";
+$tag_value = "TitoFE";
 
 // Extract parameters from URL
 $needed_params = array("home_addr", "home_time", "work_addr", "work_time","home_range");
