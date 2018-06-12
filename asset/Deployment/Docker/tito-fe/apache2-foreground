@@ -42,6 +42,7 @@ fi
 
 if [ -n "$TITO_VERSION" ]; then
     cd /var/www/html/
+    git pull
     git checkout $TITO_VERSION
 fi
 
