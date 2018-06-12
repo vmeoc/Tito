@@ -207,6 +207,6 @@ if ($result === false) {
 $data_point = "$metric_name $metric_value $metric_epoch source=$source_name  $tag_name=$tag_value\n";
 syslog (LOG_INFO, "Sending Wavefront Data point \n");
 socket_write($socket, $data_point, strlen($data_point));
-syslog (LOG_INFO,echo "Closing socket...\n");
+syslog (LOG_INFO, "Closing socket...\n");
 socket_close($socket);
 }
