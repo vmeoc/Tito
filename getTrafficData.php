@@ -191,10 +191,12 @@ function extractParametersFromUrl(array $needed_params = array()) {
 
 #this function send data to Wavefront to showcase Wavefront ability to ingest metric application
 function wavefront($source_name,$metric_name,$metric_value,$metric_epoch,$tag_name,$tag_value) {
-#to delete later on
-  $servername =
+#retrieve wavefront proxy details
   $wf_proxy_name=getenv('PROXY_NAME');
   $wf_proxy_port=getenv('PROXY_PORT');
+
+#exit if no proxy_name entered
+ if (empty($wf_proxy_name)) {return;}
 
   $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 if ($socket === false) {
