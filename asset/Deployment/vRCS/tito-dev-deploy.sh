@@ -12,8 +12,6 @@ TMP_DIR+=$2
 TITO_GITHUB="https://github.com/vmeoc/Tito"
 VERSION=$1
 STAGE="dev"
-INGRESS_NAME="tito-dev-"
-INGRESS_NAME+=$(cat /dev/urandom | tr -dc '0-9' | fold -w 4 | head -n 1)
 
 echo "lancement script deploiement Tito"
 echo -n "TMP_DIR= "
@@ -35,18 +33,16 @@ cd $TMP_DIR
 git clone $TITO_GITHUB
 
 #Flag Tito files as Dev stage
-sed -i "/stage:/c\    stage: ${STAGE}" Tito/asset/Deployment/K8/*
+sed -i "/stage:/c\    stage: ${STAGE}" Tito/asset/Deployment/K8-PKS/*
 
-#Set Ingress as Dev
-sed -i "/- path:/c\      - path: /${INGRESS_NAME}" Tito/asset/Deployment/K8/tito-fe-ing.yml
 
 #Set Tito to the correct version
-sed -i "/value:/c\            value: ${VERSION}" Tito/asset/Deployment/K8/tito-fe-rc.yml
+sed -i "/value:/c\            value: ${VERSION}" Tito/asset/Deployment/K8-PKS/tito-fe-rc.yml
 
 #Start Tito 
-kubectl --namespace=dev create -f Tito/asset/Deployment/K8/.
+kubectl --namespace=dev create -f Tito/asset/Deployment/K8-PKS/.
 
 #Resultat
+sleep 3
 echo "Connect to: "
-echo http://ingress.k8s/$INGRESS_NAME/index.php
-
+kubectl get services titofe-service --namespace=dev --output=json | jq '.status.loadBalancer.ingress[0].ip'

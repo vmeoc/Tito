@@ -10,7 +10,7 @@
 TITO_RC_NEXT="tito-fe-rc-next.yml"
 TITO_TEMP_DIR="/tmp/"
 TITO_TEMP_DIR+=$1
-TITO_PROD_DIR="/home/vmware/Demo-do-not-touch/Tito/asset/Deployment/K8"
+TITO_PROD_DIR="/home/vmware/DemoTito/Prod/Tito/asset/Deployment/K8-PKS"
 TITO_RC="tito-fe-rc.yml"
 
 echo "lancement du script clean up"
