@@ -47,7 +47,7 @@ echo "</section>";
 echo "</div>";
 
 showmap($home, $work);
-//writeintodb();
+writeintodb();
 //****************************************
 
 function displayInfo($result, $home, $home_time, $work){
