@@ -1,0 +1,3 @@
+To use the ingress yaml file of Tito, modify the following:
+change the ingress url in the tito-fe-ing.yaml file
+if you use wavefront, set the wavefront proxy url and port

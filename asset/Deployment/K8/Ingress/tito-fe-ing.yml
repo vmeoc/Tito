@@ -10,7 +10,7 @@ metadata:
     traefik.frontend.rule.type: PathPrefixStrip
 spec:
   rules:
-  - host: ingress.k8s
+  - host: ingress.cpod-gv.shwrfr.com #set your ingress URL here
     http:
       paths:
       - path: /tito
