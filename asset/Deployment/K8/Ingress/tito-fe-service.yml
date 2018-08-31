@@ -9,5 +9,7 @@ spec:
   ports:
   - name: http
     port: 80               # port expose par docker  (pas le port dans le container)
+    targetPort: 80
+    protocol: TCP
   selector:                     # key/value, label permettant de definir le pod cible (doit etre danslabels du pod)
     type: tito-fe

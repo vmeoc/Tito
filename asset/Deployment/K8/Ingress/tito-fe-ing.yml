@@ -2,19 +2,17 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: ingress-tito
+  annotations:
+    ncp/rewrite_target: "/"
   labels:
     app: tito
     stage: dev
-  annotations:
-    kubernetes.io/ingress.class: traefik
-    traefik.frontend.rule.type: PathPrefixStrip
 spec:
   rules:
-  - host: ingress.cpod-gv.shwrfr.com #set your ingress URL here
-    http:
-      paths:
-      - path: /tito
-        backend:
-          serviceName: titofe-service
-          servicePort: http
-
+   - host: ingress.cpod-gv.shwrfr.com #set your ingress URL here
+     http:
+       paths:
+       - path: /tito
+         backend:
+           serviceName: titofe-service
+           servicePort: 80
