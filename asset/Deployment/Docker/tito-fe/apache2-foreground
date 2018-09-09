@@ -46,4 +46,7 @@ if [ -n "$TITO_VERSION" ]; then
     git checkout $TITO_VERSION
 fi
 
+#to have the apache server redirect the flow for ingress
+sed -i '/<IfModule alias_module>/a Alias /tito/ "/var/www/html/"' /etc/apache2/mods-enabled/alias.conf
+
 exec apache2 -DFOREGROUND "$@"

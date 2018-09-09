@@ -2,8 +2,8 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: ingress-tito
-  annotations:
-    ncp/rewrite_target: "/"
+#  annotations:
+#    ncp/rewrite_target: "/"
   labels:
     app: tito
     stage: dev
@@ -12,7 +12,7 @@ spec:
    - host: ingress.cpod-gv.shwrfr.com #set your ingress URL here
      http:
        paths:
-       - path: /tito
+       - path: /tito/*
          backend:
            serviceName: titofe-service
            servicePort: 80
