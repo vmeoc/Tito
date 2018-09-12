@@ -10,8 +10,9 @@
 TITO_RC_NEXT="tito-fe-rc-next.yml"
 TITO_TEMP_DIR="/tmp/"
 TITO_TEMP_DIR+=$1
-TITO_PROD_DIR="/home/vmware/DemoTito/Prod/Tito/asset/Deployment/K8-PKS"
+TITO_PROD_DIR="/home/vince/Demo/Prod/Tito/asset/Deployment/K8/Ingress"
 TITO_RC="tito-fe-rc.yml"
+K8_CLUSTER="gv-prod"
 
 echo "lancement du script clean up"
 echo -n "TITO_TEMP_DIR="
@@ -22,6 +23,9 @@ echo -n "TITO_RC="
 echo $TITO_RC
 
 cd $TITO_PROD_DIR
+
+#use the right K8 cluster
+kubectl config use-context $K8_CLUSTER
 
 #suppression fichiers et répertoires
 rm -rf $TITO_TEMP_DIR
