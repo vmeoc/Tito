@@ -13,6 +13,7 @@ TITO_GITHUB="https://github.com/vmeoc/Tito"
 VERSION=$1
 STAGE="dev"
 TITO_CONF="Tito/asset/Deployment/K8/Ingress/"
+K8_CLUSTER="gv-prod"
 
 echo "lancement script deploiement Tito"
 echo -n "TMP_DIR= "
@@ -23,6 +24,9 @@ echo -n "VERSION= "
 echo $VERSION
 echo -n "STAGE= "
 echo $STAGE
+
+#switch to the right cluster
+kubectl config use-context $K8_CLUSTER
 
 #cleanup
 echo "cleanup..."
