@@ -27,7 +27,7 @@ spec:
           - containerPort: 80
           env:
           - name: TITO_VERSION
-            value: V1
+            value: V1.9.2
           - name: POD_NAME
             valueFrom:
               fieldRef:
