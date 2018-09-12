@@ -12,7 +12,8 @@ TITO_RC_CURRENT="tito-fe-rc.yml"
 NEXT_LABEL="next"
 NEXT_NAME="titofe-next"
 TITO_VERSION=$1
-TITO_PROD_DIR="/home/vince/Demo/Prod/Tito/asset/Deployment/K8-PKS"
+TITO_PROD_DIR="/home/vince/Demo/Prod/Tito/asset/Deployment/K8/Ingress"
+K8_CLUSTER="gv-prod"
 
 echo "lancement du script update Prod Tito"
 echo -n "TITO_PROD_DIR="
@@ -30,6 +31,9 @@ echo $TITO_VERSION
 
 cd $TITO_PROD_DIR
 cp $TITO_RC_CURRENT $TITO_RC_NEXT
+
+#Change to the right K8 Cluster
+kubectl config use-context $K8_CLUSTER
 
 #change metadata.name
 sed -i "0,/name:.*/s//name: ${NEXT_NAME}/" $TITO_RC_NEXT
