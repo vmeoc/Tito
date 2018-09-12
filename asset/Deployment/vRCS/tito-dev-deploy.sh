@@ -12,6 +12,7 @@ TMP_DIR+=$2
 TITO_GITHUB="https://github.com/vmeoc/Tito"
 VERSION=$1
 STAGE="dev"
+TITO_CONF="Tito/asset/Deployment/K8/Ingress/"
 
 echo "lancement script deploiement Tito"
 echo -n "TMP_DIR= "
@@ -22,8 +23,6 @@ echo -n "VERSION= "
 echo $VERSION
 echo -n "STAGE= "
 echo $STAGE
-echo -n "INGRESS_NAME= "
-echo $INGRESS_NAME
 
 #cleanup
 echo "cleanup..."
@@ -33,16 +32,17 @@ cd $TMP_DIR
 git clone $TITO_GITHUB
 
 #Flag Tito files as Dev stage
-sed -i "/stage:/c\    stage: ${STAGE}" Tito/asset/Deployment/K8-PKS/*
+sed -i "/stage:/c\    stage: ${STAGE}" $TITO_CONF/*
 
 
 #Set Tito to the correct version
-sed -i "/value:/c\            value: ${VERSION}" Tito/asset/Deployment/K8-PKS/tito-fe-rc.yml
+sed -i "/value:/c\            value: ${VERSION}" $TITO_CONF/tito-fe-rc.yml
 
 #Start Tito 
-kubectl --namespace=dev create -f Tito/asset/Deployment/K8-PKS/.
+kubectl --namespace=dev create -f $TITO_CONF/.
 
 #Resultat
 sleep 3
 echo "Connect to: "
-kubectl get services titofe-service --namespace=dev --output=json | jq '.status.loadBalancer.ingress[0].ip'
+VAR=$(kubectl get ing tito-dev --namespace=dev --output=json | jq '.spec.rules[0].host')
+echo "http://${VAR//\"}/tito/"
