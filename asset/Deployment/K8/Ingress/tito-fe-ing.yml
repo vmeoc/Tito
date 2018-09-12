@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: tito-prod
+  name: tito-dev
 #  annotations:
 #    ncp/rewrite_target: "/"
   labels:
@@ -9,7 +9,7 @@ metadata:
     stage: dev
 spec:
   rules:
-   - host: tito-prod.cpod-gv.shwrfr.com #set your ingress URL here
+   - host: tito-dev.cpod-gv.shwrfr.com #set your ingress URL here
      http:
        paths:
        - path: /tito/*
