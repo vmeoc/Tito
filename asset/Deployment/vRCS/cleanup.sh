@@ -35,5 +35,6 @@ rm -f $TITO_RC_NEXT
 kubectl --namespace=dev delete pods,services,rc,ing -l app=tito -l stage=dev
 
 #Set Tito prod tp V1
-kubectl -n=prod rolling-update titofe-next -f $TITO_RC
-
+sed -i "0,/name:.*/s//name: tito-fe-current/" $TITO_RC
+kubectl -n=prod rolling-update titofe -f $TITO_RC
+sed -i "0,/name:.*/s//name: tito-fe/" $TITO_RC
