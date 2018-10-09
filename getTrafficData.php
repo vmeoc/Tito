@@ -190,26 +190,35 @@ function extractParametersFromUrl(array $needed_params = array()) {
 }
 
 #this function send data to Wavefront to showcase Wavefront ability to ingest metric application
-function wavefront($source_name,$metric_name,$metric_value,$metric_epoch,$tag_name,$tag_value) {
-#retrieve wavefront proxy details
-  $wf_proxy_name=getenv('PROXY_NAME');
-  $wf_proxy_port=getenv('PROXY_PORT');
+function wavefront($source_name,$metric_name,$metric_value,$metric_epoch,$tag_name,$tag_value) 
+{
+   #retrieve wavefront proxy details
+   $wf_proxy_name=getenv('PROXY_NAME');
+   $wf_proxy_port=getenv('PROXY_PORT');
 
-#exit if no proxy_name entered
- if (empty($wf_proxy_name)) {return;}
+   #exit if no proxy_name entered
+   if (empty($wf_proxy_name)) {return;}
 
-  $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-if ($socket === false) {
-    error_log("socket_create() failed: reason: " . socket_strerror(socket_last_error()) . "\n");
-}
-syslog (LOG_INFO,"Attempting to connect to ‘$wf_proxy_name' on port ‘$wf_proxy_port'...");
-$result = socket_connect($socket, $wf_proxy_name, $wf_proxy_port);
-if ($result === false) {
-    error_log("socket_connect() failed.\nReason: ($result) " . socket_strerror(socket_last_error($socket)) . "\n");
-}
-$data_point = "$metric_name $metric_value $metric_epoch source=$source_name  $tag_name=$tag_value\n";
-syslog (LOG_INFO, "Sending Wavefront Data point \n");
-socket_write($socket, $data_point, strlen($data_point));
-syslog (LOG_INFO, "Closing socket...\n");
-socket_close($socket);
+   error_log("wavefront - info : Socket creation : starting...");
+   $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+   if ($socket === false) {
+      error_log("wavefront - error : socket_create() failed: reason: " . socket_strerror(socket_last_error()) . "\n");
+   }
+   else {
+      error_log("wavefront - info : Socket creation : Successful");
+      error_log("wavefront - info : Attempting to connect to '$wf_proxy_name' on port '$wf_proxy_port'...");
+      $result = socket_connect($socket, $wf_proxy_name, $wf_proxy_port);
+      if ($result === false) {
+         error_log("wavefront - error : socket_connect() failed. Reason: ($result) " . socket_strerror(socket_last_error($socket)));
+      }
+      else {
+         $data_point = "$metric_name $metric_value $metric_epoch source=$source_name  $tag_name=$tag_value\n";     
+         # '\n' a la fin du data_point est indispensable dans le data format de wavefront
+         error_log("wavefront - info : Sending Wavefront Data point: $data_point");
+         socket_write($socket, $data_point, strlen($data_point));
+      }
+
+      error_log("wavefront - info : Closing socket...");
+      socket_close($socket);
+   }
 }
