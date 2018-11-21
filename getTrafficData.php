@@ -197,7 +197,10 @@ function wavefront($source_name,$metric_name,$metric_value,$metric_epoch,$tag_na
    $wf_proxy_port=getenv('PROXY_PORT');
 
    #exit if no proxy_name entered
-   if (empty($wf_proxy_name)) {return;}
+   if (empty($wf_proxy_name) || empty($wf_proxy_port)) {
+      error_log("wavefront - error : wavefront parameter missing, please check PROXY_NAME and PROXY_PORT configuration");
+      return;
+    }
 
    error_log("wavefront - info : Socket creation : starting...");
    $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
