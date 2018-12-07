@@ -1,0 +1,55 @@
+inputs:
+  titoVersion:
+    type: string
+    description: Version de code de Tito
+    enum:
+      - V1.9.4
+      - V1.8.9
+      - V1.7.1
+      - v1.5
+resources:
+  Cloud_LoadBalancer_1:
+    type: Cloud.LoadBalancer
+    properties:
+      name: TitoLB
+      routes:
+        - protocol: HTTP
+          port: '80'
+          instanceProtocol: HTTP
+          instancePort: '80'
+      network: '${Cloud_Network_1.name}'
+      instances:
+        - '${Cloud_Machine_1.id}'
+      internetFacing: true
+  Cloud_Machine_1:
+    type: Cloud.Machine
+    properties:
+      count: 2
+      image: ahugla-Linux
+      flavor: ahugla-small
+      sshKeyName: keyPairIreland
+      constraints:
+        - tag: 'Zone:Ireland'
+        - tag: 'AZ:1A'
+      cloudConfig: |
+        #cloud-config
+        packages:
+          - git
+        runcmd:
+          - rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+          - rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+          - yum --enablerepo=remi,remi-php72 install -y httpd php php-common
+          - systemctl start httpd
+          - systemctl enable httpd
+          - cd /tmp
+          - git clone https://github.com/vmeoc/Tito.git  /var/www/html           
+          - cd /var/www/html
+          - git checkout ${input.titoVersion}
+  Cloud_Network_1:
+    type: Cloud.Network
+    properties:
+      name: MonReseau
+      networkType: existing
+      constraints:
+        - tag: 'Network:application'
+
