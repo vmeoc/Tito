@@ -9,7 +9,7 @@ metadata:
     stage: dev
 spec:
   rules:
-   - host: tito-dev.cpod-gv.shwrfr.com #set your ingress URL here
+   - host: tito-dev.cpod-goodvibes.az-demo.shwrfr.com #set your ingress URL here
      http:
        paths:
        - path: /tito/*
