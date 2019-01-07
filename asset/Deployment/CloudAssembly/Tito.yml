@@ -1,4 +1,11 @@
 inputs:
+  cloud_target:
+    type: string
+    description: choix du cloud de destination
+    enum:
+      - vSphere
+      - AWS
+      - Azure
   titoVersion:
     type: string
     description: Version de code de Tito
@@ -45,6 +52,15 @@ resources:
           - git clone https://github.com/vmeoc/Tito.git  /var/www/html           
           - cd /var/www/html
           - git checkout ${input.titoVersion}
+      name: Tito Front End
+  Cloud_Machine_2:
+    type: Cloud.Machine
+    properties:
+      image: ahugla-Linux
+      flavor: ahugla-small
+      networks:
+        - name: '${Cloud_Network_1.name}'
+      name: Tito DB
   Cloud_Network_1:
     type: Cloud.Network
     properties:
@@ -52,4 +68,3 @@ resources:
       networkType: existing
       constraints:
         - tag: 'Network:application'
-
