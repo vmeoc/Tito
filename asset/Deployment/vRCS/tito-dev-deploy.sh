@@ -13,7 +13,7 @@ TITO_GITHUB="https://github.com/vmeoc/Tito"
 VERSION=$1
 STAGE="dev"
 TITO_CONF="Tito/asset/Deployment/K8/Ingress/"
-K8_CLUSTER="gv-prod"
+K8_CLUSTER="k8s-1"
 
 echo "lancement script deploiement Tito"
 echo -n "TMP_DIR= "
