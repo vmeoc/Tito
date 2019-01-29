@@ -53,7 +53,7 @@ echo "STARTUP SCRIPT mysql -u ....."
 
 echo -e "Doing this now:"
 echo "mysql --user=$init_db_username -h $init_db --password=$init_db_password < $db_name.sql"
-mysql --user=$init_db_username --hostname=$init_db --password=$init_db_password < $db_name.sql
+mysql --user=$init_db_username -h $init_db --password=$init_db_password < $db_name.sql
 
 echo
 echo "TitoDB creation script end"
