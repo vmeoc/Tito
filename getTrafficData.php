@@ -209,6 +209,8 @@ function wavefront($source_name,$metric_name,$metric_value,$metric_epoch,$tag_na
    }
    else {
       error_log("wavefront - info : Socket creation : Successful");
+      socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, array('sec' => 2, 'usec' => 0));   # 2 sec Timeout
+      socket_set_option($socket, SOL_SOCKET, SO_SNDTIMEO, array('sec' => 2, 'usec' => 0));   # 2 sec Timeout
       error_log("wavefront - info : Attempting to connect to '$wf_proxy_name' on port '$wf_proxy_port'...");
       $result = socket_connect($socket, $wf_proxy_name, $wf_proxy_port);
       if ($result === false) {
