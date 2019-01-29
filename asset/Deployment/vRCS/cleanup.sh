@@ -12,7 +12,7 @@ TITO_TEMP_DIR="/tmp/"
 TITO_TEMP_DIR+=$1
 TITO_PROD_DIR="/home/vince/Demo/Prod/Tito/asset/Deployment/K8/Ingress"
 TITO_RC="tito-fe-rc.yml"
-K8_CLUSTER="gv-prod"
+K8_CLUSTER="k8s-1"
 
 echo "lancement du script clean up"
 echo -n "TITO_TEMP_DIR="
