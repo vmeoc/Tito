@@ -1,0 +1,68 @@
+formatVersion: 1
+inputs:
+  titoVersion:
+    type: string
+    description: Version de code de Tito
+    enum:
+      - V1.9.4
+      - V1.8.9
+      - V1.7.1
+      - v1.5
+    default: V1.9.4
+  size:
+    type: string
+    enum:
+      - small
+    default: small
+resources:
+  RDS_Cluster:
+    type: Cloud.Service.AWS.RDS.Cluster
+    properties:
+      region: eu-west-1
+      account: AWS perso Vince
+      engine: aurora-mysql
+      master_username: root
+      master_password: Tito2016
+      skip_final_snapshot: true
+      db_subnet_group_name: default-vpc-00ca7e4534ead6705
+      vpc_security_group_ids:
+        - sg-09eebe3ddf8d1a960
+  RDS_Cluster_Instance:
+    type: Cloud.Service.AWS.RDS.Cluster.Instance
+    properties:
+      engine: aurora-mysql
+      identifier: '${env.deploymentName}'
+      region: eu-west-1
+      account: AWS perso Vince
+      instance_class: db.t2.small
+      cluster_identifier: '${resource.RDS_Cluster.id}'
+      availability_zone: eu-west-1a
+      publicly_accessible: true
+      db_subnet_group_name: default-vpc-00ca7e4534ead6705
+  EC2_app_fe:
+    type: Cloud.Machine
+    dependsOn:
+      - RDS_Cluster_Instance
+    properties:
+      image: CentosV7
+      flavor: small
+      count: 1
+      sshKeyName: SE-Key
+      networks:
+        - name: '${resource.Public_Net.name}'
+      cloudConfig: |
+        #cloud-config
+        packages:
+          - git
+        runcmd:
+          - cd /tmp
+          - git clone https://github.com/vmeoc/Tito
+          - cd Tito/asset/Deployment/CloudAssembly/titodb
+          - chmod u+x *.sh
+          - [ /tmp/Tito/asset/Deployment/CloudAssembly/titodb/tito_as.sh, ${resource.RDS_Cluster_Instance.endpoint} ]
+          - [ /tmp/Tito/asset/Deployment/CloudAssembly/titodb/tito_db.sh, ${resource.RDS_Cluster_Instance.endpoint} ]
+  Public_Net:
+    type: Cloud.Network
+    properties:
+      name: All Open - Dev
+      networkType: public
