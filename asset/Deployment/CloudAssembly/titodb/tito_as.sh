@@ -51,6 +51,10 @@ echo
 echo -e "conf httpd.conf to include PHP and set MySQL server\n"
 
 echo
+echo -e "modify SQLSERVER variable to remove not needed characters"
+SQLSERVER=$(tr -d []\' <<< $SQLSERVER)
+
+echo
 echo "LoadModule php5_module modules/libphp5.so" >> $HTTPDCONF
 cat <<EOF >> $HTTPDCONF
 <IfModule env_module>
