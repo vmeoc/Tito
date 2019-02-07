@@ -175,7 +175,7 @@ function extractParametersFromUrl(array $needed_params = array()) {
     // Adding LOG
     $home_for_log = $params['home_addr'];
     $work_for_log = $params['work_addr'];
-    $LogLine = "TITO-App;home=\"$home_for_log\";work=\"$work_for_log\";";
+    $LogLine = "TITO-App;home=$home_for_log;work=$work_for_log;";
     error_log(print_r($LogLine, TRUE));
 
     $result = array();
@@ -202,13 +202,13 @@ function wavefront($source_name,$metric_name,$metric_value,$metric_epoch,$tag_na
       return;
     }
 
-   error_log("wavefront - info : Socket creation : starting...");
+   #error_log("wavefront - info : Socket creation : starting...");
    $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
    if ($socket === false) {
       error_log("wavefront - error : socket_create() failed: reason: " . socket_strerror(socket_last_error()) . "\n");
    }
    else {
-      error_log("wavefront - info : Socket creation : Successful");
+      #error_log("wavefront - info : Socket creation : Successful");
       socket_set_option($socket, SOL_SOCKET, SO_RCVTIMEO, array('sec' => 2, 'usec' => 0));   # 2 sec Timeout
       socket_set_option($socket, SOL_SOCKET, SO_SNDTIMEO, array('sec' => 2, 'usec' => 0));   # 2 sec Timeout
       error_log("wavefront - info : Attempting to connect to '$wf_proxy_name' on port '$wf_proxy_port'...");
@@ -223,7 +223,7 @@ function wavefront($source_name,$metric_name,$metric_value,$metric_epoch,$tag_na
          socket_write($socket, $data_point, strlen($data_point));
       }
 
-      error_log("wavefront - info : Closing socket...");
+      #error_log("wavefront - info : Closing socket...");
       socket_close($socket);
    }
 }
