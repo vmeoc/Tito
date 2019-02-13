@@ -12,4 +12,4 @@ This folder consists of a number of different files. An overview is provided bel
 ## Merged YAMLs
 
 - **ahugla-merg-rc-svc-fe.yaml** : Provides a merged YAML of the tito-fe-rc.yml and tito-fe-service.yml . This can be handy if you are providing step-by-step guidance on building out the Tito app and want the Front-End (LB Service + ReplicationController) to be deployed as a single YAML.
-- **tito-full-lb.yml** : Provides a SINGLE YAML to stand up a Load Balanced copy of Tito in Kubernetes. Create a namespace named "tito" in your cluster, then use Sample deployment line: ```kubectl create -f tito-full-lb.yml```
+- **tito-full-lb.yml** : Provides a SINGLE YAML to stand up a Load Balanced copy of Tito in Kubernetes in a Namespace named "tito". Create a namespace named "tito" in your cluster, then use Sample deployment line: ```kubectl create -f tito-full-lb.yml```
