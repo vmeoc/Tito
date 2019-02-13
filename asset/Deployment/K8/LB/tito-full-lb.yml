@@ -1,7 +1,58 @@
 apiVersion: v1
+kind: Pod
+metadata:
+  generateName: titosql-
+  namespace: tito
+  labels:
+    name: tito-sql
+    version: "1.5"
+    app: tito
+    stage: prod
+    tiers: tito-sql
+spec:
+  containers:
+    - name: tito-sql
+      image: vmeoc/tito-sql:V1.5
+      imagePullPolicy: IfNotPresent
+      ports:
+      - containerPort: 3306
+      env:
+      - name: MYSQL_ROOT_PASSWORD
+        value: Tito2016
+      - name: POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tito-sql-service
+  namespace: tito
+  labels:
+    app: tito
+    tiers: tito-sql
+    stage: prod
+spec:
+  ports:
+      - port: 3306               # port expose par docker  (pas le port dans le container)
+  selector:                     # key/value, label permettant de definir le pod cible (doit etre danslabels du pod)
+    tiers: tito-sql
+
+
+---
+
+apiVersion: v1
 kind: ReplicationController
 metadata:
   name: titofe
+  namespace: tito
   labels:
     name: tito-fe
     version: "latest"
@@ -23,6 +74,7 @@ spec:
       containers:
         - name: tito
           image: vmeoc/tito-fe:V1.9.4
+          imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 80
           env:
@@ -49,6 +101,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: titofe-service
+  namespace: tito
   labels:
     app: tito
     stage: prod
