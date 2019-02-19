@@ -2,7 +2,6 @@ apiVersion: v1
 kind: Pod
 metadata:
   generateName: titosql-
-  namespace: tito
   labels:
     name: tito-sql
     version: "1.5"
@@ -34,7 +33,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tito-sql-service
-  namespace: tito
   labels:
     app: tito
     tiers: tito-sql
@@ -52,7 +50,6 @@ apiVersion: v1
 kind: ReplicationController
 metadata:
   name: titofe
-  namespace: tito
   labels:
     name: tito-fe
     version: "latest"
@@ -101,7 +98,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: titofe-service
-  namespace: tito
   labels:
     app: tito
     stage: prod
