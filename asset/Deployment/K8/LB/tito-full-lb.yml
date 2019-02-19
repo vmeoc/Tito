@@ -80,7 +80,7 @@ spec:
           - name: TITO_SQL_SERVICE_HOST
             value: tito-sql
           - name: PROXY_NAME
-            value: 10.100.200.71
+            value: wavefront-proxy.corp.local
           - name: PROXY_PORT
             value: "2878"
           - name: POD_NAME
