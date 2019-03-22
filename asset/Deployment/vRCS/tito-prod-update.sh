@@ -13,7 +13,7 @@ NEXT_LABEL="next"
 NEXT_NAME="titofe-next"
 TITO_VERSION=$1
 TITO_PROD_DIR="/home/vince/Demo/Prod/Tito/asset/Deployment/K8/Ingress"
-K8_CLUSTER="k8s-1"
+K8_CLUSTER="k8s-02"
 
 echo "lancement du script update Prod Tito"
 echo -n "TITO_PROD_DIR="
