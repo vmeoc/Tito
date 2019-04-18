@@ -1,0 +1,23 @@
+var mysql = require('mysql');
+
+// On exporte ici une fonction
+module.exports = (query, callback) => {
+  var con = mysql.createConnection({
+    host: "172.18.8.209",
+    user: "root",
+    password: "Tito2016",
+    database: "Tito4DB"
+});
+
+    // Open database connection
+    con.connect();
+
+    // -----------------------------------------------------
+    // Execute query, pass callback parameter
+    con.query(query, callback); // <-- callback function from parameter 
+    // -----------------------------------------------------
+
+    // Close database connection
+    con.end();
+}
+

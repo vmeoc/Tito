@@ -13,7 +13,7 @@
 
 
         <!-- Bootstrap Core CSS -->
-        <link href="./asset/css/bootstrap.min.css" rel="stylesheet">
+        <link href="./asset/css/bootstrap.css" rel="stylesheet">
 
         <!-- Custom CSS -->
         <link href="./asset/css/stylish-portfolio.css" rel="stylesheet">
@@ -33,11 +33,33 @@
    <!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 -->
+		<!-- Ajout script Ajax -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="./asset/js/book.js"></script>
+
+<script>
+$(document).ready(function () {
+    $("#read").click(function () {
+            $.get("https://92wo7syjzk.execute-api.eu-west-1.amazonaws.com/Dev/read", function(data, status){
+                    initCarsList(data,"#cars-list-container",{
+                        idKey: 'name',
+                        tableClass: "table custom-table",
+                        buttonClass: "btn btn-default",
+                        buttonClick: function (id){
+                            var json = '{"name":"'+ id +'"}';
+                            $.post("https://92wo7syjzk.execute-api.eu-west-1.amazonaws.com/Dev/book",'{"name":"'+ id +'"}');
+                            }
+                    })
+            });
+        }); 
+});
+</script>
+		
     </head>
 
     <body>
 
-        <!-- Navigation
+	 <!-- Navigation
         <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
         <nav id="sidebar-wrapper">
             <ul class="sidebar-nav">
@@ -154,9 +176,9 @@
                             </div>
                         </div>
                         <div class="col-lg-12 col-md-12">
-                            <input id="submit" name="submit" type="submit" value="Send" class="btn btn-default">
+                            <input id="submit" name="submit" type="submit" value="Send" class="btn btn-default"> 
                         </div>
-                    </div>
+				</div>
                     <!-- /.container -->
                 </form>
             </div>
@@ -167,7 +189,11 @@
             include "form_result.php";
         }
         ?>
-
+		<!--ajout bouton read -->
+<div class="col-lg-12 col-md-12 read-car-list-container">
+                            <input id="read" name="read" type="submit" value="Need a car?" class="btn btn-default btn-lg">
+                        </div>
+        <div id="cars-list-container"></div>
         <!-- Footer -->
         <footer>
             <div class="container">
@@ -175,7 +201,7 @@
                     <div class="col-lg-10 col-lg-offset-1 text-center">
                         <h4><strong>Powered by PHP/Bootstrap/Javascript/SDDC</strong>
                         </h4>
-                        <p>VMware France
+                        VMware France
                         <ul class="list-unstyled">
                             <li><i class="fa fa-envelope-o fa-fw"></i> <a href="mailto:name@example.com">vmeoc@vmware.com</a>
                             </li>
@@ -184,7 +210,7 @@
                         <hr class="small">
                        <p class="text-muted">
                         <?PHP
-                        echo "V1.9.6";
+                        echo "V2";
                         echo "<br>";
                         echo "Tito Front End: " . gethostname() . " (" . getHostByName(getHostName()) .")";
                         echo "<br>";
@@ -193,6 +219,10 @@
                         echo "<a href=\"db_dump.php\">db_dump";
 
                                 ?>
+                        </p>
+                        <p class="text-muted">
+                            <a href="https://92wo7syjzk.execute-api.eu-west-1.amazonaws.com/Dev/reset" target="_blank">Reset
+
                         </p>
                     </div>
                 </div>

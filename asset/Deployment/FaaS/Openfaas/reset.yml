@@ -1,0 +1,8 @@
+provider:
+  name: faas
+  gateway: http://192.168.70.5:8080
+functions:
+  reset:
+    lang: node
+    handler: ./reset
+    image: vmeoc/reset:latest

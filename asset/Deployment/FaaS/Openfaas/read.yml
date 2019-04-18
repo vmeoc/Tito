@@ -1,0 +1,9 @@
+provider:
+  name: faas
+  gateway: http://192.168.70.5:8080
+
+functions:
+  read:
+    lang: node
+    handler: ./read
+    image: vmeoc/read:latest
