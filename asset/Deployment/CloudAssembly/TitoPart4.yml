@@ -1,0 +1,166 @@
+formatVersion: 1
+inputs:
+  titoVersion:
+    type: string
+    description: Version de code de Tito
+    enum:
+      - V1
+    default: V1
+  size:
+    type: string
+    enum:
+      - small
+    default: small
+resources:
+  Public_Net:
+    type: Cloud.Network
+    metadata:
+      layoutPosition:
+        - 0
+        - 0
+    properties:
+      name: All Open - Dev
+      networkType: public
+      
+  Fe:
+    type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 1
+        - 1
+    dependsOn:
+      - API gateway
+    properties:
+      image: CentosV7
+      flavor: small
+      count: 1
+      sshKeyName: SE-Key
+      networks:
+        - name: '${resource.Public_Net.name}'
+      cloudConfig: |
+        #cloud-config
+        packages:
+          - git
+        runcmd:
+          - cd /tmp
+          - git clone https://github.com/Tito-org/tito-part4
+          - cd tito-part4/Vince/TitoFE/asset/Deployment/CloudAssembly/TitoMonolith/
+          - chmod u+x *.sh
+          - bash tito_as.sh ${resource.DBMachine.address}
+  DBMachine:
+    type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 1
+        - 2
+    properties:
+      image: CentosV7
+      flavor: small
+      count: 1
+      sshKeyName: SE-Key
+      networks:
+        - name: '${resource.Public_Net.name}'
+      cloudConfig: |
+        #cloud-config
+        packages:
+          - git
+          - mariadb-server
+        runcmd:
+          - cd /tmp
+          - git clone https://github.com/Tito-org/tito-part4
+          - cd tito-part4/Vince/TitoFE/asset/Deployment/CloudAssembly/TitoMonolith/
+          - chmod u+x *.sh
+          - bash conf_db.sh
+  RDS_Cluster:
+    type: Cloud.Service.AWS.RDS.Cluster
+    metadata:
+      layoutPosition:
+        - 4
+        - 1
+    dependsOn:
+      - reset function
+      - Book function
+      - read function
+    properties:
+      count: 0
+      region: eu-west-1
+      account: AWS perso Vince
+      engine: aurora-mysql
+      master_username: root
+      master_password: Tito2016
+      skip_final_snapshot: true
+      db_subnet_group_name: default-vpc-00ca7e4534ead6705
+      vpc_security_group_ids:
+        - sg-09eebe3ddf8d1a960
+  reset function:
+    type: Cloud.Service.AWS.Lambda.Function
+    metadata:
+      layoutPosition:
+        - 3
+        - 0
+    dependsOn:
+      - API gateway
+    properties:
+      role: LambdaExecWithAccessToRDS
+      region: ''
+      account: AWS perso Vince
+      handler: ''
+      runtime: ''
+      function_name: ''
+  read function:
+    type: Cloud.Service.AWS.Lambda.Function
+    metadata:
+      layoutPosition:
+        - 3
+        - 2
+    dependsOn:
+      - API gateway
+    properties:
+      role: LambdaExecWithAccessToRDS
+      region: ''
+      account: AWS perso Vince
+      handler: ''
+      runtime: ''
+      function_name: ''
+  Book function:
+    type: Cloud.Service.AWS.Route53.Record
+    metadata:
+      layoutPosition:
+        - 3
+        - 1
+    dependsOn:
+      - API gateway
+    properties:
+      name: ''
+      type: ''
+      region: ''
+      account: AWS perso Vince
+      zone_id: ''
+  API gateway:
+    type: Cloud.Service.AWS.Lambda.Event.Source.Mapping
+    metadata:
+      layoutPosition:
+        - 2
+        - 1
+    properties:
+      region: ''
+      account: AWS perso Vince
+      function_name: ''
+      event_source_arn: ''
+  RDS_Cluster_Instance:
+    type: Cloud.Service.AWS.RDS.Cluster.Instance
+    metadata:
+      layoutPosition:
+        - 5
+        - 1
+    properties:
+      count: 0
+      engine: aurora-mysql
+      identifier: '${env.deploymentName}'
+      region: eu-west-1
+      account: AWS perso Vince
+      instance_class: db.t2.small
+      cluster_identifier: '${resource.RDS_Cluster.id}'
+      availability_zone: eu-west-1a
+      publicly_accessible: true
+      db_subnet_group_name: default-vpc-00ca7e4534ead6705
