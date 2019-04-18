@@ -4,6 +4,23 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+.custom-table{
+  color:black !important;
+}
+.custom-table td img{
+  width:120px;
+}
+.read-car-list-container{
+  text-align:center;
+  padding:30px;
+}
+#cars-list-container{
+  padding:0 50px;
+}
+table{
+# color:black !important;
+  color:black;
+}
 html {
   font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
