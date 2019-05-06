@@ -2,6 +2,9 @@ version: '2.3'
 services:
   Tito-FE:
     image: vmeoc/tito-fe:V1.7.1.3
+    mem_limit: 16m
+    cpus: 0.50
+    cpu_percent: 5
     ports:
       - 80
     networks:
@@ -20,6 +23,9 @@ services:
         condition: service_healthy
   Tito-SQL:
     image: vmeoc/tito-sql:V1.5
+    mem_limit: 150m
+    cpus: 0.50
+    cpu_percent: 10
     networks:
       - tito-nw
     restart: always
