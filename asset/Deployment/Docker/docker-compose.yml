@@ -1,19 +1,38 @@
-version: '2'
+version: '2.3'
 services:
   Tito-FE:
     image: vmeoc/tito-fe:V1.7.1.3
+    mem_limit: 16m
+    cpus: 0.50
+    cpu_percent: 5
     ports:
       - 80
     networks:
       - tito-nw
     restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     links:
         - Tito-SQL
+    depends_on:
+      Tito-SQL:
+        condition: service_healthy
   Tito-SQL:
     image: vmeoc/tito-sql:V1.5
+    mem_limit: 150m
+    cpus: 0.50
+    cpu_percent: 10
     networks:
       - tito-nw
     restart: always
+    healthcheck:
+      test: "/etc/init.d/mysql status"
+      interval: 1s
+      retries: 120
     environment:
       MYSQL_ROOT_PASSWORD: Tito2016
 #removed until automated volume deployment is available
