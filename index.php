@@ -40,14 +40,14 @@
 <script>
 $(document).ready(function () {
     $("#read").click(function () {
-            $.get("https://92wo7syjzk.execute-api.eu-west-1.amazonaws.com/Dev/read", function(data, status){
+            $.get("API_GW/read", function(data, status){
                     initCarsList(data,"#cars-list-container",{
                         idKey: 'name',
                         tableClass: "table custom-table",
                         buttonClass: "btn btn-default",
                         buttonClick: function (id){
                             var json = '{"name":"'+ id +'"}';
-                            $.post("https://92wo7syjzk.execute-api.eu-west-1.amazonaws.com/Dev/book",'{"name":"'+ id +'"}');
+                            $.post("API_GW/book",'{"name":"'+ id +'"}');
                             }
                     })
             });
@@ -221,7 +221,7 @@ $(document).ready(function () {
                                 ?>
                         </p>
                         <p class="text-muted">
-                            <a href="https://92wo7syjzk.execute-api.eu-west-1.amazonaws.com/Dev/reset" target="_blank">Reset
+                            <a href="API_GW/reset" target="_blank">Reset
 
                         </p>
                     </div>
