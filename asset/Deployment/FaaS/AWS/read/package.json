@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mysql": "^2.16.0",
-    "wavefront-lambda": "^0.9.1"
+    "mysql": "^2.16.0"
   }
 }

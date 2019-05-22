@@ -4,7 +4,7 @@ var mysql = require('mysql');
 module.exports = (query) => {
     return new Promise((resolve,reject)=>{
     var con = mysql.createConnection({
-        host: "tito4.cz2lccqj0gzo.eu-west-1.rds.amazonaws.com",
+        host: process.env.DB,
         user: "root",
         password: "Tito2016",
         database: "Tito4DB"
