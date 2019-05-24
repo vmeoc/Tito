@@ -1,88 +1,352 @@
 formatVersion: 1
+#BP created by Vincent Meoc to deploy Tito Part4
+#dependencies are:
+# lambda function in S3
+# VPC, SG, Group subnet
+#TODO:
+# layout hard writenn
+# create constant
+# encrypt password
+# tags all services
+# add more data to the Car DB
 inputs:
+  customer_name:
+    type: string
   titoVersion:
     type: string
     description: Version de code de Tito
     enum:
-      - V1
-    default: V1
-  size:
+      - V2
+      - V1.9.4
+      - V1.8.9
+      - V1.7.1
+      - v1.5
+  Region:
     type: string
     enum:
-      - small
-    default: small
+      - eu-west-1
+    default: eu-west-1
+  FrontEndNumber:
+    title: Number of Front End
+    type: integer
 resources:
-  Public_Net:
+  LoadBalancer:
+    type: Cloud.LoadBalancer
+    properties:
+      name: LB
+      routes:
+        - port: 80
+          protocol: http
+          instanceProtocol: http
+          instancePort: 80
+      network: '${resource.Public_Nw.name}'
+      instances:
+        - '${resource.Front_end.id}'
+      internetFacing: true
+  Front_end:
+    type: Cloud.Machine
+    dependsOn:
+      - DB
+      - API_Gw_Deployment
+      - RDS_Cluster_Instance
+    count: '${FrontEndNumber}'
+    properties:
+      image: CentosV7
+      flavor: small
+      remoteAccess:
+        authentication: publicPrivateKey
+        sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkN9Sbxj9H77Mrt+8QB/NQn+bqR0ZDx6vvoNeGpkeTbaOhL/6cd9zq+ZYx0hNzc2bPLI4S3NQ8CcAt1gdFdIPte38+gnk1+M+z1oqy2sh+TLFz4hBrdJ3JxTWW/b4Yex5uKbscKEjl2WiW+3MQfP5g5pZkWF3AbWQDAEI8BANn80eZU7q4yDMuW4TsCUEuNmrYjaTyi2S6i3WhngaAlZqdQzPvqUh/JTcmwTXx30XmsoVbG9NHEcbTehhoaHuKSCaCN5pBJ5uXEe4Oxjxa3AAU90YorC140Jw5mkQ4/5earNTqggBiI+uxQCHhC867GCyt9rlgJZZ1F0TlUYDymgx imported-openssh-key
+        username: vince
+      networks:
+        - name: '${resource.Public_Nw.name}'
+      cloudConfig: |
+        #cloud-config
+        packages:
+          - git
+          - mysql
+        runcmd:
+          - cd /tmp
+          - git clone https://github.com/vmeoc/Tito
+          - cd Tito/asset/Deployment/CloudAssembly/titodb
+          - chmod u+x *.sh
+          - [ /tmp/Tito/asset/Deployment/CloudAssembly/titodb/tito_as.sh, ${resource.DB.address} ]
+          - sed -i -e 's|API_GW|https://${resource.API_Gateway_Rest.id}.execute-api.${input.Region}.amazonaws.com/${input.customer_name}|g' /var/www/html/index.php
+          - mysql -u root -h ${resource.RDS_Cluster_Instance.endpoint} -pTito2016 << EOF
+          - create database if not exists Tito4DB;
+          - use Tito4DB;
+          - CREATE TABLE TitoTable (name VARCHAR(50) NOT NULL, picture VARCHAR(200) NOT NULL, capa INT, location INT, available INT);
+          - INSERT INTO TitoTable VALUES("Audi Q7","https://s3-eu-west-1.amazonaws.com/tito4picture/2018-audi-q7-20-tfsi-quattro-komfort.png",70,0.2,1);
+          - EOF
+  Route53_Record:
+    type: Cloud.Service.AWS.Route53.Record
+    properties:
+      name: '${input.customer_name}'
+      type: CNAME
+      region: eu-west-1
+      account: AWS perso Vince
+      zone_id: Z30ZHGUZ2HHA3L
+      records:
+        - '${resource.LoadBalancer.address}'
+      ttl: 60
+  DB:
+    type: Cloud.Machine
+    properties:
+      image: CentosV7
+      flavor: small
+      networks:
+        - name: '${resource.Public_Nw.name}'
+      remoteAccess:
+        authentication: publicPrivateKey
+        sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkN9Sbxj9H77Mrt+8QB/NQn+bqR0ZDx6vvoNeGpkeTbaOhL/6cd9zq+ZYx0hNzc2bPLI4S3NQ8CcAt1gdFdIPte38+gnk1+M+z1oqy2sh+TLFz4hBrdJ3JxTWW/b4Yex5uKbscKEjl2WiW+3MQfP5g5pZkWF3AbWQDAEI8BANn80eZU7q4yDMuW4TsCUEuNmrYjaTyi2S6i3WhngaAlZqdQzPvqUh/JTcmwTXx30XmsoVbG9NHEcbTehhoaHuKSCaCN5pBJ5uXEe4Oxjxa3AAU90YorC140Jw5mkQ4/5earNTqggBiI+uxQCHhC867GCyt9rlgJZZ1F0TlUYDymgx imported-openssh-key
+        username: vince
+      cloudConfig: |
+        packages:
+          - mysql
+          - mariadb-server
+          - mariadb
+        runcmd:
+          - sudo systemctl enable mariadb.service
+          - sudo systemctl start mariadb.service
+          - mysql -u root << EOF
+          - USE mysql;
+          - SELECT user,host FROM user;
+          - GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;
+          - EOF
+        #to update the root password
+          - sudo systemctl stop mariadb.service
+          - sudo mysqld_safe --skip-grant-tables &
+          - mysql -u root << EOF
+          - UPDATE mysql.user SET Password=PASSWORD('Tito2016') WHERE User='root';
+          - FLUSH PRIVILEGES;
+          - EOF
+          - sudo mysqladmin -u root -pTito2016 shutdown
+          - sudo systemctl start mariadb.service
+          
+          #create conf DB and table
+          - mysql -u root -pTito2016 << EOF
+          - create database if not exists TitoDB;
+          - use TitoDB;
+          - CREATE TABLE TitoTable (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, home VARCHAR(50) NOT NULL, work VARCHAR(50) NOT NULL, hour_home_departure VARCHAR(50) NOT NULL, hour_work_departure VARCHAR(50) NOT NULL)
+          - EOF
+  Public_Nw:
     type: Cloud.Network
-    metadata:
-      layoutPosition:
-        - 0
-        - 0
     properties:
       name: All Open - Dev
-      networkType: public
-      
-  Fe:
-    type: Cloud.Machine
-    metadata:
-      layoutPosition:
-        - 1
-        - 1
+      networkType: existing
+      constraints:
+        - tag: public
+  API_Gw_Deployment:
+    type: Cloud.Service.AWS.API.Gateway.Deployment
     dependsOn:
-      - API gateway
+      - Read_Integration
+      - Reset_Integration
+      - Book_Integration
     properties:
-      image: CentosV7
-      flavor: small
-      count: 1
-      sshKeyName: SE-Key
-      networks:
-        - name: '${resource.Public_Net.name}'
-      cloudConfig: |
-        #cloud-config
-        packages:
-          - git
-        runcmd:
-          - cd /tmp
-          - git clone https://github.com/Tito-org/tito-part4
-          - cd tito-part4/Vince/TitoFE/asset/Deployment/CloudAssembly/TitoMonolith/
-          - chmod u+x *.sh
-          - bash tito_as.sh ${resource.DBMachine.address}
-  DBMachine:
-    type: Cloud.Machine
-    metadata:
-      layoutPosition:
-        - 1
-        - 2
+      account: AWS perso Vince
+      stage_name: '${input.customer_name}'
+      rest_api_id: '${resource.API_Gateway_Rest.id}'
+      provider_region: eu-west-1
+  API_Gateway_Rest:
+    type: Cloud.Service.AWS.API.Gateway.Rest.Api
     properties:
-      image: CentosV7
-      flavor: small
-      count: 1
-      sshKeyName: SE-Key
-      networks:
-        - name: '${resource.Public_Net.name}'
-      cloudConfig: |
-        #cloud-config
-        packages:
-          - git
-          - mariadb-server
-        runcmd:
-          - cd /tmp
-          - git clone https://github.com/Tito-org/tito-part4
-          - cd tito-part4/Vince/TitoFE/asset/Deployment/CloudAssembly/TitoMonolith/
-          - chmod u+x *.sh
-          - bash conf_db.sh
+      name: 'Tito-API_GW-${env.deploymentName}-${input.customer_name}'
+      account: AWS perso Vince
+      provider_region: eu-west-1
+  Resource_Read:
+    type: Cloud.Service.AWS.API.Gateway.Resource
+    properties:
+      account: AWS perso Vince
+      parent_id: '${resource.API_Gateway_Rest.root_resource_id}'
+      path_part: read
+      rest_api_id: '${resource.API_Gateway_Rest.id}'
+      provider_region: eu-west-1
+  Resource_Book:
+    type: Cloud.Service.AWS.API.Gateway.Resource
+    properties:
+      account: AWS perso Vince
+      parent_id: '${resource.API_Gateway_Rest.root_resource_id}'
+      path_part: book
+      rest_api_id: '${resource.API_Gateway_Rest.id}'
+      provider_region: eu-west-1
+  Resource_Reset:
+    type: Cloud.Service.AWS.API.Gateway.Resource
+    properties:
+      account: AWS perso Vince
+      parent_id: '${resource.API_Gateway_Rest.root_resource_id}'
+      path_part: reset
+      rest_api_id: '${resource.API_Gateway_Rest.id}'
+      provider_region: eu-west-1
+  Read_Integration:
+    type: Cloud.Service.AWS.API.Gateway.Integration
+    dependsOn:
+      - read
+    properties:
+      provider_region: eu-west-1
+      account: AWS perso Vince
+      type: AWS_PROXY
+      http_method: '${resource.Method_read.http_method}'
+      resource_id: '${resource.Resource_Read.id}'
+      rest_api_id: '${resource.API_Gateway_Rest.id}'
+      integration_http_method: POST
+      uri: 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${resource.read.arn}/invocations'
+  Book_Integration:
+    type: Cloud.Service.AWS.API.Gateway.Integration
+    dependsOn:
+      - book
+    properties:
+      provider_region: eu-west-1
+      account: AWS perso Vince
+      type: AWS_PROXY
+      http_method: '${resource.Method_book.http_method}'
+      resource_id: '${resource.Resource_Book.id}'
+      rest_api_id: '${resource.API_Gateway_Rest.id}'
+      integration_http_method: POST
+      uri: 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${resource.book.arn}/invocations'
+  Reset_Integration:
+    type: Cloud.Service.AWS.API.Gateway.Integration
+    dependsOn:
+      - reset
+    properties:
+      provider_region: eu-west-1
+      account: AWS perso Vince
+      type: AWS_PROXY
+      http_method: '${resource.Method_Reset.http_method}'
+      resource_id: '${resource.Resource_Reset.id}'
+      rest_api_id: '${resource.API_Gateway_Rest.id}'
+      integration_http_method: POST
+      uri: 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${resource.reset.arn}/invocations'
+  read:
+    type: Cloud.Service.AWS.Lambda.Function
+    properties:
+      role: 'arn:aws:iam::263722866210:role/LambdaExecWithAccessToRDS'
+      region: eu-west-1
+      account: AWS perso Vince
+      handler: index.handler
+      runtime: nodejs8.10
+      function_name: 'read-${env.deploymentName}-${input.customer_name}'
+      tags:
+        customer_name: '${input.customer_name}'
+      s3_bucket: titopart4lambda
+      s3_key: read.zip
+      vpc_config:
+        - subnet_ids:
+            - subnet-0fa212749b7e8d01f
+          security_group_ids:
+            - sg-035cc63a44baa8159
+      environment:
+        - variables:
+            DB: '${resource.RDS_Cluster_Instance.endpoint}'
+  book:
+    type: Cloud.Service.AWS.Lambda.Function
+    properties:
+      role: 'arn:aws:iam::263722866210:role/LambdaExecWithAccessToRDS'
+      region: eu-west-1
+      account: AWS perso Vince
+      handler: index.handler
+      runtime: nodejs8.10
+      function_name: 'book-${env.deploymentName}-${input.customer_name}'
+      tags:
+        customer_name: '${input.customer_name}'
+      s3_bucket: titopart4lambda
+      s3_key: book.zip
+      vpc_config:
+        - subnet_ids:
+            - subnet-0fa212749b7e8d01f
+          security_group_ids:
+            - sg-035cc63a44baa8159
+      environment:
+        - variables:
+            DB: '${resource.RDS_Cluster_Instance.endpoint}'
+  reset:
+    type: Cloud.Service.AWS.Lambda.Function
+    properties:
+      role: 'arn:aws:iam::263722866210:role/LambdaExecWithAccessToRDS'
+      region: eu-west-1
+      account: AWS perso Vince
+      handler: index.handler
+      runtime: nodejs8.10
+      function_name: 'reset-${env.deploymentName}-${input.customer_name}'
+      tags:
+        customer_name: '${input.customer_name}'
+      s3_bucket: titopart4lambda
+      s3_key: reset.zip
+      vpc_config:
+        - subnet_ids:
+            - subnet-0fa212749b7e8d01f
+          security_group_ids:
+            - sg-035cc63a44baa8159
+      environment:
+        - variables:
+            DB: '${resource.RDS_Cluster_Instance.endpoint}'
+  Method_read:
+    type: Cloud.Service.AWS.API.Gateway.Method
+    properties:
+      account: AWS perso Vince
+      http_method: GET
+      resource_id: '${resource.Resource_Read.id}'
+      rest_api_id: '${resource.API_Gateway_Rest.id}'
+      authorization: None
+      provider_region: eu-west-1
+  Method_book:
+    type: Cloud.Service.AWS.API.Gateway.Method
+    properties:
+      account: AWS perso Vince
+      http_method: POST
+      resource_id: '${resource.Resource_Book.id}'
+      rest_api_id: '${resource.API_Gateway_Rest.id}'
+      authorization: None
+      provider_region: eu-west-1
+  Method_Reset:
+    type: Cloud.Service.AWS.API.Gateway.Method
+    properties:
+      account: AWS perso Vince
+      http_method: GET
+      resource_id: '${resource.Resource_Reset.id}'
+      rest_api_id: '${resource.API_Gateway_Rest.id}'
+      authorization: None
+      provider_region: eu-west-1
+  Lambda_Permission_read:
+    type: Cloud.Service.AWS.Lambda.Permission
+    properties:
+      action: 'lambda:InvokeFunction'
+      region: eu-west-1
+      account: AWS perso Vince
+      principal: apigateway.amazonaws.com
+      function_name: '${resource.read.function_name}'
+      statement_id: AllowExecutionFromAPIGatewayforRead
+  Lambda_Permission_book:
+    type: Cloud.Service.AWS.Lambda.Permission
+    properties:
+      action: 'lambda:InvokeFunction'
+      region: eu-west-1
+      account: AWS perso Vince
+      principal: apigateway.amazonaws.com
+      function_name: '${resource.book.function_name}'
+      statement_id: AllowExecutionFromAPIGatewayforBook
+  Lambda_Permission_reset:
+    type: Cloud.Service.AWS.Lambda.Permission
+    properties:
+      action: 'lambda:InvokeFunction'
+      region: eu-west-1
+      account: AWS perso Vince
+      principal: apigateway.amazonaws.com
+      function_name: '${resource.reset.function_name}'
+      statement_id: AllowExecutionFromAPIGatewayforReset
+  RDS_Cluster_Instance:
+    type: Cloud.Service.AWS.RDS.Cluster.Instance
+    properties:
+      engine: aurora-mysql
+      identifier: '${input.customer_name}'
+      region: eu-west-1
+      account: AWS perso Vince
+      instance_class: db.t2.small
+      cluster_identifier: '${resource.RDS_Cluster.id}'
+      availability_zone: eu-west-1a
+      publicly_accessible: true
+      db_subnet_group_name: default-vpc-00ca7e4534ead6705
   RDS_Cluster:
     type: Cloud.Service.AWS.RDS.Cluster
-    metadata:
-      layoutPosition:
-        - 4
-        - 1
-    dependsOn:
-      - reset function
-      - Book function
-      - read function
     properties:
-      count: 0
       region: eu-west-1
       account: AWS perso Vince
       engine: aurora-mysql
@@ -91,76 +355,4 @@ resources:
       skip_final_snapshot: true
       db_subnet_group_name: default-vpc-00ca7e4534ead6705
       vpc_security_group_ids:
-        - sg-09eebe3ddf8d1a960
-  reset function:
-    type: Cloud.Service.AWS.Lambda.Function
-    metadata:
-      layoutPosition:
-        - 3
-        - 0
-    dependsOn:
-      - API gateway
-    properties:
-      role: LambdaExecWithAccessToRDS
-      region: ''
-      account: AWS perso Vince
-      handler: ''
-      runtime: ''
-      function_name: ''
-  read function:
-    type: Cloud.Service.AWS.Lambda.Function
-    metadata:
-      layoutPosition:
-        - 3
-        - 2
-    dependsOn:
-      - API gateway
-    properties:
-      role: LambdaExecWithAccessToRDS
-      region: ''
-      account: AWS perso Vince
-      handler: ''
-      runtime: ''
-      function_name: ''
-  Book function:
-    type: Cloud.Service.AWS.Route53.Record
-    metadata:
-      layoutPosition:
-        - 3
-        - 1
-    dependsOn:
-      - API gateway
-    properties:
-      name: ''
-      type: ''
-      region: ''
-      account: AWS perso Vince
-      zone_id: ''
-  API gateway:
-    type: Cloud.Service.AWS.Lambda.Event.Source.Mapping
-    metadata:
-      layoutPosition:
-        - 2
-        - 1
-    properties:
-      region: ''
-      account: AWS perso Vince
-      function_name: ''
-      event_source_arn: ''
-  RDS_Cluster_Instance:
-    type: Cloud.Service.AWS.RDS.Cluster.Instance
-    metadata:
-      layoutPosition:
-        - 5
-        - 1
-    properties:
-      count: 0
-      engine: aurora-mysql
-      identifier: '${env.deploymentName}'
-      region: eu-west-1
-      account: AWS perso Vince
-      instance_class: db.t2.small
-      cluster_identifier: '${resource.RDS_Cluster.id}'
-      availability_zone: eu-west-1a
-      publicly_accessible: true
-      db_subnet_group_name: default-vpc-00ca7e4534ead6705
+        - sg-035cc63a44baa8159
