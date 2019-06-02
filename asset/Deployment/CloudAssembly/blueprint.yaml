@@ -4,11 +4,9 @@ formatVersion: 1
 # lambda function in S3
 # VPC, SG, Group subnet
 #TODO:
-# layout hard writenn
 # create constant
 # encrypt password
 # tags all services
-# add more data to the Car DB
 inputs:
   customer_name:
     type: string
@@ -32,6 +30,10 @@ inputs:
 resources:
   LoadBalancer:
     type: Cloud.LoadBalancer
+    metadata:
+      layoutPosition:
+        - 0
+        - 2
     properties:
       name: LB
       routes:
@@ -45,6 +47,10 @@ resources:
       internetFacing: true
   Front_end:
     type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 0
+        - 3
     dependsOn:
       - DB
       - API_Gw_Deployment
@@ -76,9 +82,22 @@ resources:
           - use Tito4DB;
           - CREATE TABLE TitoTable (name VARCHAR(50) NOT NULL, picture VARCHAR(200) NOT NULL, capa INT, location INT, available INT);
           - INSERT INTO TitoTable VALUES("Audi Q7","https://s3-eu-west-1.amazonaws.com/tito4picture/2018-audi-q7-20-tfsi-quattro-komfort.png",70,0.2,1);
+          - INSERT INTO TitoTable VALUES("Tesla Model S"," https://s3-eu-west-1.amazonaws.com/tito4picture/tesla2.png",88,0.1,0);
+          - INSERT INTO TitoTable VALUES("Audi A3 Electric", "https://s3-eu-west-1.amazonaws.com/tito4picture/AudiA3r.png", 20, 0.6,1);
+          - INSERT INTO TitoTable VALUES("BMW Serie 3", "https://s3-eu-west-1.amazonaws.com/tito4picture/BMW-i3-Electric-Car.png", 55, 1.2, 1);
+          - INSERT INTO TitoTable VALUES("BMW Serie 4", "https://s3-eu-west-1.amazonaws.com/tito4picture/BMX-serie-4.png", 43, 0.8, 1);
+          - INSERT INTO TitoTable VALUES("Drone", "https://s3-eu-west-1.amazonaws.com/tito4picture/Flyride185.png", 28, 0.1, 1);
+          - INSERT INTO TitoTable VALUES("Peugeot 3008", "https://s3-eu-west-1.amazonaws.com/tito4picture/Peugeot-3008.png", 89, 0.3, 1);
+          - INSERT INTO TitoTable VALUES("Suzuki 750", "https://s3-eu-west-1.amazonaws.com/tito4picture/Suzuki-750.png", 68, 0.9, 1);
+          - INSERT INTO TitoTable VALUES("Renault Grand scenic", "https://s3-eu-west-1.amazonaws.com/tito4picture/renault_grand-scenic.png", 81, 0.4, 1);
+          - INSERT INTO TitoTable VALUES("Smart Roadster", "https://s3-eu-west-1.amazonaws.com/tito4picture/smart+roadster.png", 52, 0.7, 1);
           - EOF
   Route53_Record:
     type: Cloud.Service.AWS.Route53.Record
+    metadata:
+      layoutPosition:
+        - 0
+        - 1
     properties:
       name: '${input.customer_name}'
       type: CNAME
@@ -90,6 +109,10 @@ resources:
       ttl: 60
   DB:
     type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 0
+        - 4
     properties:
       image: CentosV7
       flavor: small
@@ -130,6 +153,10 @@ resources:
           - EOF
   Public_Nw:
     type: Cloud.Network
+    metadata:
+      layoutPosition:
+        - 1
+        - 1
     properties:
       name: All Open - Dev
       networkType: existing
@@ -137,6 +164,10 @@ resources:
         - tag: public
   API_Gw_Deployment:
     type: Cloud.Service.AWS.API.Gateway.Deployment
+    metadata:
+      layoutPosition:
+        - 2
+        - 2    
     dependsOn:
       - Read_Integration
       - Reset_Integration
@@ -147,13 +178,21 @@ resources:
       rest_api_id: '${resource.API_Gateway_Rest.id}'
       provider_region: eu-west-1
   API_Gateway_Rest:
-    type: Cloud.Service.AWS.API.Gateway.Rest.Api
+    type: Cloud.Service.AWS.API.Gateway.Rest.API
+    metadata:
+      layoutPosition:
+        - 3
+        - 2
     properties:
       name: 'Tito-API_GW-${env.deploymentName}-${input.customer_name}'
       account: AWS perso Vince
       provider_region: eu-west-1
   Resource_Read:
     type: Cloud.Service.AWS.API.Gateway.Resource
+    metadata:
+      layoutPosition:
+        - 4
+        - 1
     properties:
       account: AWS perso Vince
       parent_id: '${resource.API_Gateway_Rest.root_resource_id}'
@@ -162,6 +201,10 @@ resources:
       provider_region: eu-west-1
   Resource_Book:
     type: Cloud.Service.AWS.API.Gateway.Resource
+    metadata:
+      layoutPosition:
+        - 4
+        - 2
     properties:
       account: AWS perso Vince
       parent_id: '${resource.API_Gateway_Rest.root_resource_id}'
@@ -170,6 +213,10 @@ resources:
       provider_region: eu-west-1
   Resource_Reset:
     type: Cloud.Service.AWS.API.Gateway.Resource
+    metadata:
+      layoutPosition:
+        - 4
+        - 3
     properties:
       account: AWS perso Vince
       parent_id: '${resource.API_Gateway_Rest.root_resource_id}'
@@ -178,6 +225,10 @@ resources:
       provider_region: eu-west-1
   Read_Integration:
     type: Cloud.Service.AWS.API.Gateway.Integration
+    metadata:
+      layoutPosition:
+        - 6
+        - 1
     dependsOn:
       - read
     properties:
@@ -191,6 +242,10 @@ resources:
       uri: 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${resource.read.arn}/invocations'
   Book_Integration:
     type: Cloud.Service.AWS.API.Gateway.Integration
+    metadata:
+      layoutPosition:
+        - 6
+        - 2
     dependsOn:
       - book
     properties:
@@ -204,6 +259,10 @@ resources:
       uri: 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${resource.book.arn}/invocations'
   Reset_Integration:
     type: Cloud.Service.AWS.API.Gateway.Integration
+    metadata:
+      layoutPosition:
+        - 6
+        - 3
     dependsOn:
       - reset
     properties:
@@ -217,6 +276,10 @@ resources:
       uri: 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${resource.reset.arn}/invocations'
   read:
     type: Cloud.Service.AWS.Lambda.Function
+    metadata:
+      layoutPosition:
+        - 7
+        - 1
     properties:
       role: 'arn:aws:iam::263722866210:role/LambdaExecWithAccessToRDS'
       region: eu-west-1
@@ -238,6 +301,10 @@ resources:
             DB: '${resource.RDS_Cluster_Instance.endpoint}'
   book:
     type: Cloud.Service.AWS.Lambda.Function
+    metadata:
+      layoutPosition:
+        - 7
+        - 2
     properties:
       role: 'arn:aws:iam::263722866210:role/LambdaExecWithAccessToRDS'
       region: eu-west-1
@@ -259,6 +326,10 @@ resources:
             DB: '${resource.RDS_Cluster_Instance.endpoint}'
   reset:
     type: Cloud.Service.AWS.Lambda.Function
+    metadata:
+      layoutPosition:
+        - 7
+        - 3
     properties:
       role: 'arn:aws:iam::263722866210:role/LambdaExecWithAccessToRDS'
       region: eu-west-1
@@ -280,6 +351,10 @@ resources:
             DB: '${resource.RDS_Cluster_Instance.endpoint}'
   Method_read:
     type: Cloud.Service.AWS.API.Gateway.Method
+    metadata:
+      layoutPosition:
+        - 5
+        - 1
     properties:
       account: AWS perso Vince
       http_method: GET
@@ -289,6 +364,10 @@ resources:
       provider_region: eu-west-1
   Method_book:
     type: Cloud.Service.AWS.API.Gateway.Method
+    metadata:
+      layoutPosition:
+        - 5
+        - 2
     properties:
       account: AWS perso Vince
       http_method: POST
@@ -298,6 +377,10 @@ resources:
       provider_region: eu-west-1
   Method_Reset:
     type: Cloud.Service.AWS.API.Gateway.Method
+    metadata:
+      layoutPosition:
+        - 5
+        - 3
     properties:
       account: AWS perso Vince
       http_method: GET
@@ -307,6 +390,10 @@ resources:
       provider_region: eu-west-1
   Lambda_Permission_read:
     type: Cloud.Service.AWS.Lambda.Permission
+    metadata:
+      layoutPosition:
+        - 8
+        - 1
     properties:
       action: 'lambda:InvokeFunction'
       region: eu-west-1
@@ -316,6 +403,10 @@ resources:
       statement_id: AllowExecutionFromAPIGatewayforRead
   Lambda_Permission_book:
     type: Cloud.Service.AWS.Lambda.Permission
+    metadata:
+      layoutPosition:
+        - 8
+        - 2
     properties:
       action: 'lambda:InvokeFunction'
       region: eu-west-1
@@ -325,6 +416,10 @@ resources:
       statement_id: AllowExecutionFromAPIGatewayforBook
   Lambda_Permission_reset:
     type: Cloud.Service.AWS.Lambda.Permission
+    metadata:
+      layoutPosition:
+        - 8
+        - 3
     properties:
       action: 'lambda:InvokeFunction'
       region: eu-west-1
@@ -334,6 +429,10 @@ resources:
       statement_id: AllowExecutionFromAPIGatewayforReset
   RDS_Cluster_Instance:
     type: Cloud.Service.AWS.RDS.Cluster.Instance
+    metadata:
+      layoutPosition:
+        - 9
+        - 2
     properties:
       engine: aurora-mysql
       identifier: '${input.customer_name}'
@@ -346,6 +445,10 @@ resources:
       db_subnet_group_name: default-vpc-00ca7e4534ead6705
   RDS_Cluster:
     type: Cloud.Service.AWS.RDS.Cluster
+    metadata:
+      layoutPosition:
+        - 10
+        - 2
     properties:
       region: eu-west-1
       account: AWS perso Vince
