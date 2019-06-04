@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mysql-pass-$$EXECUTIONID
+  name: mysql-pass-${executionId}
   labels:
     app: tito
     stage: dev
