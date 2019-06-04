@@ -1,0 +1,141 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-pass-${executionId}
+  labels:
+    app: tito
+    stage: dev
+  namespace: prod
+type: Opaque
+data:
+  password: VGl0bzIwMTY=
+  # Password created like this: echo -n 'Tito2016' | base64
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: titosql-${executionId}
+  labels:
+    name: tito-sql
+    version: "1.5"
+    app: tito
+    stage: dev
+    tier: backend
+  namespace: prod
+spec:
+  replicas: 1
+  minReadySeconds: 5
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      tier: backend
+      app: tito
+  template:
+    metadata:
+      labels:
+        tier: backend
+        app: tito
+    spec:
+      containers:
+      - name: tito-sql
+        image: vmeoc/tito-sql:V1.5
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tito-sql-service-${executionId}
+  labels:
+    app: tito
+    tier: backend
+    stage: dev
+  namespace: prod
+spec:
+  ports:
+      - port: 3306               # port expose par docker  (pas le port dans le container)
+  selector:                     # key/value, label permettant de definir le pod cible (doit etre danslabels du pod)
+    tier: backend
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: titofe-${executionId}
+  labels:
+    name: tito-fe
+    version: "latest"
+    app: tito
+    tier: frontend
+    stage: dev
+  namespace: prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      type: tito-fe
+      version: v1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: tito
+        type: tito-fe
+        version: v1
+        tier: frontend
+    spec:
+      containers:
+        - name: tito
+          image: vmeoc/tito-fe:V1.9.4
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 80
+          env:
+          - name: TITO_VERSION
+            value: V1.5
+          - name: TITO_SQL_SERVICE_HOST
+            value: tito-sql
+          - name: PROXY_NAME
+            value: wavefront-proxy.default.svc.cluster.local
+          - name: PROXY_PORT
+            value: "2878"
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: titofe-service-dev
+  labels:
+    app: tito
+    tier: frontend
+    stage: dev
+  namespace: prod
+spec:
+  ports:
+  - name: http
+    port: 80               # port expose par docker  (pas le port dans le container)
+  selector:                # key/value, label permettant de definir le pod cible (doit etre danslabels du pod)
+    type: tito-fe
+    tier: frontend
+    stage: dev
