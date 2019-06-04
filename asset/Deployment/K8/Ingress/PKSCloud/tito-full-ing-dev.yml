@@ -95,6 +95,7 @@ spec:
         type: tito-fe
         version: v1
         tier: frontend
+        stage: dev
     spec:
       containers:
         - name: tito
