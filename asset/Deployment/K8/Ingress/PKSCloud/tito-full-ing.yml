@@ -21,6 +21,7 @@ metadata:
     app: tito
     stage: prod
     tier: backend
+  namespace: prod
 spec:
   replicas: 1
   minReadySeconds: 5
@@ -58,6 +59,7 @@ metadata:
     app: tito
     tier: backend
     stage: prod
+  namespace: prod
 spec:
   ports:
       - port: 3306               # port expose par docker  (pas le port dans le container)
@@ -75,6 +77,7 @@ metadata:
     app: tito
     tier: frontend
     stage: prod
+  namespace: prod
 spec:
   replicas: 2
   selector:
@@ -124,6 +127,7 @@ metadata:
     app: tito
     tier: frontend
     stage: prod
+  namespace: prod
 spec:
   ports:
   - name: http
@@ -136,11 +140,16 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: tito-ingress
+  labels:
+    app: tito
+    tier: frontend
+    stage: prod
   annotations:
     nginx.org/rewrites: "serviceName=titofe-service rewrite=/"
+  namespace: prod
 spec:
   rules:
-  - host: vince-dev-7e5b1578-307d-11e9-817b-0a5a57836034.3d1c7171-5a92-4a59-80d5-605db5b53df0.vke-user.com
+  - host: vince-prod-87b171cc-5c6e-11e9-987f-0a6b9ab28b7e.3d1c7171-5a92-4a59-80d5-605db5b53df0.vke-user.com
     http:
       paths:
       - path: /tito
