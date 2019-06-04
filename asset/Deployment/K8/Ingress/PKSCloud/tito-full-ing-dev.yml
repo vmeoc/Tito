@@ -105,7 +105,7 @@ spec:
           - containerPort: 80
           env:
           - name: TITO_VERSION
-            value: V1.5
+            value: V1.9.7
           - name: TITO_SQL_SERVICE_HOST
             value: tito-sql
           - name: PROXY_NAME
