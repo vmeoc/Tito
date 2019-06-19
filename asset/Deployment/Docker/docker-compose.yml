@@ -40,7 +40,7 @@ services:
       - tito-nw
     restart: always
     healthcheck:
-      test: "/etc/init.d/mysql status"
+      test: "mysql --user=root --password=Tito2016 --database=TitoDB -e 'select count(*) from TitoTable'"
       interval: 1s
       retries: 120
     environment:
