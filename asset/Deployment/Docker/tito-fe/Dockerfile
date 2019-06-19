@@ -1,22 +1,15 @@
-#Created by Vincent Meoc
+# Created by Vincent Meoc
 # Create the Tito Front End container
-#Env (optional): TITOSQL=<FQDN/IP of MYSQL
 
-FROM php:rc-apache
-#COPY . /var/www/html/
-COPY asset/Deployment/Docker/tito-fe/apache2-foreground /usr/local/bin/apache2-foreground
-RUN chmod +x /usr/local/bin/apache2-foreground
+FROM php:7.3.6-apache-stretch
 
-RUN apt-get update
-RUN apt-get install php-mysql vim libmcrypt-dev -y
-RUN apt-get install git -y
-RUN docker-php-ext-install mysqli pdo pdo_mysql sockets
-
-#Deploy Tito
-RUN git clone https://github.com/vmeoc/Tito /var/www/html/
-
-RUN echo "<IfModule env_module>" >> /etc/apache2/mods-enabled/env.conf
-RUN echo "     SetEnv TITO-SQL \"Tito-SQL\"" >> /etc/apache2/mods-enabled/env.conf
-RUN echo "</IfModule>" >> /etc/apache2/mods-enabled/env.conf
+COPY apache2-foreground /usr/local/bin/apache2-foreground
+RUN chmod +x /usr/local/bin/apache2-foreground; \
+    apt-get update; \
+    # for troubleshooting, can add vim and iputils-ping the following command line
+    apt-get install -y libmcrypt-dev git curl; \
+    docker-php-ext-install mysqli pdo_mysql sockets; \
+    echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf; a2enconf servername; \
+    apt-get clean && rm -rf /var/cache/apt/archives;
 
 ENTRYPOINT ["/usr/local/bin/apache2-foreground"]
