@@ -15,27 +15,23 @@ fi
 rm -f "$APACHE_PID_FILE"
 
 #if it's running in a kubernetes environement
+echo "<IfModule env_module>" > /etc/apache2/mods-enabled/env.conf
 if [ -n "$TITO_SQL_SERVICE_SERVICE_HOST" ]; then
-    if [ -n "$PROXY_NAME" ]; then
-     cat <<EOF >> /etc/apache2/mods-enabled/env.conf
-                    <IfModule env_module>
-                            SetEnv TITO-SQL $TITO_SQL_SERVICE_SERVICE_HOST
-                            SetEnv proxy_name $PROXY_NAME
-                            setEnv proxy_port $PROXY_PORT
-                    </IfModule>
-EOF
-    fi
-    else
-        cat <<EOF >> /etc/apache2/mods-enabled/env.conf
-                       <IfModule env_module>
-                               SetEnv TITO-SQL $TITO_SQL_SERVICE_SERVICE_HOST
-                       </IfModule>
-EOF
+  echo "  SetEnv TITO-SQL $TITO_SQL_SERVICE_SERVICE_HOST" >> /etc/apache2/mods-enabled/env.conf
+else
+  echo "  SetEnv TITO-SQL Tito-SQL" >> /etc/apache2/mods-enabled/env.conf
 fi
+
+if [ -n "$PROXY_NAME" ]; then
+  echo "  SetEnv proxy_name $PROXY_NAME" >> /etc/apache2/mods-enabled/env.conf
+  echo "  setEnv proxy_port $PROXY_PORT" >> /etc/apache2/mods-enabled/env.conf
+fi
+echo "</IfModule>" >> /etc/apache2/mods-enabled/env.conf
 
 #get Tito code
 if [ -z "$(ls -A /var/www/html)" ]; then
 	git clone https://github.com/vmeoc/Tito /var/www/html/
+  rm -Rf /var/www/html/asset/Deployment /var/www/html/.gitignore
 fi
 
 #if the env variable TITO_VERSION is available, then checkout the needed version.
