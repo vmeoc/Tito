@@ -1,7 +1,6 @@
-#Created by Vincent Meoc
+# Created by Vincent Meoc
 # Create the Tito Back end
 
-FROM mysql:5.7
-ENV MYSQL_ROOT_PASSWORD: Tito2016
+FROM mariadb:10.3.13
 
-ADD asset/Deployment/Docker/tito-sql/db_name.sql /docker-entrypoint-initdb.d
+ADD db_name.sql /docker-entrypoint-initdb.d

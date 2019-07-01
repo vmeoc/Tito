@@ -1,28 +1,38 @@
 version: '2.3'
 services:
   Tito-FE:
-    image: vmeoc/tito-fe:V1.7.1.3
+    build:
+      context: ./tito-fe
+    image: tito-fe
+    container_name: Tito-FE
+    #image: vmeoc/tito-fe:V1.7.1.3
     mem_limit: 16m
     cpus: 0.50
     cpu_percent: 5
     ports:
-      - 80
+      - "8080:80"
     networks:
       - tito-nw
     restart: always
+    environment:
+      TITO-SQL: Tito-SQL
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 1m30s
       timeout: 10s
       retries: 3
       start_period: 30s
-    links:
-        - Tito-SQL
+    #links:
+    #    - Tito-SQL
     depends_on:
       Tito-SQL:
         condition: service_healthy
   Tito-SQL:
-    image: vmeoc/tito-sql:V1.5
+    #image: vmeoc/tito-sql:V1.5
+    build:
+      context: ./tito-sql
+    image: tito-sql
+    container_name: Tito-SQL
     mem_limit: 150m
     cpus: 0.50
     cpu_percent: 10
@@ -30,16 +40,18 @@ services:
       - tito-nw
     restart: always
     healthcheck:
-      test: "/etc/init.d/mysql status"
+      test: "mysql --user=root --password=Tito2016 --database=TitoDB -e 'select count(*) from TitoTable'"
       interval: 1s
       retries: 120
     environment:
       MYSQL_ROOT_PASSWORD: Tito2016
+    # Uncomment following two lines to allow for local access/troubleshooting
+    #ports:
+    #  - "3306:3306"
 #removed until automated volume deployment is available
 #    volumes:
 #      - "./data/db:/var/lib/mysql"
 
- 
 networks:
    tito-nw:
     driver: bridge
