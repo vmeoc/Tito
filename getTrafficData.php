@@ -1,6 +1,6 @@
 <?php
-
-const GOOGLE_API_KEY = "AIzaSyA5ZDRG9r8hBWrtlGsEuJKU2KBg_cCV_Qk";
+$ini = parse_ini_file('config.ini.php');
+define('GOOGLE_API_KEY', $ini['GOOGLE_API_KEY']);
 
 $metric_name = "google_maps_call_duration";
 $tag_name = "TitoTier";
@@ -8,7 +8,6 @@ $tag_value = "TitoFE";
 
 // Extract parameters from URL
 $needed_params = array("home_addr", "home_time", "work_addr", "work_time","home_range");
-
 
 $params = extractParametersFromUrl($needed_params);
 

@@ -1,9 +1,13 @@
 <?php
+
+// Retrieve variables from config file
+$ini = parse_ini_file("config.ini.php");
+
 $servername = getenv('TITO-SQL');
-$password = "Tito2016";
-$username = "root";
-$tablename = "TitoTable";
-$dbname = "TitoDB";
+$password = $ini['password'];
+$username = $ini['username'];
+$tablename = $ini['tablename'];
+$dbname = $ini['dbname'];
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

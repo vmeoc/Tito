@@ -9,11 +9,14 @@ include 'getTrafficData.php';
 
 
 //**************SQL variables*********************
+$ini = parse_ini_file('config.ini.php');
+
 $servername = getenv('TITO-SQL');
-$username = "root";
-$password = "Tito2016";
-$tablename = "TitoTable";
-$dbname = "TitoDB";
+$username = $ini['username'];
+$password = $ini['password'];
+$tablename = $ini['tablename'];
+$dbname = $ini['dbname']; 
+
 //*************************************************
 /*
 // Réception des variables
