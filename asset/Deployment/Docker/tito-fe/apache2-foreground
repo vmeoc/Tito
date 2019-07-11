@@ -30,7 +30,7 @@ echo "</IfModule>" >> /etc/apache2/mods-enabled/env.conf
 
 #get Tito code
 if [ -z "$(ls -A /var/www/html)" ]; then
-	git clone https://github.com/bazbill115/Tito /var/www/html/
+	git clone https://github.com/vmeoc/Tito /var/www/html/
   rm -Rf /var/www/html/asset/Deployment /var/www/html/.gitignore
 fi
 
