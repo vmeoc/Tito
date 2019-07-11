@@ -16,6 +16,8 @@ services:
     restart: always
     environment:
       TITO-SQL: Tito-SQL
+      # The following is used by apache2-foreground to make sure updated pw is passed to config.ini.php
+      MYSQL_ROOT_PASSWORD: Tito2016
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 1m30s

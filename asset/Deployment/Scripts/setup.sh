@@ -1,7 +1,7 @@
 #!/bin/bash
 cd ../../..
 
-filePaths=( "asset/Deployment/CloudAssembly/titodb/mysql.sh")
+#filePaths=( "asset/Deployment/CloudAssembly/titodb/mysql.sh")
 
 echo "Set database password: " && read password
 
@@ -13,7 +13,7 @@ fi
 
 encpass=$(echo -n "${password}" | base64)
 
-sed -i '' "s/.*password.*/password = $password/" "config.ini.php"
+sed -i '' "s/.*password.*/password = \"$password\"/" "config.ini.php"
 
 sed -i '' "s/master_password.*/master_password: $password/" "asset/Deployment/CloudAssembly/Tito FE and RDS DB.yml"
 
@@ -23,7 +23,7 @@ sed -i '' "s/db_password=.*/db_password=$password/" "asset/Deployment/CloudAssem
 
 sed -i '' "s/password=.*/password=$password --database=TitoDB -e 'select count(*) from TitoTable'\"/" "asset/Deployment/Docker/docker-compose.yml"
 
-sed -i '' "s/ROOT_PASSWORD:.*/ROOT_PASSWORD: $password/" "asset/Deployment/Docker/docker-compose.yml"
+sed -i '' "s/ROOT_PASSWORD:.*/ROOT_PASSWORD: $password/g" "asset/Deployment/Docker/docker-compose.yml"
 
 sed -i '' "s/password:.*/password: \"$password\",/" "asset/Deployment/FaaS/AWS/book/db-connector.js"
 
