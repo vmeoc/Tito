@@ -42,6 +42,11 @@ if [ -n "$TITO_VERSION" ]; then
     git checkout $TITO_VERSION
 fi
 
+# Make sure the config file has the updated password:
+if [ -n "$MYSQL_ROOT_PASSWORD" ]; then
+  sed -i "s/.*password.*/password = \"$MYSQL_ROOT_PASSWORD\"/" "./config.ini.php"
+fi
+
 #to have the apache server redirect the flow for ingress
 sed -i '/<IfModule alias_module>/a Alias /tito/ "/var/www/html/"' /etc/apache2/mods-enabled/alias.conf
 
