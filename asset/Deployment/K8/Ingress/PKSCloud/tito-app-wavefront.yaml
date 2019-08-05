@@ -1,31 +1,31 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mysql-pass
+  generateName: mysql-pass-
   labels:
     app: tito
+    stage: wavefront
   namespace: prod
 type: Opaque
 data:
   password: VGl0bzIwMTY=
   # Password created like this: echo -n 'Tito2016' | base64
-
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: titosql
+  generateName: titosql-
   labels:
     name: tito-sql
     version: "1.5"
     app: tito
-    stage: prod
+    stage: wavefront
     tier: backend
   namespace: prod
 spec:
   replicas: 1
   minReadySeconds: 5
-  strategy: 
+  strategy:
     type: Recreate
   selector:
     matchLabels:
@@ -50,15 +50,16 @@ spec:
               name: mysql-pass
               key: password
 
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: tito-sql-service
+  generateName: tito-sql-service-
   labels:
     app: tito
     tier: backend
-    stage: prod
+    stage: wavefront
   namespace: prod
 spec:
   ports:
@@ -66,17 +67,18 @@ spec:
   selector:                     # key/value, label permettant de definir le pod cible (doit etre danslabels du pod)
     tier: backend
 
+
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: titofe
+  generateName: titofe-
   labels:
     name: tito-fe
     version: "latest"
     app: tito
     tier: frontend
-    stage: prod
+    stage: waveferont
   namespace: prod
 spec:
   replicas: 2
@@ -93,7 +95,7 @@ spec:
         type: tito-fe
         version: v1
         tier: frontend
-        stage: prod
+        stage: wavefront
     spec:
       containers:
         - name: tito
@@ -103,7 +105,7 @@ spec:
           - containerPort: 80
           env:
           - name: TITO_VERSION
-            value: V0.5 #change the code version here 
+            value: V1.9.7
           - name: TITO_SQL_SERVICE_HOST
             value: tito-sql
           - name: PROXY_NAME
@@ -119,15 +121,16 @@ spec:
               fieldRef:
                 fieldPath: metadata.namespace
 
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: titofe-service
+  name: titofe-service-wavefront
   labels:
     app: tito
     tier: frontend
-    stage: prod
+    stage: wavefront
   namespace: prod
 spec:
   ports:
@@ -136,33 +139,4 @@ spec:
   selector:                # key/value, label permettant de definir le pod cible (doit etre danslabels du pod)
     type: tito-fe
     tier: frontend
-    stage: prod
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: tito-ingress
-  labels:
-    app: tito
-    tier: frontend
-    stage: prod
-  annotations:
-    nginx.org/rewrites: "serviceName=titofe-service rewrite=/;serviceName=titofe-service-dev rewrite=/;serviceName=titofe-service-wavefront rewrite=/"
-  namespace: prod
-spec:
-  rules:
-  - host: vince-prod-87b171cc-5c6e-11e9-987f-0a6b9ab28b7e.3d1c7171-5a92-4a59-80d5-605db5b53df0.vke-user.com
-    http:
-      paths:
-      - path: /tito-prod
-        backend:
-          serviceName: titofe-service
-          servicePort: 80
-      - path: /tito-dev
-        backend:
-          serviceName: titofe-service-dev
-          servicePort: 80
-      - path: /tito-wavefront
-        backend:
-          serviceName: titofe-service-wavefront
-          servicePort: 80
+    stage: wavefront
