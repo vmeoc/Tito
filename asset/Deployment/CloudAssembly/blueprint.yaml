@@ -110,7 +110,7 @@ resources:
         - 1
     properties:
       name: '${input.customer_name}'
-      type: A
+      type: CNAME
       region: eu-west-1
       account: AWS perso Vince
       zone_id: Z30ZHGUZ2HHA3L
@@ -124,6 +124,7 @@ resources:
         - 0
         - 4
     properties:
+      count: '${input.architecture == "expensive" ? 0 : 1}'
       image: CentosV7
       flavor: small
       networks:
@@ -450,7 +451,7 @@ resources:
       region: eu-west-1
       account: AWS perso Vince
       instance_class: db.t2.small
-      cluster_identifier: '${resource.RDS_Cluster.id}'
+      cluster_identifier: '${resource.RDS_Cluster[0].id}'
       availability_zone: eu-west-1a
       publicly_accessible: true
       db_subnet_group_name: default-vpc-00ca7e4534ead6705
