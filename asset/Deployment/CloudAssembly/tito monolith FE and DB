@@ -1,0 +1,92 @@
+formatVersion: 1
+inputs:
+  code:
+    type: string
+    enum:
+      - V2
+      - V1.9.6
+      - 1.8.5
+      - V1.5
+      - V0.5
+    default: V2
+resources:
+  front_end:
+    type: Cloud.Machine
+    count: '${FrontEndNumber}'
+    properties:
+      image: CentosV7
+      flavor: small
+      remoteAccess:
+        authentication: publicPrivateKey
+        sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkN9Sbxj9H77Mrt+8QB/NQn+bqR0ZDx6vvoNeGpkeTbaOhL/6cd9zq+ZYx0hNzc2bPLI4S3NQ8CcAt1gdFdIPte38+gnk1+M+z1oqy2sh+TLFz4hBrdJ3JxTWW/b4Yex5uKbscKEjl2WiW+3MQfP5g5pZkWF3AbWQDAEI8BANn80eZU7q4yDMuW4TsCUEuNmrYjaTyi2S6i3WhngaAlZqdQzPvqUh/JTcmwTXx30XmsoVbG9NHEcbTehhoaHuKSCaCN5pBJ5uXEe4Oxjxa3AAU90YorC140Jw5mkQ4/5earNTqggBiI+uxQCHhC867GCyt9rlgJZZ1F0TlUYDymgx imported-openssh-key
+        username: vince
+      networks:
+        - name: '${resource.Public_Nw.name}'
+          network: '${resource.Public_Nw.id}'
+      cloudConfig: |
+        #cloud-config
+        packages:
+          - git
+        runcmd:
+          - cd /tmp
+          - git clone https://github.com/vmeoc/Tito
+          - cd Tito/asset/Deployment/CloudAssembly/titodb
+          - chmod u+x *.sh
+          - [ /tmp/Tito/asset/Deployment/CloudAssembly/titodb/tito_as.sh, ${resource.DB.networks[0].address} ]
+          - [ /tmp/Tito/asset/Deployment/CloudAssembly/titodb/tito_db.sh, ${resource.DB.networks[0].address} ]
+          - echo ${resource.DB.address} > /tmp/address
+  DB:
+    type: Cloud.Machine
+    properties:
+      image: CentosV7
+      flavor: small
+      networks:
+        - network: '${resource.Private_Nw.id}'
+          assignPublicIpAddress: false
+      remoteAccess:
+        authentication: publicPrivateKey
+        sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkN9Sbxj9H77Mrt+8QB/NQn+bqR0ZDx6vvoNeGpkeTbaOhL/6cd9zq+ZYx0hNzc2bPLI4S3NQ8CcAt1gdFdIPte38+gnk1+M+z1oqy2sh+TLFz4hBrdJ3JxTWW/b4Yex5uKbscKEjl2WiW+3MQfP5g5pZkWF3AbWQDAEI8BANn80eZU7q4yDMuW4TsCUEuNmrYjaTyi2S6i3WhngaAlZqdQzPvqUh/JTcmwTXx30XmsoVbG9NHEcbTehhoaHuKSCaCN5pBJ5uXEe4Oxjxa3AAU90YorC140Jw5mkQ4/5earNTqggBiI+uxQCHhC867GCyt9rlgJZZ1F0TlUYDymgx imported-openssh-key
+        username: vince
+      cloudConfig: |
+        packages:
+          - mysql
+          - mariadb-server
+          - mariadb
+        runcmd:
+          - sudo systemctl enable mariadb.service
+          - sudo systemctl start mariadb.service
+          - mysql -u root << EOF
+          - USE mysql;
+          - SELECT user,host FROM user;
+          - GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;
+          - EOF
+        #to update the root password
+          - sudo systemctl stop mariadb.service
+          - sudo mysqld_safe --skip-grant-tables &
+          - mysql -u root << EOF
+          - UPDATE mysql.user SET Password=PASSWORD('Tito2016') WHERE User='root';
+          - FLUSH PRIVILEGES;
+          - EOF
+          - sudo mysqladmin -u root -pTito2016 shutdown
+          - sudo systemctl start mariadb.service
+          
+          #create conf DB and table
+          - mysql -u root -pTito2016 << EOF
+          - create database if not exists TitoDB;
+          - use TitoDB;
+          - CREATE TABLE TitoTable (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, home VARCHAR(50) NOT NULL, work VARCHAR(50) NOT NULL, hour_home_departure VARCHAR(50) NOT NULL, hour_work_departure VARCHAR(50) NOT NULL)
+          - EOF
+  Public_Nw:
+    type: Cloud.Network
+    properties:
+      networkType: existing
+      constraints:
+        - tag: public
+        - tag: zone-A
+  Private_Nw:
+    type: Cloud.Network
+    properties:
+      networkType: existing
+      constraints:
+        - tag: private
+        - tag: zone-A
