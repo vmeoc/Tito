@@ -85,9 +85,9 @@ resources:
           - git clone https://github.com/vmeoc/Tito
           - cd Tito/asset/Deployment/CloudAssembly/titodb
           - chmod u+x *.sh
-          - [ /tmp/Tito/asset/Deployment/CloudAssembly/titodb/tito_as.sh, ${resource.DB.address[0]} ]
+          - [ /tmp/Tito/asset/Deployment/CloudAssembly/titodb/tito_as.sh, ${resource.DB.address} ]
           - sed -i -e 's|API_GW|https://${resource.API_Gateway_Rest.id}.execute-api.${input.Region}.amazonaws.com/${input.customer_name}|g' /var/www/html/index.php
-          - mysql -u root -h ${input.architecture == "cheap" ? resource.DB.address[0] : resource.RDS_Cluster_Instance[0].endpoint} -pTito2016 << EOF
+          - mysql -u root -h ${input.architecture == "cheap" ? resource.DB.address : resource.RDS_Cluster_Instance.endpoint[0]} -pTito2016 << EOF
           - create database if not exists Tito4DB;
           - use Tito4DB;
           - CREATE TABLE TitoTable (name VARCHAR(50) NOT NULL, picture VARCHAR(200) NOT NULL, capa INT, location INT, available INT);
@@ -124,7 +124,6 @@ resources:
         - 0
         - 4
     properties:
-      count: '${input.architecture == "expensive" ? 0 : 1}'
       image: CentosV7
       flavor: small
       networks:
@@ -310,7 +309,7 @@ resources:
             - sg-035cc63a44baa8159
       environment:
         - variables:
-            DB: '${input.architecture == "cheap" ? resource.DB.address[0] : resource.RDS_Cluster_Instance[0].endpoint}'
+            DB: '${input.architecture == "cheap" ? resource.DB.address : resource.RDS_Cluster_Instance.endpoint[0]}'
   book:
     type: Cloud.Service.AWS.Lambda.Function
     metadata:
@@ -335,7 +334,7 @@ resources:
             - sg-035cc63a44baa8159
       environment:
         - variables:
-            DB: '${input.architecture == "cheap" ? resource.DB.address[0] : resource.RDS_Cluster_Instance[0].endpoint}'
+            DB: '${input.architecture == "cheap" ? resource.DB.address : resource.RDS_Cluster_Instance.endpoint[0]}'
   reset:
     type: Cloud.Service.AWS.Lambda.Function
     metadata:
@@ -360,7 +359,7 @@ resources:
             - sg-035cc63a44baa8159
       environment:
         - variables:
-            DB: '${input.architecture == "cheap" ? resource.DB.address[0] : resource.RDS_Cluster_Instance[0].endpoint}'
+            DB: '${input.architecture == "cheap" ? resource.DB.address : resource.RDS_Cluster_Instance.endpoint[0]}'
   Method_read:
     type: Cloud.Service.AWS.API.Gateway.Method
     metadata:
