@@ -1,5 +1,11 @@
 formatVersion: 1
 inputs:
+  cloud:
+    type: string
+    enum:
+      - azure
+      - aws
+      - vsphere
   code:
     type: string
     enum:
@@ -17,9 +23,10 @@ resources:
       image: CentosV7
       flavor: small
       remoteAccess:
-        authentication: publicPrivateKey
-        sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkN9Sbxj9H77Mrt+8QB/NQn+bqR0ZDx6vvoNeGpkeTbaOhL/6cd9zq+ZYx0hNzc2bPLI4S3NQ8CcAt1gdFdIPte38+gnk1+M+z1oqy2sh+TLFz4hBrdJ3JxTWW/b4Yex5uKbscKEjl2WiW+3MQfP5g5pZkWF3AbWQDAEI8BANn80eZU7q4yDMuW4TsCUEuNmrYjaTyi2S6i3WhngaAlZqdQzPvqUh/JTcmwTXx30XmsoVbG9NHEcbTehhoaHuKSCaCN5pBJ5uXEe4Oxjxa3AAU90YorC140Jw5mkQ4/5earNTqggBiI+uxQCHhC867GCyt9rlgJZZ1F0TlUYDymgx imported-openssh-key
+        authentication: '${self.endpointType == "aws" ? "publicPrivateKey" : "usernamePassword"}'
+        #        sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkN9Sbxj9H77Mrt+8QB/NQn+bqR0ZDx6vvoNeGpkeTbaOhL/6cd9zq+ZYx0hNzc2bPLI4S3NQ8CcAt1gdFdIPte38+gnk1+M+z1oqy2sh+TLFz4hBrdJ3JxTWW/b4Yex5uKbscKEjl2WiW+3MQfP5g5pZkWF3AbWQDAEI8BANn80eZU7q4yDMuW4TsCUEuNmrYjaTyi2S6i3WhngaAlZqdQzPvqUh/JTcmwTXx30XmsoVbG9NHEcbTehhoaHuKSCaCN5pBJ5uXEe4Oxjxa3AAU90YorC140Jw5mkQ4/5earNTqggBiI+uxQCHhC867GCyt9rlgJZZ1F0TlUYDymgx imported-openssh-key
         username: vince
+        password: VMware1!
       networks:
         - name: '${resource.Public_Nw.name}'
           network: '${resource.Public_Nw.id}'
@@ -41,12 +48,12 @@ resources:
       image: CentosV7
       flavor: small
       networks:
-        - network: '${resource.Private_Nw.id}'
-          assignPublicIpAddress: false
+        - network: '${resource.Public_Nw.id}'
       remoteAccess:
-        authentication: publicPrivateKey
-        sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkN9Sbxj9H77Mrt+8QB/NQn+bqR0ZDx6vvoNeGpkeTbaOhL/6cd9zq+ZYx0hNzc2bPLI4S3NQ8CcAt1gdFdIPte38+gnk1+M+z1oqy2sh+TLFz4hBrdJ3JxTWW/b4Yex5uKbscKEjl2WiW+3MQfP5g5pZkWF3AbWQDAEI8BANn80eZU7q4yDMuW4TsCUEuNmrYjaTyi2S6i3WhngaAlZqdQzPvqUh/JTcmwTXx30XmsoVbG9NHEcbTehhoaHuKSCaCN5pBJ5uXEe4Oxjxa3AAU90YorC140Jw5mkQ4/5earNTqggBiI+uxQCHhC867GCyt9rlgJZZ1F0TlUYDymgx imported-openssh-key
+        authentication: '${self.endpointType == "aws" ? "publicPrivateKey" : "usernamePassword"}'
+        #        sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkN9Sbxj9H77Mrt+8QB/NQn+bqR0ZDx6vvoNeGpkeTbaOhL/6cd9zq+ZYx0hNzc2bPLI4S3NQ8CcAt1gdFdIPte38+gnk1+M+z1oqy2sh+TLFz4hBrdJ3JxTWW/b4Yex5uKbscKEjl2WiW+3MQfP5g5pZkWF3AbWQDAEI8BANn80eZU7q4yDMuW4TsCUEuNmrYjaTyi2S6i3WhngaAlZqdQzPvqUh/JTcmwTXx30XmsoVbG9NHEcbTehhoaHuKSCaCN5pBJ5uXEe4Oxjxa3AAU90YorC140Jw5mkQ4/5earNTqggBiI+uxQCHhC867GCyt9rlgJZZ1F0TlUYDymgx imported-openssh-key
         username: vince
+        password: VMware1!
       cloudConfig: |
         packages:
           - mysql
@@ -81,12 +88,4 @@ resources:
     properties:
       networkType: existing
       constraints:
-        - tag: public
-        - tag: zone-A
-  Private_Nw:
-    type: Cloud.Network
-    properties:
-      networkType: existing
-      constraints:
-        - tag: private
-        - tag: zone-A
+        - tag: 'cloud:${input.cloud}'
