@@ -22,6 +22,7 @@ resources:
     properties:
       image: CentosV7
       flavor: small
+      resourceGroupName: '${self.endpointType == "azure" ? "ResourceGroup1" : self.endpointType == "vsphere" ? "From_vRA8_Cloud" : ""}'
       remoteAccess:
         authentication: '${self.endpointType == "aws" ? "publicPrivateKey" : "usernamePassword"}'
         #        sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkN9Sbxj9H77Mrt+8QB/NQn+bqR0ZDx6vvoNeGpkeTbaOhL/6cd9zq+ZYx0hNzc2bPLI4S3NQ8CcAt1gdFdIPte38+gnk1+M+z1oqy2sh+TLFz4hBrdJ3JxTWW/b4Yex5uKbscKEjl2WiW+3MQfP5g5pZkWF3AbWQDAEI8BANn80eZU7q4yDMuW4TsCUEuNmrYjaTyi2S6i3WhngaAlZqdQzPvqUh/JTcmwTXx30XmsoVbG9NHEcbTehhoaHuKSCaCN5pBJ5uXEe4Oxjxa3AAU90YorC140Jw5mkQ4/5earNTqggBiI+uxQCHhC867GCyt9rlgJZZ1F0TlUYDymgx imported-openssh-key
@@ -47,6 +48,7 @@ resources:
     properties:
       image: CentosV7
       flavor: small
+      resourceGroupName: '${self.endpointType == "azure" ? "ResourceGroup1" : self.endpointType == "vsphere" ? "From_vRA8_Cloud" : ""}'
       networks:
         - network: '${resource.Public_Nw.id}'
       remoteAccess:
