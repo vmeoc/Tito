@@ -169,7 +169,6 @@ resources:
         - 1
         - 0
     properties:
-      name: All Open - Dev
       networkType: existing
       constraints:
         - tag: public
