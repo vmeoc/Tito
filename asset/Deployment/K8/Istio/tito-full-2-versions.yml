@@ -70,7 +70,7 @@ metadata:
   name: titofe
   labels:
     name: tito-fe
-    version: "latest"
+    version: V1
     app: tito
     tier: frontend
     stage: prod
@@ -79,7 +79,7 @@ spec:
   selector:
     matchLabels:
       type: tito-fe
-      version: v1
+      version: V1
   strategy:
     type: Recreate
   template:
@@ -87,7 +87,7 @@ spec:
       labels:
         app: tito
         type: tito-fe
-        version: v1
+        version: V1
         tier: frontend
     spec:
       containers:
@@ -123,6 +123,7 @@ metadata:
     app: tito
     tier: frontend
     stage: prod
+    version: V1
 spec:
   ports:
   - name: http
@@ -136,10 +137,10 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: titofe
+  name: titofe-v05
   labels:
     name: tito-fe
-    version: V0.5
+    version: V05
     app: tito
     tier: frontend
     stage: prod
@@ -148,7 +149,7 @@ spec:
   selector:
     matchLabels:
       type: tito-fe
-      version: v1
+      version: V05
   strategy:
     type: Recreate
   template:
@@ -156,7 +157,7 @@ spec:
       labels:
         app: tito
         type: tito-fe
-        version: v0.5
+        version: V05
         tier: frontend
     spec:
       containers:
@@ -182,22 +183,3 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: titofe-service
-  labels:
-    app: tito
-    tier: frontend
-    stage: prod
-    version: V0.5
-spec:
-  ports:
-  - name: http
-    port: 80               # port expose par docker  (pas le port dans le container)
-  selector:                # key/value, label permettant de definir le pod cible (doit etre danslabels du pod)
-    type: tito-fe
-    tier: frontend
-  type: LoadBalancer
