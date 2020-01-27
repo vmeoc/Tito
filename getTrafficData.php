@@ -11,7 +11,19 @@ $needed_params = array("home_addr", "home_time", "work_addr", "work_time","home_
 
 $params = extractParametersFromUrl($needed_params);
 
+
+# Appel des googles API, on recupere la date avant et apres pour l'envoyer au tracing
+$time_before=microtime(true);
 $result = getTrafficData($params);
+$time_after=microtime(true);
+
+
+# send traces to wavefront  
+$home_addr_no_space = str_replace(' ', '', $params['home_addr']);
+$work_addr_no_space = str_replace(' ', '', $params['work_addr']);
+$cmd = "/var/www/html/sendTraces.py " . $time_before . "  " . $time_after . "  " . $home_addr_no_space . "  " . $work_addr_no_space . " > /dev/null 2>/dev/null &";
+$resultat = shell_exec($cmd);
+
 
 //------------------------------------------------------------------------------
 
