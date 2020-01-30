@@ -35,10 +35,14 @@ echo "HTTPDCONF=$HTTPDCONF"
 
 
 # Install web server 
-rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
-yum --enablerepo=remi,remi-php72 install -y httpd php php-common
-
+#rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+#rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+#yum --enablerepo=remi,remi-php72 install -y httpd php php-common
+yum install httpd -y
+/usr/sbin/service httpd start
+yum install php -y
+yum install php-mysql -y
+/usr/sbin/chkconfig httpd on
 
 # Install Python3 and libraries
 yum install -y python36 python-pip python36-setuptools gcc python3-devel
