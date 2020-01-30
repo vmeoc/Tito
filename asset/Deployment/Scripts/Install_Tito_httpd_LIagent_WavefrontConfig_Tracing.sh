@@ -2,21 +2,23 @@
 
 # INSTALL TITO SUR CentOS7.x:
 #    - httpd
+#    - Setup DB address
 #    - Tito App
 #	 - Wavefront metriques et Tracing
 #    - Log Insight Agent
 #---------------------------------------------------------------------------------------------------------------------------
-# alex
-# 27/01/2020
+# Original author: Alex
+# Updated by Vince
+# 30/01/2020
 #
-# V2.0
+# V2.1
 #
 #---------------------------------------------------------------------------------------------------------------------------
 # USAGE:
 #
-# Install_Tito_LIagent_WavefrontConfig_Tracing.sh  [WAVEFRONT PROXY FQDN]  [WAVEFRONT PORT] [TITO VERSION]
+# Install_Tito_LIagent_WavefrontConfig_Tracing.sh  [WAVEFRONT PROXY FQDN]  [WAVEFRONT PORT] [TITO VERSION] [DB_address]
 #
-#     ex: ./Install_Tito_LIagent_WavefrontConfig_Tracing.sh   wvfp.cpod-vrealizesuite.az-demo.shwrfr.com  2878   V1.9.6
+#     ex: ./Install_Tito_LIagent_WavefrontConfig_Tracing.sh   wvfp.cpod-vrealizesuite.az-demo.shwrfr.com  2878   V1.9.6 192.168.30.1
 #
 #---------------------------------------------------------------------------------------------------------------------------
 
@@ -24,6 +26,7 @@
 PROXY_NAME=$1
 PROXY_PORT=$2
 TITO_VERSION=$3
+SQLSERVER=$4
 echo "PROXY_NAME=$PROXY_NAME"
 echo "PROXY_PORT=$PROXY_PORT"
 echo "TITO_VERSION=$TITO_VERSION"
@@ -40,6 +43,22 @@ yum install -y python36 python-pip python36-setuptools gcc python3-devel
 easy_install-3.6 pip
 pip3 install wavefront-opentracing-sdk-python --no-cache-dir
 
+
+#Setup DBAddress
+echo
+echo -e "conf httpd.conf to include PHP and set MySQL server\n"
+
+echo
+echo -e "modify SQLSERVER variable to remove not needed characters"
+SQLSERVER=$(tr -d []\' <<< $SQLSERVER)
+
+echo
+echo "LoadModule php5_module modules/libphp5.so" >> $HTTPDCONF
+cat <<EOF >> $HTTPDCONF
+<IfModule env_module>
+    SetEnv TITO-SQL "$SQLSERVER"
+</IfModule>
+EOF
 
 # TITO INSTALL
 git clone https://github.com/vmeoc/Tito.git  /var/www/html
