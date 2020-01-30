@@ -27,9 +27,11 @@ PROXY_NAME=$1
 PROXY_PORT=$2
 TITO_VERSION=$3
 SQLSERVER=$4
+HTTPDCONF=/etc/httpd/conf/httpd.conf
 echo "PROXY_NAME=$PROXY_NAME"
 echo "PROXY_PORT=$PROXY_PORT"
 echo "TITO_VERSION=$TITO_VERSION"
+echo "HTTPDCONF=$HTTPDCONF"
 
 
 # Install web server 
