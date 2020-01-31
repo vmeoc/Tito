@@ -49,6 +49,11 @@ yum install -y python36 python-pip python36-setuptools gcc python3-devel
 easy_install-3.6 pip
 pip3 install wavefront-opentracing-sdk-python --no-cache-dir
 
+#Se timezone
+echo
+echo -e "conf php.ini Timezone \n"
+
+echo "date.timezone = \"Europe/Rome\"" >> /etc/php.ini
 
 #Setup DBAddress
 echo
