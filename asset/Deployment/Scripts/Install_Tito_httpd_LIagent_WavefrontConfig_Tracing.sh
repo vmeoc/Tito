@@ -92,7 +92,7 @@ echo "PROXY_PORT=$PROXY_PORT" >> /etc/sysconfig/httpd
 
 
 # Start Web Server
-systemctl start httpd
+systemctl restart httpd
 systemctl enable httpd
 
 
