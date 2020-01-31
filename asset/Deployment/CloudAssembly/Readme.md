@@ -14,7 +14,7 @@ Each Network profile need to have cloud:<aws/azure/vsphere> for example
 
 Tracing with Tito
 
-Tito now sends traces to Wavefront (via proxy) with tags for home_address and work_address.
+The tito monolith FE and DB multi cloud blueprint now sends traces to Wavefront (via proxy) with tags for home_address and work_address. 
 This is based on a Python script 'sendTraces.py' which sequentially reports the spans and which is launched by GetTrafficData.php.
 As this is for demo purpose, all spans are fake but 'Google API calls' which is based on the real duration of the call.
 
