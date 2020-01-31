@@ -9,12 +9,21 @@ inputs:
   code:
     type: string
     enum:
+      - V2.2
       - V2
       - V1.9.6
       - 1.8.5
       - V1.5
       - V0.5
-    default: V2
+    default: V2.2
+  wavefront_proxy:
+    title: Proxy Wavefront
+    type: string
+    default: wvfp.cpod-vrealizesuite.az-demo.shwrfr.com
+  wavefront_port:
+    title: Port Wavefront
+    type: string
+    default: 2878
 resources:
   DB:
     type: Cloud.Machine
@@ -81,13 +90,13 @@ resources:
           - git
         runcmd:
           - cd /tmp
-          - git clone https://github.com/vmeoc/Tito
-          - cd Tito/asset/Deployment/CloudAssembly/titodb
-          - chmod u+x *.sh
-          - [ /tmp/Tito/asset/Deployment/CloudAssembly/titodb/tito_as.sh, ${resource.DB.networks[0].address} ]
+          - curl -O https://raw.githubusercontent.com/vmeoc/Tito/master/asset/Deployment/Scripts/Install_Tito_httpd_LIagent_WavefrontConfig_Tracing.sh
+          - chmod 755 Install_Tito_httpd_LIagent_WavefrontConfig_Tracing.sh
+          - /tmp/Install_Tito_httpd_LIagent_WavefrontConfig_Tracing.sh ${input.wavefront_proxy} ${input.wavefront_port} ${input.code} ${resource.DB.networks[0].address}
+          - rm -f /tmp/Install_Tito_httpd_LIagent_WavefrontConfig_Tracing.sh
   Public_Nw:
     type: Cloud.Network
     properties:
-      networkType: existing
+      networkType: existing 
       constraints:
         - tag: 'cloud:${input.cloud}'
