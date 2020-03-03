@@ -91,6 +91,7 @@ $(document).ready(function () {
             <div class="text-vertical-center">
                 <h1>Tito</h1>
                 <h3>Time Traffic Overview</h3>
+                <h5>Version: V2.3)</h5>
                 <h5>by Vince :)</h5>
                  <?PHP
                  echo "Runs on : " . gethostname() . " (" . getHostByName(getHostName()) .")";
@@ -210,7 +211,6 @@ $(document).ready(function () {
                         <hr class="small">
                        <p class="text-muted">
                         <?PHP
-                        echo "V2";
                         echo "<br>";
                         echo "Tito Front End: " . gethostname() . " (" . getHostByName(getHostName()) .")";
                         echo "<br>";
