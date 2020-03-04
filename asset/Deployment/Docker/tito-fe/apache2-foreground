@@ -42,6 +42,19 @@ if [ -n "$TITO_VERSION" ]; then
     git checkout $TITO_VERSION
 fi
 
+# apache2 configuration to allow python scripts 
+cat >>/etc/apache2/apache2.conf <<EOF
+<Directory /var/www/html>
+        Options Indexes FollowSymLinks
+        AllowOverride None
+        Require all granted
+        AddHandler mod_python .py
+</Directory>
+EOF
+
+# Allow execution of python script for tracing to wavefront
+chmod 755 /var/www/html/sendTraces.py
+
 # Make sure the config file has the updated password:
 if [ -n "$MYSQL_ROOT_PASSWORD" ]; then
   sed -i "s/.*password.*/password = \"$MYSQL_ROOT_PASSWORD\"/" "./config.ini.php"
