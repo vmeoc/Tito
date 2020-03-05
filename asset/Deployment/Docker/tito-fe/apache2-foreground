@@ -53,7 +53,10 @@ cat >>/etc/apache2/apache2.conf <<EOF
 EOF
 
 # Allow execution of python script for tracing to wavefront
-chmod 755 /var/www/html/sendTraces.py
+if [ -e /var/www/html/sendTraces.py ]
+then
+        chmod 755 /var/www/html/sendTraces.py
+fi
 
 # Make sure the config file has the updated password:
 if [ -n "$MYSQL_ROOT_PASSWORD" ]; then
