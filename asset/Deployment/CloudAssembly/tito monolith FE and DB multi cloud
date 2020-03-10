@@ -1,3 +1,7 @@
+##pre requisite for this BP:
+#working AWS, vsphere, Azure accounts
+#template, flavor, Network profile set
+#NSX policy to block ICMP between VMs having the noping tag in the security scope
 formatVersion: 1
 inputs:
   cloud:
@@ -16,14 +20,26 @@ inputs:
       - V1.5
       - V0.5
     default: V2.2
+  frontendnumber:
+    type: integer
+    enum:
+      - 1
+      - 2
+      - 3
+    default: 1
+  security:
+    type: string
+    enum:
+      - high
+      - low
   wavefront_proxy:
-    title: Proxy Wavefront
     type: string
     default: wvfp.cpod-vrealizesuite.az-demo.shwrfr.com
+    title: Proxy Wavefront
   wavefront_port:
-    title: Port Wavefront
     type: string
     default: 2878
+    title: Port Wavefront
 resources:
   DB:
     type: Cloud.Machine
@@ -32,7 +48,10 @@ resources:
       flavor: small
       networks:
         - network: '${resource.Public_Nw.id}'
-          assignment: static
+          assignment: '${input.cloud == "vsphere" ? "static" : ""}'
+          tags:
+            - key: security
+              value: '${input.security == "high" ? "noping" : "open"}'
       remoteAccess:
         authentication: '${self.endpointType == "aws" ? "publicPrivateKey" : "usernamePassword"}'
         #        sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkN9Sbxj9H77Mrt+8QB/NQn+bqR0ZDx6vvoNeGpkeTbaOhL/6cd9zq+ZYx0hNzc2bPLI4S3NQ8CcAt1gdFdIPte38+gnk1+M+z1oqy2sh+TLFz4hBrdJ3JxTWW/b4Yex5uKbscKEjl2WiW+3MQfP5g5pZkWF3AbWQDAEI8BANn80eZU7q4yDMuW4TsCUEuNmrYjaTyi2S6i3WhngaAlZqdQzPvqUh/JTcmwTXx30XmsoVbG9NHEcbTehhoaHuKSCaCN5pBJ5uXEe4Oxjxa3AAU90YorC140Jw5mkQ4/5earNTqggBiI+uxQCHhC867GCyt9rlgJZZ1F0TlUYDymgx imported-openssh-key
@@ -69,23 +88,49 @@ resources:
           - use TitoDB;
           - CREATE TABLE TitoTable (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, home VARCHAR(50) NOT NULL, work VARCHAR(50) NOT NULL, hour_home_departure VARCHAR(50) NOT NULL, hour_work_departure VARCHAR(50) NOT NULL)
           - EOF
+  Cloud_LoadBalancer_1:
+    type: Cloud.LoadBalancer
+    properties:
+      count: '${input.frontendnumber > 1 ? 1 : 0}'
+      routes:
+        - protocol: HTTP
+          port: '80'
+          instanceProtocol: HTTP
+          instancePort: '80'
+          healthCheckConfiguration:
+            protocol: HTTP
+            port: '80'
+            urlPath: /
+            intervalSeconds: 60
+            timeoutSeconds: 30
+            unhealthyThreshold: 10
+            healthyThreshold: 2
+      network: '${resource.Public_Nw.id}'
+      instances:
+        - '${resource.front_end.id}'
+      internetFacing: true
   front_end:
     type: Cloud.Machine
+    dependsOn:
+      - DB
     count: '${FrontEndNumber}'
     properties:
       image: CentosV7
       flavor: small
+      count: '${input.frontendnumber}'
       remoteAccess:
         authentication: '${self.endpointType == "aws" ? "publicPrivateKey" : "usernamePassword"}'
         #        sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkN9Sbxj9H77Mrt+8QB/NQn+bqR0ZDx6vvoNeGpkeTbaOhL/6cd9zq+ZYx0hNzc2bPLI4S3NQ8CcAt1gdFdIPte38+gnk1+M+z1oqy2sh+TLFz4hBrdJ3JxTWW/b4Yex5uKbscKEjl2WiW+3MQfP5g5pZkWF3AbWQDAEI8BANn80eZU7q4yDMuW4TsCUEuNmrYjaTyi2S6i3WhngaAlZqdQzPvqUh/JTcmwTXx30XmsoVbG9NHEcbTehhoaHuKSCaCN5pBJ5uXEe4Oxjxa3AAU90YorC140Jw5mkQ4/5earNTqggBiI+uxQCHhC867GCyt9rlgJZZ1F0TlUYDymgx imported-openssh-key
         username: vince
         password: VMware1!
+      #resourceGroupName: '${input.cloud == "azure" ? "ResourceGroup1" : "vince"}'
       networks:
-        - name: '${resource.Public_Nw.name}'
-          network: '${resource.Public_Nw.id}'
-          assignment: static
+        - network: '${resource.Public_Nw.id}'
+          assignment: '${input.cloud == "vsphere" ? "static" : ""}'
+          tags:
+            - key: security
+              value: '${input.security == "high" ? "noping" : "open"}'
       cloudConfig: |
-        #cloud-config
         packages:
           - git
         runcmd:
@@ -97,6 +142,6 @@ resources:
   Public_Nw:
     type: Cloud.Network
     properties:
-      networkType: existing 
+      networkType: existing
       constraints:
         - tag: 'cloud:${input.cloud}'
