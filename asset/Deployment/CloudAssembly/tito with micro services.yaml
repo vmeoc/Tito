@@ -1,13 +1,21 @@
 formatVersion: 1
 #BP created by Vincent Meoc to deploy Tito Part4
 #dependencies are:
-# lambda function in S3
-# VPC, SG, Group subnet
+# AWS account
+# lambda function in S3 to import (cf https://github.com/vmeoc/Tito/tree/master/asset/Deployment/FaaS/AWS)
+# Region, VPC, SG, 2 subnets dispatched over 2 zones, Group subnet for RDS, IAM role with AWSLambdaVPCAccessExecutionRole &  AWSLambdaVPCAccessExecutionRole, Route 53 zone
+#Set the region for all the services necessary
+#Cf comments below to know where to place these information
+#if too static, feel free to modify it to make it dynamic :)
 #TODO:
-# create constant
-# encrypt password
 # tags all services
 inputs:
+  aws_account:
+    type: string
+    enum:
+      - AWS perso Vince
+      - Rob AWS
+    default: Rob AWS
   customer_name:
     type: string
   titoVersion:
@@ -39,10 +47,6 @@ inputs:
 resources:
   LoadBalancer:
     type: Cloud.LoadBalancer
-    metadata:
-      layoutPosition:
-        - 0
-        - 2
     properties:
       count: '${input.architecture == "cheap" ? 0 : 1}'
       name: LB
@@ -60,10 +64,6 @@ resources:
     dependsOn:
       - DB
       - API_Gw_Deployment
-    metadata:
-      layoutPosition:
-        - 0
-        - 3
     count: '${FrontEndNumber}'
     properties:
       image: CentosV7
@@ -104,10 +104,6 @@ resources:
           - EOF
   Route53_Record:
     type: Cloud.Service.AWS.Route53.Record
-    metadata:
-      layoutPosition:
-        - 0
-        - 1
     properties:
       name: '${input.customer_name}'
       type: '${input.architecture == "cheap" ? "A" : "CNAME"}'
@@ -119,10 +115,6 @@ resources:
       ttl: 60
   DB:
     type: Cloud.Machine
-    metadata:
-      layoutPosition:
-        - 0
-        - 4
     properties:
       image: CentosV7
       flavor: small
@@ -164,86 +156,59 @@ resources:
           - EOF
   Public_Nw:
     type: Cloud.Network
-    metadata:
-      layoutPosition:
-        - 1
-        - 0
     properties:
+      name: All Open - Dev
       networkType: existing
       constraints:
-        - tag: public
+        - tag: 'bill:rob'
   API_Gw_Deployment:
     type: Cloud.Service.AWS.API.Gateway.Deployment
     dependsOn:
       - Read_Integration
       - Reset_Integration
       - Book_Integration
-    metadata:
-      layoutPosition:
-        - 2
-        - 2
     properties:
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       stage_name: '${input.customer_name}'
       rest_api_id: '${resource.API_Gateway_Rest.id}'
-      provider_region: eu-west-1
+      region: eu-west-1
   API_Gateway_Rest:
     type: Cloud.Service.AWS.API.Gateway.Rest.API
-    metadata:
-      layoutPosition:
-        - 3
-        - 2
     properties:
       name: 'Tito-API_GW-${env.deploymentName}-${input.customer_name}'
-      account: AWS perso Vince
-      provider_region: eu-west-1
+      account: '${input.aws_account}'
+      region: eu-west-1
   Resource_Read:
     type: Cloud.Service.AWS.API.Gateway.Resource
-    metadata:
-      layoutPosition:
-        - 4
-        - 1
     properties:
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       parent_id: '${resource.API_Gateway_Rest.root_resource_id}'
       path_part: read
       rest_api_id: '${resource.API_Gateway_Rest.id}'
-      provider_region: eu-west-1
+      region: eu-west-1
   Resource_Book:
     type: Cloud.Service.AWS.API.Gateway.Resource
-    metadata:
-      layoutPosition:
-        - 4
-        - 2
     properties:
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       parent_id: '${resource.API_Gateway_Rest.root_resource_id}'
       path_part: book
       rest_api_id: '${resource.API_Gateway_Rest.id}'
-      provider_region: eu-west-1
+      region: eu-west-1
   Resource_Reset:
     type: Cloud.Service.AWS.API.Gateway.Resource
-    metadata:
-      layoutPosition:
-        - 4
-        - 3
     properties:
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       parent_id: '${resource.API_Gateway_Rest.root_resource_id}'
       path_part: reset
       rest_api_id: '${resource.API_Gateway_Rest.id}'
-      provider_region: eu-west-1
+      region: eu-west-1
   Read_Integration:
     type: Cloud.Service.AWS.API.Gateway.Integration
     dependsOn:
       - read
-    metadata:
-      layoutPosition:
-        - 6
-        - 1
     properties:
-      provider_region: eu-west-1
-      account: AWS perso Vince
+      region: eu-west-1
+      account: '${input.aws_account}'
       type: AWS_PROXY
       http_method: '${resource.Method_read.http_method}'
       resource_id: '${resource.Resource_Read.id}'
@@ -254,13 +219,9 @@ resources:
     type: Cloud.Service.AWS.API.Gateway.Integration
     dependsOn:
       - book
-    metadata:
-      layoutPosition:
-        - 6
-        - 2
     properties:
-      provider_region: eu-west-1
-      account: AWS perso Vince
+      region: eu-west-1
+      account: '${input.aws_account}'
       type: AWS_PROXY
       http_method: '${resource.Method_book.http_method}'
       resource_id: '${resource.Resource_Book.id}'
@@ -271,13 +232,9 @@ resources:
     type: Cloud.Service.AWS.API.Gateway.Integration
     dependsOn:
       - reset
-    metadata:
-      layoutPosition:
-        - 6
-        - 3
     properties:
-      provider_region: eu-west-1
-      account: AWS perso Vince
+      region: eu-west-1
+      account: '${input.aws_account}'
       type: AWS_PROXY
       http_method: '${resource.Method_Reset.http_method}'
       resource_id: '${resource.Resource_Reset.id}'
@@ -286,188 +243,156 @@ resources:
       uri: 'arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/${resource.reset.arn}/invocations'
   read:
     type: Cloud.Service.AWS.Lambda.Function
-    metadata:
-      layoutPosition:
-        - 7
-        - 1
     properties:
-      role: 'arn:aws:iam::263722866210:role/LambdaExecWithAccessToRDS'
+      role: 'arn:aws:iam::352001968179:role/LambdaExecWithAccessToRDS'
       region: eu-west-1
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       handler: index.handler
-      runtime: nodejs8.10
+      runtime: nodejs12.x
       function_name: 'read-${env.deploymentName}-${input.customer_name}'
       tags:
         customer_name: '${input.customer_name}'
-      s3_bucket: titopart4lambda
+      #place the S3 bucket name containing the function here
+      s3_bucket: titopart4lambdaawsrob
       s3_key: read.zip
       vpc_config:
+        #place your subnet ID here
         - subnet_ids:
-            - subnet-0fa212749b7e8d01f
+            - subnet-0d918be8708244110
+          #place the security group ID here
           security_group_ids:
-            - sg-035cc63a44baa8159
+            - sg-0d062f4ef74916b35
       environment:
         - variables:
             DB: '${input.architecture == "cheap" ? resource.DB.address : resource.RDS_Cluster_Instance.endpoint[0]}'
   book:
     type: Cloud.Service.AWS.Lambda.Function
-    metadata:
-      layoutPosition:
-        - 7
-        - 2
     properties:
-      role: 'arn:aws:iam::263722866210:role/LambdaExecWithAccessToRDS'
+      role: 'arn:aws:iam::352001968179:role/LambdaExecWithAccessToRDS'
       region: eu-west-1
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       handler: index.handler
-      runtime: nodejs8.10
+      runtime: nodejs12.x
       function_name: 'book-${env.deploymentName}-${input.customer_name}'
       tags:
         customer_name: '${input.customer_name}'
-      s3_bucket: titopart4lambda
+      #place the S3 bucket name containing the function here
+      s3_bucket: titopart4lambdaawsrob
       s3_key: book.zip
       vpc_config:
+        #place your subnet ID here
         - subnet_ids:
-            - subnet-0fa212749b7e8d01f
+            - subnet-0d918be8708244110
+          #Place the security group ID here
           security_group_ids:
-            - sg-035cc63a44baa8159
+            - sg-0d062f4ef74916b35
       environment:
         - variables:
             DB: '${input.architecture == "cheap" ? resource.DB.address : resource.RDS_Cluster_Instance.endpoint[0]}'
   reset:
     type: Cloud.Service.AWS.Lambda.Function
-    metadata:
-      layoutPosition:
-        - 7
-        - 3
     properties:
-      role: 'arn:aws:iam::263722866210:role/LambdaExecWithAccessToRDS'
+      role: 'arn:aws:iam::352001968179:role/LambdaExecWithAccessToRDS'
       region: eu-west-1
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       handler: index.handler
-      runtime: nodejs8.10
+      runtime: nodejs12.x
       function_name: 'reset-${env.deploymentName}-${input.customer_name}'
       tags:
         customer_name: '${input.customer_name}'
-      s3_bucket: titopart4lambda
+      #place the S3 bucket name containing the function here
+      s3_bucket: titopart4lambdaawsrob
       s3_key: reset.zip
       vpc_config:
+        #place your subnet ID here
         - subnet_ids:
-            - subnet-0fa212749b7e8d01f
+            - subnet-0d918be8708244110
+          #place the security group ID here
           security_group_ids:
-            - sg-035cc63a44baa8159
+            - sg-0d062f4ef74916b35
       environment:
         - variables:
             DB: '${input.architecture == "cheap" ? resource.DB.address : resource.RDS_Cluster_Instance.endpoint[0]}'
   Method_read:
     type: Cloud.Service.AWS.API.Gateway.Method
-    metadata:
-      layoutPosition:
-        - 5
-        - 1
     properties:
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       http_method: GET
       resource_id: '${resource.Resource_Read.id}'
       rest_api_id: '${resource.API_Gateway_Rest.id}'
       authorization: None
-      provider_region: eu-west-1
+      region: eu-west-1
   Method_book:
     type: Cloud.Service.AWS.API.Gateway.Method
-    metadata:
-      layoutPosition:
-        - 5
-        - 2
     properties:
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       http_method: POST
       resource_id: '${resource.Resource_Book.id}'
       rest_api_id: '${resource.API_Gateway_Rest.id}'
       authorization: None
-      provider_region: eu-west-1
+      region: eu-west-1
   Method_Reset:
     type: Cloud.Service.AWS.API.Gateway.Method
-    metadata:
-      layoutPosition:
-        - 5
-        - 3
     properties:
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       http_method: GET
       resource_id: '${resource.Resource_Reset.id}'
       rest_api_id: '${resource.API_Gateway_Rest.id}'
       authorization: None
-      provider_region: eu-west-1
+      region: eu-west-1
   Lambda_Permission_read:
     type: Cloud.Service.AWS.Lambda.Permission
-    metadata:
-      layoutPosition:
-        - 8
-        - 1
     properties:
       action: 'lambda:InvokeFunction'
       region: eu-west-1
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       principal: apigateway.amazonaws.com
       function_name: '${resource.read.function_name}'
       statement_id: AllowExecutionFromAPIGatewayforRead
   Lambda_Permission_book:
     type: Cloud.Service.AWS.Lambda.Permission
-    metadata:
-      layoutPosition:
-        - 8
-        - 2
     properties:
       action: 'lambda:InvokeFunction'
       region: eu-west-1
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       principal: apigateway.amazonaws.com
       function_name: '${resource.book.function_name}'
       statement_id: AllowExecutionFromAPIGatewayforBook
   Lambda_Permission_reset:
     type: Cloud.Service.AWS.Lambda.Permission
-    metadata:
-      layoutPosition:
-        - 8
-        - 3
     properties:
       action: 'lambda:InvokeFunction'
       region: eu-west-1
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       principal: apigateway.amazonaws.com
       function_name: '${resource.reset.function_name}'
       statement_id: AllowExecutionFromAPIGatewayforReset
   RDS_Cluster_Instance:
     type: Cloud.Service.AWS.RDS.Cluster.Instance
-    metadata:
-      layoutPosition:
-        - 9
-        - 2
     properties:
       engine: aurora-mysql
       identifier: '${input.customer_name}'
       region: eu-west-1
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       instance_class: db.t2.small
       cluster_identifier: '${resource.RDS_Cluster[0].id}'
       availability_zone: eu-west-1a
       publicly_accessible: true
-      db_subnet_group_name: default-vpc-00ca7e4534ead6705
+      #place the subnet group name here
+      db_subnet_group_name: subnetgrouptito
       count: '${input.architecture == "cheap" ? 0 : 1}'
   RDS_Cluster:
     type: Cloud.Service.AWS.RDS.Cluster
-    metadata:
-      layoutPosition:
-        - 10
-        - 2
     properties:
       region: eu-west-1
-      account: AWS perso Vince
+      account: '${input.aws_account}'
       engine: aurora-mysql
       master_username: root
       master_password: Tito2016
       skip_final_snapshot: true
-      db_subnet_group_name: default-vpc-00ca7e4534ead6705
+      #place the subnet group name here
+      db_subnet_group_name: subnetgrouptito
+      #place the security group ID here
       vpc_security_group_ids:
-        - sg-035cc63a44baa8159
+        - sg-0d062f4ef74916b35
       count: '${input.architecture == "cheap" ? 0 : 1}'
