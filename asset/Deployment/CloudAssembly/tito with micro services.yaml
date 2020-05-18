@@ -3,7 +3,7 @@ formatVersion: 1
 #dependencies are:
 # AWS account
 # lambda function in S3 to import (cf https://github.com/vmeoc/Tito/tree/master/asset/Deployment/FaaS/AWS)
-# Region, VPC, SG, 2 subnets dispatched over 2 zones, Group subnet for RDS, IAM role with AWSLambdaVPCAccessExecutionRole &  AWSLambdaVPCAccessExecutionRole, Route 53 zone
+# Region, VPC, SG, 2 subnets dispatched over 2 zones, Group subnet for RDS, IAM role for Lambda service with AWSLambdaVPCAccessExecutionRole &  AmazonRDSFullAccess, Route 53 zone
 #Set the region for all the services necessary
 #Cf comments below to know where to place these information
 #if too static, feel free to modify it to make it dynamic :)
