@@ -8,13 +8,13 @@ metadata:
     app: tito
     tier: frontend
     stage: prod
+    ID: $${DBIP}
 spec:
   replicas: 1
   selector:
     matchLabels:
       type: tito-fe
       version: v1
-      ID: $${DBIP}
   strategy:
     type: Recreate
   template:
@@ -24,6 +24,7 @@ spec:
         type: tito-fe
         version: v1
         tier: frontend
+        ID: $${DBIP}
     spec:
       containers:
         - name: tito
