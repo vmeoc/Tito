@@ -14,6 +14,7 @@ spec:
     matchLabels:
       type: tito-fe
       version: v1
+      ID: $${DBIP}
   strategy:
     type: Recreate
   template:
@@ -64,4 +65,5 @@ spec:
   selector:                # key/value, label permettant de definir le pod cible (doit etre danslabels du pod)
     type: tito-fe
     tier: frontend
+    ID: $${DBIP}
   type: LoadBalancer
