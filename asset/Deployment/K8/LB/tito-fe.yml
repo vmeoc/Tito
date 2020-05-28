@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: titofe
+  generateName: titofe-
   labels:
     name: tito-fe
     version: "latest"
@@ -52,7 +52,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: titofe-service
+  generateName: titofe-service-
   labels:
     app: tito
     tier: frontend
