@@ -100,7 +100,7 @@ resource "aws_security_group" "default" {
 
 resource "aws_key_pair" "auth" {
    key_name   = "${var.key_name}"
-  public_key = "${file(var.public_key_path)}"
+  public_key = "${var.public_key}"
 }
 
 resource "aws_instance" "web" {
@@ -110,6 +110,7 @@ resource "aws_instance" "web" {
     # The default username for our AMI
     user = "centos"
     private_key = "${file("~/.ssh/titan_priv")}"
+    host = self.public_ip
 
     # The connection will use the local SSH agent for authentication.
   }
@@ -137,6 +138,7 @@ resource "aws_instance" "web" {
   provisioner "remote-exec" {
     inline = [
       "sudo yum update -y",
+      "sudo yum install epel-release -y",
       "sudo yum install httpd -y",
       "sudo yum install ansible -y",
       "sudo /usr/sbin/service httpd start",
