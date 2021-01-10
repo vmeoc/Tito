@@ -1,0 +1,7 @@
+mysql:
+  password:    'Tito2016'
+  user:        'root'
+
+DB:
+  name: 'TitoDB'
+  table: 'TitoTable'
