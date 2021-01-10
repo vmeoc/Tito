@@ -9,29 +9,14 @@
 
 install all nec packages:
  pkg.installed:
-    - names: 
+    - pkgs: 
       - git
       - httpd
       - php
       - php-mysql
 
-File to manage:
-  file.managed:
-    - name: {{ HTTPDCONF }}
-  
-restarting Apache:
-  service.running:
-    - name: httpd
-    - enable: True
-    - watch:
-      - file: {{ HTTPDCONF }}
-
-Installing Tito source code:
-  git.latest:
-    - name: {{ GITREPO }}
-    - target: {{ HTMLPATH }}
-    - rev: {{ CODEVERSION }}
-    - force_reset: True
+{{ HTTPDCONF }}:
+  file.managed
 
 HTTPD Conf modification to load php module and talk to the SQL server:
   file.append:
@@ -47,3 +32,19 @@ PHP INI modification to set the timezone:
     - name: {{ PHPINIFILE }}
     - text: 
       - date.timezone = "Europe/Paris"
+
+restarting Apache:
+  service.running:
+    - name: httpd
+    - enable: True
+    - watch:
+      - file: {{ HTTPDCONF }}
+    - require:
+      - HTTPD Conf modification to load php module and talk to the SQL server
+
+Installing Tito source code:
+  git.latest:
+    - name: {{ GITREPO }}
+    - target: {{ HTMLPATH }}
+    - rev: {{ CODEVERSION }}
+    - force_reset: True

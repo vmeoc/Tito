@@ -1,0 +1,8 @@
+httpd:
+  conf_file:   '/etc/httpd/conf/httpd.conf'
+code:
+  git_repo:    'https://github.com/vmeoc/Tito/'
+  version:     'V1.5'
+  destination:  '/var/www/html'
+php:
+  ini_file:     '/etc/php.ini'
