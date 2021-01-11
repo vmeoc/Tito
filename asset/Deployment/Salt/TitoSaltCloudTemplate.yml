@@ -1,0 +1,46 @@
+formatVersion: 1
+inputs:
+  SaltMasteraddress:
+    type: string
+resources:
+  Cloud_Network_1:
+    type: Cloud.Network
+    properties:
+      networkType: existing
+      constraints:
+        - tag: 'net:nsx'
+  TitoFrontEnd:
+    type: Cloud.Machine
+    dependsOn:
+      - TitoDB
+    properties:
+      image: CentOS7.6
+      flavor: Small
+      customizationSpec: Linux
+      networks:
+        - network: '${resource.Cloud_Network_1.id}'
+          assignment: static
+      cloudConfig: |
+        #cloud-config
+        runcmd:
+          - curl -L https://bootstrap.saltstack.com -o install_salt.sh
+          - sh install_salt.sh -A ${input.SaltMasteraddress}
+          - salt-call grains.append roles tito_frontend
+          - salt-call grains.set 'titoDB_IP' ${resource.TitoDB.networks.address[0]}
+          - salt-call state.highstate
+  TitoDB:
+    type: Cloud.Machine
+    properties:
+      image: CentOS7.6
+      flavor: Small
+      customizationSpec: Linux
+      networks:
+        - network: '${resource.Cloud_Network_1.id}'
+          assignment: static
+      cloudConfig: |
+        #cloud-config
+        runcmd:
+          - curl -L https://bootstrap.saltstack.com -o install_salt.sh
+          - sh install_salt.sh -A ${input.SaltMasteraddress}
+          - salt-call grains.append roles tito_db
+          - salt-call state.highstate
