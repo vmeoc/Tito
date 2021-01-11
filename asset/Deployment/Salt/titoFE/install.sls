@@ -1,6 +1,5 @@
 {% import_yaml "./conf.yaml" as conf %}
 
-{% set SQLSERVER = 'xxx' %}
 
 install all nec packages:
  pkg.installed:
@@ -13,11 +12,11 @@ install all nec packages:
 HTTPD Conf modification to load php module and talk to the SQL server:
   file.append:
     - name: {{ conf.httpd.conf_file }}
-    - text:
-      - LoadModule php5_module modules/libphp5.so
-      - <IfModule env_module>
-      -   SetEnv TITO-SQL {{ SQLSERVER }}
-      - </IfModule>
+    - text: |
+       LoadModule php5_module modules/libphp5.so
+       <IfModule env_module>
+         SetEnv TITO-SQL {{ conf.DB.IP }}
+       </IfModule>
 
 PHP INI modification to set the timezone:
   file.append:

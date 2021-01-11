@@ -6,3 +6,5 @@ code:
   destination:  '/var/www/html'
 php:
   ini_file:     '/etc/php.ini'
+DB:
+ IP:            '{{grains['titoDB_IP']}}'
