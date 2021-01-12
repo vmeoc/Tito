@@ -11,5 +11,8 @@ You can also set your salt master to point to this repo to consume the files:
   
 Then restart the server.
 
-To test the setup: salt '<servernameX>' state.apply titoFE.install.
+To test the setup: 
+
+    salt '<servernameX>' state.apply titoFE.install.
+
 <ServernameX> should answer on port 80 with the Tito Front end.
