@@ -7,7 +7,7 @@ You can also set your salt master to point to this repo to consume the files:
       - roots
     gitfs_remotes:
       - git://github.com/vmeoc/Tito.git:
-      - gitfs_root: asset/Deployment/Salt
+        - gitfs_root: asset/Deployment/Salt
   
 Then restart the server.
 
