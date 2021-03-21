@@ -1,6 +1,6 @@
 This is the content to deploy the Tito monolith app from Cloud assembly with Salt taking care of the conf mgmt.
 To use it, simply import the cloud assembly template and copy all salt files on your salt master.
-You can also set your salt master to point to this repo to consume the files:
+You can also set your salt master to point to this repo to consume the files. To do so, add the following in your master conf file ((/etc/Salt/master or /etc/salt/master.d/raas.conf):
   
     fileserver_backend:
       - git
