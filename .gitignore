@@ -1,3 +1,5 @@
 Dockerfile
 nbproject
 .vscode
+.terraform
+*.tfstate.backup
