@@ -8,8 +8,8 @@
 #DESCRIPTION
 #}
 
-variable "public_key" {
-	description = "enter your public key"
+variable "public_key_path" {
+  description = "enter your public key path"
 }
 
 variable "key_name" {
@@ -27,3 +27,8 @@ variable "aws_amis" {
     eu-west-1 = "ami-693d3483"
   }
 }
+variable "private_key_path" {
+  description = "enter your private key path"
+}
+
+
