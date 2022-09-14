@@ -10,6 +10,7 @@ inputs:
       - azure
       - aws
       - vsphere
+    default: vsphere
   code:
     type: string
     enum:
@@ -26,32 +27,30 @@ inputs:
       - 1
       - 2
       - 3
-    default: 1
+    default: 2
   security:
     type: string
     enum:
       - high
       - low
+    default: high
   wavefront_proxy:
     type: string
     default: wvfp.cpod-vrealizesuite.az-demo.shwrfr.com
     title: Proxy Wavefront
   wavefront_port:
-    type: string
+    type: number
     default: 2878
     title: Port Wavefront
 resources:
   DB:
     type: Cloud.Machine
     properties:
-      image: CentosV7
+      image: CentOS7.6
       flavor: small
       networks:
-        - network: '${resource.Public_Nw.id}'
+        - network: ${resource.Public_Nw.id}
           assignment: '${input.cloud == "vsphere" ? "static" : ""}'
-          tags:
-            - key: security
-              value: '${input.security == "high" ? "noping" : "open"}'
       remoteAccess:
         authentication: '${self.endpointType == "aws" ? "publicPrivateKey" : "usernamePassword"}'
         #        sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkN9Sbxj9H77Mrt+8QB/NQn+bqR0ZDx6vvoNeGpkeTbaOhL/6cd9zq+ZYx0hNzc2bPLI4S3NQ8CcAt1gdFdIPte38+gnk1+M+z1oqy2sh+TLFz4hBrdJ3JxTWW/b4Yex5uKbscKEjl2WiW+3MQfP5g5pZkWF3AbWQDAEI8BANn80eZU7q4yDMuW4TsCUEuNmrYjaTyi2S6i3WhngaAlZqdQzPvqUh/JTcmwTXx30XmsoVbG9NHEcbTehhoaHuKSCaCN5pBJ5uXEe4Oxjxa3AAU90YorC140Jw5mkQ4/5earNTqggBiI+uxQCHhC867GCyt9rlgJZZ1F0TlUYDymgx imported-openssh-key
@@ -60,64 +59,25 @@ resources:
       cloudConfig: |
         packages:
           - mysql
-          - mariadb-server
           - mariadb
+          - mariadb-server
+        write_files:
+          - path: /tmp/db.sh
+            encoding: b64
+            content: IyEvYmluL2Jhc2gKCmlmIFsgJChycG0gLXFhIHxncmVwIC1xaSBtYXJpYWRiLXNlcnZlcjtlY2hvICQ/KSA9PSAxIF0gO3RoZW4KICAgIGVjaG8gIm1hcmlhZGItc2VydmVyIGluc3RhbGwgaXMgb2siCmVsc2UKICAgIGVjaG8gIm1hcmlhZGItc2VydmVyIG5vdCBpbnN0YWxsZWQsIGZvcmNpbmcgaW5zdGFsbGF0aW9uIgogICAgc3VkbyB5dW0gLXkgaW5zdGFsbCBtYXJpYWRiLXNlcnZlcgogICAgc2xlZXAgMwogICAgc3VkbyBzeXN0ZW1jdGwgZW5hYmxlIG1hcmlhZGIuc2VydmljZQogICAgc3VkbyBzeXN0ZW1jdGwgc3RhcnQgbWFyaWFkYi5zZXJ2aWNlCiAgICBteXNxbCAtdiAtdSByb290IDw8RU9GClVTRSBteXNxbDsKU0VMRUNUIHVzZXIsaG9zdCBGUk9NIHVzZXI7CkdSQU5UIEFMTCBQUklWSUxFR0VTIE9OICouKiBUTyByb290QCclJyBXSVRIIEdSQU5UIE9QVElPTjsKRU9GCgogICAgc3VkbyBzeXN0ZW1jdGwgc3RvcCBtYXJpYWRiLnNlcnZpY2UKICAgIHN1ZG8gbXlzcWxkX3NhZmUgLS1za2lwLWdyYW50LXRhYmxlcyAmCiAgICBzbGVlcCA1CiAgICBteXNxbCAtdiAtdSByb290IDw8RU9GClVQREFURSBteXNxbC51c2VyIFNFVCBQYXNzd29yZD1QQVNTV09SRCgnVGl0bzIwMTYnKSBXSEVSRSBVc2VyPSdyb290JzsKRkxVU0ggUFJJVklMRUdFUzsKRU9GCgogICAgc3VkbyBteXNxbGFkbWluIC11IHJvb3QgLXBUaXRvMjAxNiBzaHV0ZG93bgogICAgc3VkbyBzeXN0ZW1jdGwgc3RhcnQgbWFyaWFkYi5zZXJ2aWNlCiAgICAgICAgICAgIAogICAgbXlzcWwgLXYgLXUgcm9vdCAtcFRpdG8yMDE2IDw8RU9GCmNyZWF0ZSBkYXRhYmFzZSBpZiBub3QgZXhpc3RzIFRpdG9EQjsKdXNlIFRpdG9EQjsKQ1JFQVRFIFRBQkxFIFRpdG9UYWJsZSAoaWQgSU5UKDYpIFVOU0lHTkVEIEFVVE9fSU5DUkVNRU5UIFBSSU1BUlkgS0VZLCBob21lIFZBUkNIQVIoNTApIE5PVCBOVUxMLCB3b3JrIFZBUkNIQVIoNTApIE5PVCBOVUxMLCBob3VyX2hvbWVfZGVwYXJ0dXJlIFZBUkNIQVIoNTApIE5PVCBOVUxMLCBob3VyX3dvcmtfZGVwYXJ0dXJlIFZBUkNIQVIoNTApIE5PVCBOVUxMKQpFT0YKCmZpCg==
+            permissions: '0755'
         runcmd:
           - exec &> /tmp/tito_db.log
-          - sudo systemctl enable mariadb.service
-          - sudo systemctl start mariadb.service
-          - mysql -v -u root << EOF
-          - USE mysql;
-          - SELECT user,host FROM user;
-          - GRANT ALL PRIVILEGES ON *.* TO root@'%' WITH GRANT OPTION;
-          - EOF
-        #to update the root password
-          - sudo systemctl stop mariadb.service
-          - sudo mysqld_safe --skip-grant-tables &
-          - sleep 5
-          - mysql -v -u root << EOF
-          - UPDATE mysql.user SET Password=PASSWORD('Tito2016') WHERE User='root';
-          - FLUSH PRIVILEGES;
-          - EOF
-          - sudo mysqladmin -u root -pTito2016 shutdown
-          - sudo systemctl start mariadb.service
-          
-          #create conf DB and table
-          - mysql -v -u root -pTito2016 << EOF
-          - create database if not exists TitoDB;
-          - use TitoDB;
-          - CREATE TABLE TitoTable (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, home VARCHAR(50) NOT NULL, work VARCHAR(50) NOT NULL, hour_home_departure VARCHAR(50) NOT NULL, hour_work_departure VARCHAR(50) NOT NULL)
-          - EOF
-  Cloud_LoadBalancer_1:
-    type: Cloud.LoadBalancer
-    properties:
-      count: '${input.frontendnumber > 1 ? 1 : 0}'
-      routes:
-        - protocol: HTTP
-          port: '80'
-          instanceProtocol: HTTP
-          instancePort: '80'
-          healthCheckConfiguration:
-            protocol: HTTP
-            port: '80'
-            urlPath: /
-            intervalSeconds: 60
-            timeoutSeconds: 30
-            unhealthyThreshold: 10
-            healthyThreshold: 2
-      network: '${resource.Public_Nw.id}'
-      instances:
-        - '${resource.front_end.id}'
-      internetFacing: true
+          - sudo /tmp/db.sh && rm -f /tmp/db.sh
   front_end:
     type: Cloud.Machine
     dependsOn:
       - DB
-    count: '${FrontEndNumber}'
+    count: ${FrontEndNumber}
     properties:
-      image: CentosV7
+      image: CentOS7.6
       flavor: small
-      count: '${input.frontendnumber}'
+      count: ${input.frontendnumber}
       remoteAccess:
         authentication: '${self.endpointType == "aws" ? "publicPrivateKey" : "usernamePassword"}'
         #        sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCzkN9Sbxj9H77Mrt+8QB/NQn+bqR0ZDx6vvoNeGpkeTbaOhL/6cd9zq+ZYx0hNzc2bPLI4S3NQ8CcAt1gdFdIPte38+gnk1+M+z1oqy2sh+TLFz4hBrdJ3JxTWW/b4Yex5uKbscKEjl2WiW+3MQfP5g5pZkWF3AbWQDAEI8BANn80eZU7q4yDMuW4TsCUEuNmrYjaTyi2S6i3WhngaAlZqdQzPvqUh/JTcmwTXx30XmsoVbG9NHEcbTehhoaHuKSCaCN5pBJ5uXEe4Oxjxa3AAU90YorC140Jw5mkQ4/5earNTqggBiI+uxQCHhC867GCyt9rlgJZZ1F0TlUYDymgx imported-openssh-key
@@ -125,11 +85,9 @@ resources:
         password: VMware1!
       #resourceGroupName: '${input.cloud == "azure" ? "ResourceGroup1" : "vince"}'
       networks:
-        - network: '${resource.Public_Nw.id}'
+        - network: ${resource.Public_Nw.id}
           assignment: '${input.cloud == "vsphere" ? "static" : ""}'
-          tags:
-            - key: security
-              value: '${input.security == "high" ? "noping" : "open"}'
+          securityGroups: []
       cloudConfig: |
         packages:
           - git
@@ -144,4 +102,4 @@ resources:
     properties:
       networkType: existing
       constraints:
-        - tag: 'cloud:${input.cloud}'
+        - tag: net:nsx
